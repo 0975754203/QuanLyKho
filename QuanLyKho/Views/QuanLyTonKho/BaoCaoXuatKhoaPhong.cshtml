@@ -1,0 +1,101 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var comboKho = ViewBag.ComboKho as System.Collections.Generic.IEnumerable<System.Web.Mvc.SelectListItem>;
+}
+
+<div class="row content-all-crmnt">
+    <div class="col-sm-12">
+        <div class="tab-content br-n pn">
+            <div class="content-tab-crmnt">
+                <div class="row align-items-end">
+                    <div class="col-xl-2 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Từ ngày</label>
+                            <input type="date" id="tuNgay" class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Đến ngày</label>
+                            <input type="date" id="denNgay" class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Kho xuất</label>
+                            @Html.DropDownList("idKho", comboKho, new { @class = "form-control select2", id = "idKho" })
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-12 content-bg">
+                        <div class="form-group mb-2">
+                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachBaoCaoXuatKhoaPhong(1)">Tìm kiếm</button>
+                            <button type="button" class="btn btn-main mb-2 ml-2" onclick="XuatExcelBaoCaoXuatKhoaPhong()"><i class="ti-download"></i>Xuất Excel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-crmnt table-job" id="content_BaoCaoXuatKhoaPhong"></div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+    function toYmd(d) {
+        var m = (d.getMonth() + 1).toString();
+        if (m.length === 1) m = '0' + m;
+        var day = d.getDate().toString();
+        if (day.length === 1) day = '0' + day;
+        return d.getFullYear() + '-' + m + '-' + day;
+    }
+
+    function initNgayMacDinh() {
+        var now = new Date();
+        var first = new Date(now.getFullYear(), now.getMonth(), 1);
+        $("#tuNgay").val(toYmd(first));
+        $("#denNgay").val(toYmd(now));
+    }
+
+    $(document).ready(function () {
+        $("#idKho").select2({ width: '100%' });
+        initNgayMacDinh();
+        DanhSachBaoCaoXuatKhoaPhong(1);
+    });
+
+    function DanhSachBaoCaoXuatKhoaPhong(pageIndex) {
+        var payload = {
+            pageIndex: pageIndex,
+            tuNgay: $("#tuNgay").val(),
+            denNgay: $("#denNgay").val(),
+            idKho: $("#idKho").val()
+        };
+
+        $("#LoadingModal").modal('show');
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("DanhSachBaoCaoXuatKhoaPhong", "QuanLyTonKho")',
+            data: payload,
+            dataType: "html",
+            success: function (data) {
+                $("#content_BaoCaoXuatKhoaPhong").html(data);
+                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 500);
+            }
+        });
+    }
+
+    function pagingData(pageIndex) {
+        DanhSachBaoCaoXuatKhoaPhong(pageIndex);
+    }
+
+    function XuatExcelBaoCaoXuatKhoaPhong() {
+        var payload = {
+            tuNgay: $("#tuNgay").val(),
+            denNgay: $("#denNgay").val(),
+            idKho: $("#idKho").val()
+        };
+        var url = '@Url.Action("XuatExcelBaoCaoXuatKhoaPhong", "QuanLyTonKho")' + '?' + $.param(payload);
+        window.location.href = url;
+    }
+</script>
+}

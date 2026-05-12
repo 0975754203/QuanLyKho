@@ -1,0 +1,62 @@
+@using QuanLyKho.Utility
+@model QuanLyKho.Models.TheKho_DSModel
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered verticle-middle table-hover table-responsive-fix-big">
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Ngày giao dịch</th>
+                <th scope="col">Mã giao dịch</th>
+                <th scope="col">Loại</th>
+                <th scope="col" class="text-right">
+                    Số lượng
+                    <div class="small font-weight-normal text-muted" style="white-space:nowrap;">Tổng: @string.Format("{0:n2}", Model.TongSoLuong)</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var i = (Model.PageIndex - 1) * Model.PageSize; }
+            @if (Model.TBL_TheKho != null && Model.TBL_TheKho.Count > 0)
+            {
+                foreach (var item in Model.TBL_TheKho)
+                {
+                    var laXuat = item.LoaiGiaoDich == "XUAT";
+                    var actionIn = laXuat ? "InXuatKho" : "InNhapKho";
+                    var nhanLoai = laXuat ? "Xuất" : "Nhập";
+                    <tr>
+                        <td>@(++i)</td>
+                        <td>@item.NgayGiaoDich.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <a href="@Url.Action(actionIn, "QuanLyGiaoDichNhapXuat", new { id = item.IdGiaoDich })" target="_blank" title="In phiếu @nhanLoai kho">
+                                @item.MaGiaoDich
+                            </a>
+                        </td>
+                        <td>
+                            @if (laXuat)
+                            {
+                                <span class="badge badge-danger">Xuất</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-success">Nhập</span>
+                            }
+                        </td>
+                        <td class="text-right" style="@(laXuat ? "color:#dc3545;" : "color:#28a745;")">
+                            @string.Format("{0:n2}", item.SoLuongHienThi)
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">Không có dữ liệu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@Html.GenPaging().PagingHTML(Model.PageIndex, Model.Pagecount, Model.Total)
+<input type="hidden" id="pageIndex" name="pageIndex" value="@Model.PageIndex" />

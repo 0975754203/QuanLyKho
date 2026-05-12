@@ -1,0 +1,133 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var comboKho = ViewBag.ComboKho as System.Collections.Generic.IEnumerable<System.Web.Mvc.SelectListItem>;
+    var comboSanPham = ViewBag.ComboSanPham as System.Collections.Generic.IEnumerable<System.Web.Mvc.SelectListItem>;
+}
+
+<div class="row content-all-crmnt">
+    <div class="col-sm-12">
+        <div class="tab-content br-n pn">
+            <div class="content-tab-crmnt">
+                <div class="row align-items-end">
+                    <div class="col-xl-3 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Kho</label>
+                            @Html.DropDownList("idKho", comboKho, new { @class = "form-control select2", id = "idKho" })
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Sản phẩm</label>
+                            @Html.DropDownList("idSanPham", comboSanPham, new { @class = "form-control select2", id = "idSanPham" })
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Từ ngày</label>
+                            <input type="date" id="tuNgay" class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Đến ngày</label>
+                            <input type="date" id="denNgay" class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-12 content-bg">
+                        <div class="form-group mb-2">
+                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachTheKho(1)">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-crmnt table-job" id="content_TheKho"></div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+    function toYmd(d) {
+        var m = (d.getMonth() + 1).toString();
+        if (m.length === 1) m = '0' + m;
+        var day = d.getDate().toString();
+        if (day.length === 1) day = '0' + day;
+        return d.getFullYear() + '-' + m + '-' + day;
+    }
+
+    function initNgayMacDinh() {
+        var today = new Date();
+        var ymd = toYmd(today);
+        $("#tuNgay").val(ymd);
+        $("#denNgay").val(ymd);
+    }
+
+    $(document).ready(function () {
+        $("#idKho").select2({ width: '100%' });
+        $("#idSanPham").select2({ width: '100%' });
+
+        $("#idKho").on('change', function () {
+            var idKho = $(this).val();
+            NapSanPhamTheoKho(idKho);
+        });
+
+        initNgayMacDinh();
+        DanhSachTheKho(1);
+    });
+
+    function NapSanPhamTheoKho(idKho) {
+        var $sp = $("#idSanPham");
+        $sp.empty();
+        if (!idKho) {
+            $sp.append(new Option('-- Chọn kho trước --', '', true, true));
+            $sp.trigger('change');
+            return;
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("SanPhamTrongKho", "QuanLyTheKho")',
+            data: { idKho: idKho },
+            dataType: 'json',
+            success: function (data) {
+                $sp.append(new Option('-- Chọn sản phẩm --', '', true, true));
+                if (data && data.length) {
+                    $.each(data, function (i, item) {
+                        $sp.append(new Option(item.text, item.id, false, false));
+                    });
+                }
+                $sp.trigger('change');
+            }
+        });
+    }
+
+    function DanhSachTheKho(pageIndex) {
+        var payload = {
+            pageIndex: pageIndex,
+            idKho: $("#idKho").val(),
+            idSanPham: $("#idSanPham").val()
+        };
+        var t1 = $("#tuNgay").val();
+        var t2 = $("#denNgay").val();
+        if (t1) payload.tuNgay = t1;
+        if (t2) payload.denNgay = t2;
+
+        $("#LoadingModal").modal('show');
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("DanhSachTheKho", "QuanLyTheKho")',
+            data: payload,
+            dataType: "html",
+            success: function (data) {
+                $("#content_TheKho").html(data);
+                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 500);
+            }
+        });
+    }
+
+    function pagingData(pageIndex) {
+        DanhSachTheKho(pageIndex);
+    }
+</script>
+}

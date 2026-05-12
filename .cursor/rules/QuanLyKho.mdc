@@ -1,0 +1,13 @@
+---
+description: 
+alwaysApply: true
+---
+
+Lúc nào cũng build để check xem còn lỗi không,
+project này dùng .net  framework nên hãy code theo đó, không dùng .net core
+Hạn chế truy vấn tới database ở controller.
+Mỗi bảng ánh xạ từ edmx sẽ có 1 model, 1 manager xử lý các vấn đề CRUD , get page ở file manager này, trên controller hãy call về và sử dụng
+Khi thêm hay xóa các file mới hãy tự động sửa luôn trong  file .csproj
+Không chỉnh sửa gì trong edmx, phần này nếu thay đổi thì tôi tự cập nhật
+Luôn trả lời tiếng việt
+Tôi có 5 năm kinh nghiemj, tuy nhiên hãy viết code dễ hiểu , không viết tắt quá nhiều

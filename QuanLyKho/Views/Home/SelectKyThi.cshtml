@@ -1,0 +1,11 @@
+﻿@model  QuanLyKho.Models.SelectBoDuLieuModel
+
+
+@Html.DropDownListFor(
+    x => x.IdKyThi,
+    Model.lstData,
+    new
+    {
+        data_url = Url.Action("SelectKyThi", "Home"),@class = "single-select-bodulieu select2"
+    }
+)

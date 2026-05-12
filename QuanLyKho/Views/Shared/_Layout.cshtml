@@ -1,0 +1,395 @@
+﻿<!DOCTYPE html>
+<html>
+@using QuanLyKho.Utility
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>@ViewBag.Title</title>
+    <!-- Favicon (theo Bệnh viện K - benhvienk.vn) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/Content/assets/images/favicon-benhvienk.png">
+    <!--Step-->
+    <link rel="stylesheet" href="/Content/js/Step/jquery-steps.css">
+
+    <!--Editor-->
+    <link rel="stylesheet" href="/Content/js/Trumbowyg-master-editor/dist/ui/trumbowyg.css">
+    <link rel="stylesheet" href="/Content/js/Trumbowyg-master-editor/dist/plugins/table/ui/trumbowyg.table.min.css">
+    <link rel="stylesheet" href="/Content/js/Trumbowyg-master-editor/dist/plugins/colors/ui/trumbowyg.colors.min.css">
+
+    <!-- clock -->
+    <link href="/Content/assets/plugins/clockpicker/css/bootstrap-clockpicker.min.css" rel="stylesheet">
+
+    <link href="/Content/css/responsive.css" rel="stylesheet">
+    <link href="/Content/css/style.css" rel="stylesheet">
+    <link href="/Content/css/main.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i" rel="stylesheet">
+
+    <!-- CSS-cau-hinh-->
+    <link rel="stylesheet" type="text/css" href="/Content/js/Boostrap-switch/css/bootstrap-switch.min.css">
+    <link rel="stylesheet" type="text/css" href="/Content/js/Boostrap-switch/css/switchery.min.css">
+    <link rel="stylesheet" type="text/css" href="/Content/js/Boostrap-switch/css/switch.min.css">
+
+    <link href="/Content/assets/plugins/toastr/css/toastr.min.css" rel="stylesheet" />
+    <!-- Select2 -->
+    <link rel="stylesheet" href="/Content/assets/plugins/select2/css/select2.min.css">
+
+    <!-- Upload-File-->
+    @*<link rel="stylesheet" href="/Content/js/Upload-file/all.min.css">*@
+
+    <!----select button---->
+    <link href="/Content/js/ui-choose/ui-choose.css" rel="stylesheet" />
+    <script src="/Content/assets/plugins/common/common.min.js"></script>
+
+</head>
+<body>
+
+
+
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper" class="main-crmnt">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header head-crmnt">
+
+            <div class="brand-logo">
+                <a href="/" class="bv-brand-link" title="Trang chủ — Bệnh viện K">
+                    <img src="/Content/assets/images/benh-vien-k-logo.png"
+                         alt="Bệnh viện K — Bệnh viện ung bướu trung ương"
+                         class="bv-brand-logo" />
+                </a>
+            </div>
+            <div class="nav-control">
+                <div class="hamburger">
+                    <span class="line"></span>  <span class="line"></span>  <span class="line"></span>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header head-crmnt-top">
+            <div class="header-content">
+                <div class="header-left">
+                        @Html.Raw(ViewBag.TitleUrl)
+                </div>
+                <div class="header-right">
+                    <ul>
+                        <li class="icons">
+                            <a href="javascript:void(0)" class="log-user">
+                                <img src="/Content/assets/images/avatar/1.jpg" alt="" />
+                                <span>@QuanLyKho.Utility.Global.TaiKhoan_Login.UserName</span>  <i class="fa fa-caret-down f-s-14" aria-hidden="true"></i>
+                            </a>
+                            <div class="drop-down dropdown-profile animated bounceInDown">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            <a href="/doi-mat-khau"><i class="icon-user"></i> <span>Đổi mật khẩu</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="/dang-xuat"><i class="icon-power"></i> <span>Đăng xuất</span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Header end
+        ***********************************-->
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        @{Html.RenderPartial("/Views/Shared/_LeftMenu.cshtml");}
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body content-body-crmnt">
+            <div class="container-fluid col-md-12" id="bodyAllPage">
+                <input type="text" style="display:none" value="@ViewBag.Quyen" id="sQuyen" />
+                <input type="text" style="display:none" value="@ViewBag.IdDonVi" id="IdDonVi" />
+                @RenderBody()
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+    </div>
+
+
+
+    <link href="/Content/css/loading2.css" rel="stylesheet" />
+    <div class='modal  divLineLoad' data-backdrop="static" id="LoadingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background:none; border:0px !important; box-shadow:none">
+        <div class="modal-dialog">
+            <div class="cube-wrapper">
+                <div class="cube-folding">
+                    <span class="leaf1"></span>
+                    <span class="leaf2"></span>
+                    <span class="leaf3"></span>
+                    <span class="leaf4"></span>
+                </div>
+                <span class="loading" data-name="Loading">Hệ thống<br />đang tải dữ liệu</span>
+            </div>
+
+            <div class="loader">
+                <span></span>
+            </div>
+            <div id="floatingBarsG">
+                <div class="blockG" id="rotateG_01">
+                </div>
+                <div class="blockG" id="rotateG_02">
+                </div>
+                <div class="blockG" id="rotateG_03">
+                </div>
+                <div class="blockG" id="rotateG_04">
+                </div>
+                <div class="blockG" id="rotateG_05">
+                </div>
+                <div class="blockG" id="rotateG_06">
+                </div>
+                <div class="blockG" id="rotateG_07">
+                </div>
+                <div class="blockG" id="rotateG_08">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modelDeleteMain" tabindex="-1" role="dialog" data-backdrop="static"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Xóa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="ti-close"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span class="text-delete">Bạn có chắc chắn muốn xóa không?</span>
+                    <input type="hidden" id="IdDelete" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
+                    <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+
+    <script src="/Content/js/custom.min.js"></script>
+    <script src="/Content/js/settings.js"></script>
+    <script src="/Content/js/gleek.js"></script>
+    <script src="/Content/js/styleSwitcher.js"></script>
+
+
+
+    <script src="/Content/js/Boostrap-switch/JS/bootstrap-switch.min.js" type="text/javascript"></script>
+    <script src="/Content/js/Boostrap-switch/JS/bootstrap-checkbox.min.js" type="text/javascript"></script>
+    <script src="/Content/js/Boostrap-switch/JS/switch.min.js" type="text/javascript"></script>
+
+    <script src="/Content/assets/plugins/toastr/js/toastr.min.js"></script>
+    <!-- Select2-->
+    <script src="/Content/assets/plugins/select2/js/select2.full.min.js"></script>
+    <script src="/Content/js/plugins-init/select2-init.js"></script>
+
+
+    <!--Step-->
+    <script src="/Content/js/Step/jquery-steps.js"></script>
+    <script>
+        $('.demo-step-crmnt').steps({
+            onFinish: function () {
+                alert('Wizard Completed');
+            }
+        });</script>
+
+
+
+
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="/Content/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    @*<script src="/Content/js/bootstrap-datepicker.XX.js"></script>*@
+    @*<script src="/Content/js/plugins-init/bs-date-picker-init.js"></script>*@
+
+    <!-- Editor -->
+    <script src="/Content/js/Trumbowyg-master-editor/dist/trumbowyg.js"></script>
+    <script src="/Content/js/Trumbowyg-master-editor/dist/langs/vi.min.js"></script>
+    <script src="/Content/js/Trumbowyg-master-editor/dist/plugins/table/trumbowyg.table.min.js"></script>
+    <script src="/Content/js/Trumbowyg-master-editor/dist/plugins/colors/trumbowyg.colors.min.js"></script>
+    <script src="/Content/js/Trumbowyg-master-editor/dist/plugins/upload/trumbowyg.upload.min.js"></script>
+    <script src="/Content/js/Trumbowyg-master-editor/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js"></script>
+    <script src="/Content/js/Trumbowyg-master-editor/dist/plugins/fontsize/trumbowyg.fontsize.min.js"></script>
+    <script src="/Content/js/plugins-init/Trumbowyg-editor-init.js"></script>
+
+
+
+
+    <!-- Clock Picker Plugin JavaScript -->
+    <script src="/Content/assets/plugins/moment/moment.min.js"></script>
+    <script src="/Content/assets/plugins/clockpicker/js/bootstrap-clockpicker.min.js"></script>
+    <script src="/Content/js/plugins-init/clock-picker-init.js"></script>
+
+    <!-- Upload-File-->
+    @*<script type="text/javascript" src="/Content/js/Upload-file/shieldui-all.min.js"></script>
+        <script type="text/javascript">
+            jQuery(function ($) {
+                $("#files, #files1, #files3, #files4").shieldUpload();
+            });</script>*@
+
+    <!-- Giữ-Dropdown ko bị mất khi di chuột-->
+    <script>
+        $('#myDropdown .dropdown-menu').on({
+            "click": function (e) {
+                e.stopPropagation();
+            }
+        });</script>
+
+    <!-- Giữ-Dropdown open khi click chuột ra ngoài-->
+    <script>
+        $('#myDropdown').on({
+            "shown.bs.dropdown": function () { $(this).attr('closable', false); },
+            "click": function () { },
+            "hide.bs.dropdown": function () { return $(this).attr('closable') == 'true'; }
+        });
+
+        $('#myDropdown #dLabel').on({
+            "click": function () {
+                $(this).parent().attr('closable', true);
+            }
+        })
+    </script>
+
+    <!---popup trong poup cuộn-->
+    <script>
+        $(document).on('hidden.bs.modal', '.modal', function () {
+            $('.modal:visible').length && $(document.body).addClass('modal-open');
+        });
+    </script>
+
+    <!--scroll-->
+    <script>
+        $('.left-work').slimscroll({
+            position: "right",
+            size: "5px",
+            height: "750px",
+            color: "#c1c1c1",
+            alwaysVisible: true,
+        });
+    </script>
+
+
+    <!-- button show hide-->
+    <script>
+        $(document).ready(function () {
+            $("#attachemnt-1").click(function () {
+                $(".attachment-comment").toggle();
+            });
+
+            $("#tags-1").click(function () {
+                $(".Tag-customer").toggle();
+            });
+
+        });
+        $(".select2").select2();
+
+        function setInputFilter(textbox, inputFilter) {
+            ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
+                textbox.addEventListener(event, function () {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    } else {
+                        this.value = "";
+                    }
+                });
+            });
+        }
+
+    </script>
+
+    <!----xóa và add form-->
+    <script src="/Content/js/repeater/js/jquery.repeater.min.js"></script>
+    <script src="/Content/js/repeater/js/form-repeater.min.js"></script>
+
+    <!--scroll-->
+    <script>
+        $('.scroll-mes').slimscroll({
+            position: "right",
+            size: "5px",
+            height: "",
+            maxHeight: '350px',
+            color: "#c1c1c1",
+            alwaysVisible: true,
+        });</script>
+
+    <!--Sửa tab trong dropdown-->
+    <script>
+        $(document).ready(function () {
+            $('.default-tab-mes .dropdown-content-heading li').on('click', function (event) {
+                //The event won't be propagated to the document NODE and
+                // therefore events delegated to document won't be fired
+                event.stopPropagation();
+            });
+
+            $('.default-tab-mes .dropdown-content-heading li').on('click', function (event) {
+                //The event won't be propagated to the document NODE and
+                // therefore events delegated to document won't be fired
+                event.stopPropagation();
+            });
+
+            $('.default-tab-mes .dropdown-content-heading > ul > li > a').on('click', function (event) {
+                event.stopPropagation();
+                $(this).tab('show')
+            });
+        });</script>
+
+
+
+    <!--Dùng chung 1 Dropdown-->
+    <script>
+        $('.uniquedd').click(function (e) {
+            e.preventDefault();
+            var that = $(this);
+            var p = that.offset();
+            actOverWhat = that.data('info');
+            //change the actions of the buttons edit and delete
+
+            //check if open
+            isOpen = $("#unique-dropdown").hasClass('open');
+
+            if (isOpen) {
+                that.dropdown('toggle');
+            }
+
+            $("#unique-dropdown").offset({ top: (p.top + 15), left: p.left });
+        });</script>
+
+    @RenderSection("scripts", required: false)
+
+
+
+</body>
+</html>

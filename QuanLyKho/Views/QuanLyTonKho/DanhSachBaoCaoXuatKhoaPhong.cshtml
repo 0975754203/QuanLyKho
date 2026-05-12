@@ -1,0 +1,54 @@
+@using QuanLyKho.Utility
+@model QuanLyKho.Models.BaoCaoXuatKhoaPhong_DSModel
+
+<div class="table-responsive" style="overflow-x: auto;">
+    <table class="table table-striped table-bordered verticle-middle table-hover table-responsive-fix-big">
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Tên khoa phòng</th>
+                @if (Model.CotSanPham != null)
+                {
+                    foreach (var cot in Model.CotSanPham)
+                    {
+                        <th scope="col" class="text-right" style="min-width: 7rem;">@cot.TenCot</th>
+                    }
+                }
+                <th scope="col" class="text-right">Tổng cộng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var i = (Model.PageIndex - 1) * Model.PageSize; }
+            @if (Model.TBL_BaoCao != null && Model.TBL_BaoCao.Count > 0 && Model.CotSanPham != null)
+            {
+                foreach (var item in Model.TBL_BaoCao)
+                {
+                    <tr>
+                        <td>@(++i)</td>
+                        <td>@item.TenKhoaPhong</td>
+                        @foreach (var cot in Model.CotSanPham)
+                        {
+                            decimal sl = 0m;
+                            if (item.SoLuongTheoSanPham != null && item.SoLuongTheoSanPham.ContainsKey(cot.IdSanPham))
+                            {
+                                sl = item.SoLuongTheoSanPham[cot.IdSanPham];
+                            }
+                            <td class="text-right">@(sl != 0m ? string.Format("{0:n2}", sl) : "")</td>
+                        }
+                        <td class="text-right">@string.Format("{0:n2}", item.TongSoLuong)</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                var colspan = 3 + (Model.CotSanPham != null ? Model.CotSanPham.Count : 0);
+                <tr>
+                    <td colspan="@colspan">Không có dữ liệu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@Html.GenPaging().PagingHTML(Model.PageIndex, Model.Pagecount, Model.Total)
+<input type="hidden" id="pageIndex" name="pageIndex" value="@Model.PageIndex" />

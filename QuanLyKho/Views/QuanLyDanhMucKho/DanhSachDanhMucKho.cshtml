@@ -1,0 +1,52 @@
+@using QuanLyKho.Utility
+@model QuanLyKho.Models.DanhMucKho_DSModel
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered verticle-middle table-hover table-responsive-fix-big">
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Mã kho</th>
+                <th scope="col">Tên kho</th>
+                <th scope="col">Ghi chú</th>
+                <th scope="col">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var i = 0; }
+            @if (Model.TBL_DanhMucKho != null && Model.TBL_DanhMucKho.Count > 0)
+            {
+                foreach (var item in Model.TBL_DanhMucKho)
+                {
+                    <tr>
+                        <td>@(++i)</td>
+                        <td>@item.MaKho</td>
+                        <td>@item.TenKho</td>
+                        <td>@item.DiaChi</td>
+                        <td>
+                            @if (QuanLyKho.Utility.Global.IsAdmin())
+                            {
+                                <a href="#" onclick="FormDanhMucKho('@item.Id')" class="mr-3" title="Sửa"><i class="ti-pencil-alt"></i></a>
+                                <a href="#" onclick="DeleteDanhMucKho('@item.Id')" class="mr-3" title="Xóa"><i class="ti-trash"></i></a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">—</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">Không có dữ liệu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@Html.GenPaging().PagingHTML(Model.PageIndex, Model.Pagecount, Model.Total)
+<input type="hidden" id="pageIndex" name="pageIndex" value="@Model.PageIndex" />
+

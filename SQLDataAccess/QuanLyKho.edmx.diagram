@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b715477e1b3248ffac691b1161619093" Name="Diagram1">
+        <EntityTypeShape EntityType="QuanLyKhoModel.Kho" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyKhoModel.KhoGiaoDichChiTiet" Width="1.5" PointX="5.25" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyKhoModel.KhoSanPham" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyKhoModel.KhoTon" Width="1.5" PointX="6" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyKhoModel.TaiKhoan" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyKhoModel.TuDien" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuanLyKhoModel.TuDienLoai" Width="1.5" PointX="1.5" PointY="12.625" IsExpanded="true" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoTon_Kho" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoSanPham" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoSanPham_TuDien" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoTon_KhoSanPham" ManuallyRouted="false" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_TuDien_TuDienLoai" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="QuanLyKhoModel.KhoGiaoDich" Width="1.5" PointX="3" PointY="4.375" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDich_Kho" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDich_TaiKhoan" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDich_TuDien" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoGiaoDich" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich" />
+        <EntityTypeShape EntityType="QuanLyKhoModel.NhomVatTu" Width="1.5" PointX="7.375" PointY="0.875" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoSanPham_NhomVatTu" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

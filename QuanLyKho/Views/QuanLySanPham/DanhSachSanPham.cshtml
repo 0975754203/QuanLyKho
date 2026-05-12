@@ -1,0 +1,68 @@
+﻿@using QuanLyKho.Utility
+@using SQLDataAccess;
+@model  QuanLyKho.Models.KhoSanPham_DSModel
+@{ var uow = new UnitOfWork(); }
+@{
+    var login = QuanLyKho.Utility.Global.ThongTinTaiKhoan_Login;
+    var laAdmin = Global.IsAdmin();
+}
+<div class="table-responsive">
+    <table class="table table-striped table-bordered verticle-middle table-hover  table-responsive-fix-big">
+        <thead>
+            <tr>
+                <th scope="col" class="">STT</th>
+                <th scope="col" class="">Mã sản phẩm</th>
+                <th scope="col" class="">Tên sản phẩm</th>
+                <th scope="col" class="">Xuất xứ</th>
+                <th scope="col" class="">Đơn vị</th>
+                <th scope="col" class="">Nhóm vật tư</th>
+                <th scope="col" class="">Ghi chú</th>
+                <th scope="col" class="">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var i = 0;
+
+            }
+            @if (Model.TBL_SanPham.Count > 0)
+            {
+                foreach (var item in Model.TBL_SanPham)
+                {
+                    <tr>
+                        <td>@(++i)</td>
+                        <td>@item.MaSanPham</td>
+                        <td>@item.TenSanPham</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.XuatXu) ? "—" : item.XuatXu)</td>
+                        <td>@item.sDonViTinh</td>
+                        <td>@(string.IsNullOrEmpty(item.TenNhomVatTu) ? "—" : item.TenNhomVatTu)</td>
+                        <td>@item.GhiChu</td>
+                        <td>
+                            @if (laAdmin)
+                            {
+                                <a href="#" onclick="FormSanPham('@item.Id')" class="mr-3" title="Sửa"><i class="ti-pencil-alt"></i></a>
+                                <a href="#" onclick="DeleteSanPham('@item.Id')" class="mr-3" title="Xóa"><i class="ti-trash"></i></a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">—</span>
+                            }
+                        </td>
+                        @*&& PhienBan ==  BusinessLogic.Utils.HangSo.PhienBan.NhapDiem*@
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8">
+                        Không có dữ liệu
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+@Html.GenPaging().PagingHTML(Model.PageIndex, Model.Pagecount, Model.Total)
+<input type="hidden" id="pageIndex" name="pageIndex" value="@Model.PageIndex" />

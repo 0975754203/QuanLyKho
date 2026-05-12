@@ -1,0 +1,266 @@
+@model BusinessLogic.Model.KhoGiaoDichModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Xuất kho";
+    var comboSanPham = ViewBag.ComboSanPham as IEnumerable<SelectListItem>;
+    var comboKho = ViewBag.ComboKho as IEnumerable<SelectListItem>;
+    var comboKhoNhan = ViewBag.ComboKhoNhan as IEnumerable<SelectListItem>;
+    var comboKhoaPhong = ViewBag.ComboKhoaPhong as IEnumerable<SelectListItem>;
+}
+
+<div class="row content-all-crmnt">
+    <div class="col-sm-12">
+        <div class="tab-content br-n pn">
+            @using (Html.BeginForm("XuatKho", "QuanLyGiaoDichNhapXuat", FormMethod.Post, new { id = "fXuatKho", @class = "form-crmnt" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x => x.IdNguoiTao)
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">Thông tin phiếu xuất</h4>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="text-label">Kho xuất</label>
+                            @Html.DropDownListFor(x => x.IdKho, comboKho, new { @class = "form-control select2", id = "ddlIdKho" })
+                            @Html.ValidationMessageFor(x => x.IdKho)
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="text-label">Kho nhận (nếu có)</label>
+                            @Html.DropDownListFor(x => x.IdKhoNhan, comboKhoNhan, new { @class = "form-control select2", id = "ddlIdKhoNhan" })
+                            @Html.ValidationMessageFor(x => x.IdKhoNhan)
+                            <small class="form-text text-muted">Khi chọn, hệ thống tự sinh phiếu nhập kho tương ứng cho kho nhận.</small>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="text-label">Khoa/Phòng nhận</label>
+                            @Html.DropDownListFor(x => x.IdKhoaPhong, comboKhoaPhong, new { @class = "form-control select2" })
+                            @Html.ValidationMessageFor(x => x.IdKhoaPhong)
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="text-label">Mã giao dịch</label>
+                            @Html.TextBoxFor(x => x.MaGiaoDich, new { @class = "form-control input-sm", @readonly = "readonly", placeholder = "Tự sinh" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="text-label">Họ tên người nhận hàng</label>
+                            @Html.TextBoxFor(x => x.NguoiGiaoNhan, new { @class = "form-control", placeholder = "Nhập họ tên người nhận" })
+                            @Html.ValidationMessageFor(x => x.NguoiGiaoNhan)
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="text-label">Ghi chú</label>
+                            @Html.TextAreaFor(x => x.GhiChu, 2, 0, new { @class = "form-control", placeholder = "Ghi chú (nếu có)" })
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">Chi tiết sản phẩm</h4>
+                    <button type="button" class="btn btn-main btn-sm" id="btnAddRow"><i class="ti-plus"></i>Thêm sản phẩm</button>
+                </div>
+
+                <div class="table-responsive mt-3">
+                    <table class="table table-bordered" id="tblChiTiet">
+                        <thead>
+                            <tr>
+                                <th style="width: 60%;">Sản phẩm (tên — tồn — đơn vị)</th>
+                                <th style="width: 25%;">Số lượng xuất</th>
+                                <th style="width: 15%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < (Model.lstChiTiet?.Count ?? 0); i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.lstChiTiet[i].IdSanPham, comboSanPham, new { @class = "form-control select2 sp-select" })
+                                        @Html.ValidationMessageFor(m => m.lstChiTiet[i].IdSanPham)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.lstChiTiet[i].SoLuong, new { @class = "form-control", type = "number", step = "0.01", min = "0" })
+                                        @Html.ValidationMessageFor(m => m.lstChiTiet[i].SoLuong)
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-danger btn-sm btnDelRow" title="Xóa dòng"><i class="ti-trash"></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <button type="submit" class="btn btn-main" id="btnSave"><i class="ti-save"></i>Lưu phiếu xuất</button>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+    var urlDanhSachXuatKho = '@Url.Action("IndexXuatKho", "QuanLyGiaoDichNhapXuat")';
+    $(function () {
+        var urlSanPham = '@Url.Action("SanPhamCoTonTrongKho", "QuanLyGiaoDichNhapXuat")';
+
+        function escOpt(s) {
+            if (!s) return '';
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+        }
+
+        function buildOptsHtml(rows) {
+            var h = '<option value="">-- Chọn sản phẩm --</option>';
+            if (!rows || !rows.length) {
+                h += '<option value="" disabled>Không có hàng tồn trong kho này</option>';
+                return h;
+            }
+            for (var i = 0; i < rows.length; i++) {
+                h += '<option value="' + escOpt(rows[i].id) + '">' + escOpt(rows[i].text) + '</option>';
+            }
+            return h;
+        }
+
+        window._optsXuatHtml = '<option value="">-- Chọn kho trước --</option>';
+
+        function refreshAllSpSelects(html) {
+            $("#tblChiTiet select.sp-select").each(function () {
+                var $s = $(this);
+                var v = $s.val();
+                try { $s.select2('destroy'); } catch (e) { }
+                $s.html(html);
+                if (v && $s.find('option[value="' + v + '"]').length) {
+                    $s.val(v);
+                }
+                $s.select2({ width: '100%' });
+            });
+        }
+
+        function reloadSanPhamTheoKho() {
+            var idKho = $("#ddlIdKho").val();
+            if (!idKho) {
+                window._optsXuatHtml = '<option value="">-- Chọn kho trước --</option>';
+                refreshAllSpSelects(window._optsXuatHtml);
+                return;
+            }
+            $.getJSON(urlSanPham, { idKho: idKho })
+                .done(function (data) {
+                    window._optsXuatHtml = buildOptsHtml(data);
+                    refreshAllSpSelects(window._optsXuatHtml);
+                })
+                .fail(function () {
+                    toastr.error("Không tải được danh sách sản phẩm trong kho.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+                });
+        }
+
+        $(".select2").not(".sp-select").select2({ width: '100%' });
+        $("#tblChiTiet select.sp-select").each(function () {
+            $(this).select2({ width: '100%' });
+        });
+
+        $("#ddlIdKho").on("change", function () {
+            reloadSanPhamTheoKho();
+            var idKho = $(this).val();
+            if (idKho && $("#ddlIdKhoNhan").val() === idKho) {
+                $("#ddlIdKhoNhan").val("").trigger("change");
+                toastr.warning("Kho nhận trùng kho xuất, đã được bỏ chọn.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+
+        $("#ddlIdKhoNhan").on("change", function () {
+            var idKhoNhan = $(this).val();
+            var idKho = $("#ddlIdKho").val();
+            if (idKhoNhan && idKho && idKhoNhan === idKho) {
+                $(this).val("").trigger("change.select2");
+                toastr.warning("Kho nhận phải khác kho xuất.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+
+        function renumberRows() {
+            $("#tblChiTiet tbody tr").each(function (idx) {
+                $(this).find("select, input").each(function () {
+                    var name = $(this).attr("name");
+                    if (!name) return;
+                    name = name.replace(/lstChiTiet\[\d+\]/g, "lstChiTiet[" + idx + "]");
+                    $(this).attr("name", name);
+                });
+                $(this).find("span[data-valmsg-for]").each(function () {
+                    var f = $(this).attr("data-valmsg-for");
+                    if (!f) return;
+                    f = f.replace(/lstChiTiet\[\d+\]/g, "lstChiTiet[" + idx + "]");
+                    $(this).attr("data-valmsg-for", f);
+                });
+            });
+        }
+
+        $("#btnAddRow").on("click", function () {
+            var idx = $("#tblChiTiet tbody tr").length;
+            var opts = window._optsXuatHtml || '<option value="">-- Chọn kho trước --</option>';
+            var row = '<tr>' +
+                '<td><select class="form-control select2 sp-select" name="lstChiTiet[' + idx + '].IdSanPham">' + opts + '</select>' +
+                '<span class="field-validation-valid" data-valmsg-for="lstChiTiet[' + idx + '].IdSanPham" data-valmsg-replace="true"></span></td>' +
+                '<td><input class="form-control" type="number" step="0.01" min="0" name="lstChiTiet[' + idx + '].SoLuong" value="1" />' +
+                '<span class="field-validation-valid" data-valmsg-for="lstChiTiet[' + idx + '].SoLuong" data-valmsg-replace="true"></span></td>' +
+                '<td class="text-center"><button type="button" class="btn btn-danger btn-sm btnDelRow" title="Xóa dòng"><i class="ti-trash"></i></button></td>' +
+                '</tr>';
+            $("#tblChiTiet tbody").append(row);
+            $("#tblChiTiet tbody tr:last select.sp-select").select2({ width: '100%' });
+        });
+
+        $(document).on("click", ".btnDelRow", function () {
+            $(this).closest("tr").remove();
+            renumberRows();
+        });
+
+        $("#fXuatKho").submit(function (e) {
+            e.preventDefault();
+            $("#btnSave").hide();
+
+            $.ajax({
+                type: "POST",
+                url: "/QuanLyGiaoDichNhapXuat/XuatKho",
+                data: $("#fXuatKho").serialize(),
+                dataType: "json",
+                success: function (data) {
+                    if (data.Sucess) {
+                        toastr.success("Lưu phiếu xuất thành công.", "Thông báo", { timeOut: 3e3, closeButton: !0 });
+                        setTimeout(function () {
+                            window.location.href = urlDanhSachXuatKho;
+                        }, 700);
+                    } else {
+                        DisplayErrors(data.Errors);
+                        var msg = (data.Message) ? data.Message : "Vui lòng kiểm tra dữ liệu nhập.";
+                        if (data.Errors && data.Errors.length && data.Errors[0].Value && data.Errors[0].Value[0]) {
+                            msg = data.Errors[0].Value[0];
+                        }
+                        toastr.warning(msg, "Cảnh báo", { timeOut: 8e3, closeButton: !0 });
+                        $("#btnSave").show();
+                    }
+                },
+                error: function () {
+                    toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                    $("#btnSave").show();
+                }
+            });
+        });
+
+        function DisplayErrors(errors) {
+            $(".field-validation-valid").html("");
+            if (!errors) return;
+            for (var i = 0; i < errors.length; i++) {
+                $("span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+            }
+        }
+    });
+</script>
+}

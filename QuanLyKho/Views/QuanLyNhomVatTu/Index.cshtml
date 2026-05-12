@@ -1,0 +1,138 @@
+@using QuanLyKho.Utility
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row content-all-crmnt">
+    <div class="col-sm-12">
+        <div class="tab-content br-n pn">
+            <div class="content-tab-crmnt ">
+                <div class="row">
+                    <div class="col-xl-2 col-sm-2 content-bg">
+                        <div class="form-group ">
+                            <input type="text" id="txtName" class="form-control input-sm" value="" name="fname" placeholder="Mã nhóm / Tên nhóm">
+                        </div>
+                    </div>
+
+
+                    <div class="col-xl-2 col-sm-2 content-bg">
+                        <div class="form-group ">
+                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachNhomVatTu(1)" id="btnTimKiem">Tìm kiếm</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-2">
+                    </div>
+                    @if (Global.IsAdmin())
+                    {
+                        <div class="col-xl-3 col-sm-3 content-bg">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-main" onclick="FormNhomVatTu('')"><i class="ti-plus"></i>Thêm mới</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="table-crmnt table-job" id="content_NhomVatTu">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal popup-detail fade" id="modalNhomVatTu" role="dialog" data-backdrop="static"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+</div>
+
+
+
+<div class="modal fade" id="modelDelete" tabindex="-1" role="dialog" data-backdrop="static"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="ti-close"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span class="text-delete">Bạn có chắc chắn muốn xóa nhóm vật tư này không?</span>
+                <input type="hidden" id="delete_id" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
+                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".select2").select2();
+        DanhSachNhomVatTu(1);
+     });
+    $("#txtName").on('keypress', function (e) {
+        if (e.keyCode === 13) {
+            DanhSachNhomVatTu(1);
+        }
+    });
+    function DanhSachNhomVatTu(pageIndex) {
+        var name = $("#txtName").val();
+        $("#LoadingModal").modal('show');
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("DanhSachNhomVatTu")',
+            data: {
+                pageIndex: pageIndex,
+                name: name
+            },
+            dataType: "html",
+            success: function (data) {
+                $("#content_NhomVatTu").html(data);
+                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 1000);
+            }
+        });
+    }
+    function pagingData(pageIndex) {
+        DanhSachNhomVatTu(pageIndex);
+    }
+
+    function FormNhomVatTu(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("FormNhomVatTu")',
+            data: { id: id },
+            dataType: "html",
+            success: function (data) {
+                $("#modalNhomVatTu").html(data);
+                $("#modalNhomVatTu").modal('show')
+            }
+        });
+    }
+
+    function DeleteNhomVatTu(id) {
+        $("#modelDelete").modal("show");
+        $("#delete_id").val(id);
+    }
+
+    function ActionDelete() {
+        $("#modelDelete").modal("hide");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("XoaNhomVatTu")',
+            data: { id: $("#delete_id").val() },
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    DanhSachNhomVatTu($("#pageIndex").val());
+                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+                } else {
+                    var msg = data.Message ? data.Message : "Không xóa được.";
+                    toastr.warning(msg, "Cảnh báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+                }
+            }
+        });
+        $(".modal-backdrop").remove();
+    }
+</script>

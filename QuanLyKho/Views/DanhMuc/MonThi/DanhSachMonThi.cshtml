@@ -1,0 +1,155 @@
+﻿@using QuanLyKho.Utility
+<div class="row content-all-crmnt">
+    <div class="col-sm-12">
+        <div class="tab-content br-n pn">
+            <div class="content-tab-crmnt ">
+                <div class="row">
+                    <div class="col-xl-3 col-sm-3 content-bg">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-main" onclick="FormTruong('')"><i class="ti-plus"></i>Thêm mới</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-2 content-bg">
+                        <div class="form-group ">
+                            <input type="text" id="txtName" class="form-control input-sm" value="" name="fname" placeholder="Tên mã trường">
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-2 content-bg">
+                        <div class="form-group ">
+                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachTruong(1)" id="btnTimKiem">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-crmnt table-job" id="content_Truong">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal popup-detail fade" id="modalAdd" role="dialog" data-backdrop="static"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+</div>
+
+<div class="modal fade" id="modelDelete" tabindex="-1" role="dialog" data-backdrop="static"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="ti-close"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span class="text-delete">Bạn có chắc chắn muốn xóa không?</span>
+                <input type="hidden" id="delete_id" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
+                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".select2").select2();
+         DanhSachTruong(1);
+     });
+    $("#txtName").on('keypress', function (e) {
+        if (e.keyCode === 13) {
+            DanhSachTruong(1);
+        }
+    });
+    function test() {
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:5000/api/Sign/PhatHanhHoaDon",
+            dataType: "json",
+            success: function (data) {
+                $("#mainContent").html(data);
+                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 1000);
+            }
+        });
+    }
+    function DanhSachTruong(pageIndex) {
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:5000/api/Sign/PhatHanhHoaDon",
+            dataType: "json",
+            success: function (data) {
+                $("#mainContent").html(data);
+                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 1000);
+            }
+        });
+    }
+    function pagingData(pageIndex) {
+        DanhSachTruong(pageIndex);
+    }
+
+    function FormTruong(id) {
+        $.ajax({
+            type: "GET",
+            url: '/QuanLyTruong/FormTruong',
+            data: { id: id },
+            dataType: "html",
+            success: function (data) {
+                $("#modalTruong").html(data);
+                $("#modalTruong").modal('show')
+            }
+        });
+    }
+
+    function DeleteTruong(id) {
+        $("#modelDelete").modal("show");
+        $("#delete_id").val(id);
+    }
+
+    function ActionDelete() {
+        $("#modelDelete").modal("hide");
+        $.ajax({
+            type: "POST",
+            url: '/QuanLyTruong/XoaTruong',
+            data: { id: $("#delete_id").val() },
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    DanhSachTruong($("#pageIndex").val());
+                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+                }
+            }
+        });
+        $(".modal-backdrop").remove();
+    }
+
+    function ResetPassTruong(id) {
+        $("#modelReset").modal("show");
+        $("#reset_id").val(id);
+    }
+
+    function ActionReset() {
+        $("#modelReset").modal("hide");
+        $.ajax({
+            type: "POST",
+            url: '/QuanLyTruong/ResetMatKhau',
+            data: { id: $("#reset_id").val() },
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    DanhSachTruong($("#pageIndex").val());
+                    toastr.success("Reset mật khẩu thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+                }
+            }
+        });
+        $(".modal-backdrop").remove();
+    }
+    function XuatFileExcel() {
+        var loaitruong = $("#ddlLoaiTruong").val();
+        var donvi = $("#ddlDonVi").val();
+        var url = "/QuanLyTruong/XuatExcel?idPhong=" + donvi + "&sLoaiTruong=" + loaitruong;
+         window.open(url);
+    }
+</script>

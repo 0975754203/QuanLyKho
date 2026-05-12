@@ -1,0 +1,155 @@
+@model BusinessLogic.Model.KhoGiaoDichModel
+@{
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+    const string DOTS_SHORT = "..............................";
+    const string DOTS_MEDIUM = "..................................................";
+    const string DOTS_LONG = "..............................................................................";
+    Func<string, string, string> orDots = (value, dots) => string.IsNullOrWhiteSpace(value) ? dots : value;
+    var tongSoLuong = (Model.lstChiTiet != null) ? Model.lstChiTiet.Sum(x => x.SoLuong) : 0;
+    var ngay = Model.NgayTao;
+    var nguoiGiao = orDots(Model.NguoiGiaoNhan, DOTS_MEDIUM);
+    var tenKho = orDots(Model.sTenKho, DOTS_MEDIUM);
+    var soPhieu = orDots(Model.MaGiaoDich, DOTS_SHORT);
+}
+
+<style>
+    .pnk-wrap { font-family: "Times New Roman", serif; color: #000; font-size: 13pt; padding: 16px 32px; }
+    .pnk-row { display: flex; justify-content: space-between; }
+    .pnk-left, .pnk-right { width: 48%; }
+    .pnk-center { text-align: center; }
+    .pnk-title { font-weight: 700; font-size: 18pt; margin: 14px 0 4px; }
+    .pnk-text { margin: 0; line-height: 1.7; }
+    .pnk-dot { letter-spacing: 1px; }
+    .pnk-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+    .pnk-table th, .pnk-table td { border: 1px solid #000; padding: 6px 4px; vertical-align: middle; font-size: 12pt; }
+    .pnk-table th { text-align: center; font-weight: 700; }
+    .pnk-sign { margin-top: 24px; width: 100%; }
+    .pnk-sign td { width: 20%; text-align: center; vertical-align: top; }
+    .pnk-sign-title { font-weight: 700; }
+    .pnk-date-line { text-align: right !important; white-space: nowrap; }
+    .no-print { margin-top: 24px; text-align: right; }
+    @@media print {
+        .no-print { display: none !important; }
+    }
+</style>
+
+<div class="pnk-wrap">
+    <div class="pnk-row">
+        <div class="pnk-left">
+            <div class="pnk-text"><strong>Đơn vị:</strong> <span class="pnk-dot">....................</span></div>
+            <div class="pnk-text"><strong>Bộ phận:</strong> <span class="pnk-dot">....................</span></div>
+        </div>
+        <div class="pnk-right pnk-center">
+            <div><strong>Mẫu số 01 - VT</strong></div>
+            <div>(Ban hành theo Thông tư số 200/2014/TT-BTC</div>
+            <div>Ngày 22/12/2014 của Bộ Tài chính)</div>
+        </div>
+    </div>
+
+    <div class="pnk-center">
+        <div class="pnk-title">PHIẾU NHẬP KHO</div>
+        <div><em>Ngày @ngay.Day tháng @ngay.Month năm @ngay.Year</em></div>
+    </div>
+
+    <table style="width:100%; margin-top: 4px;">
+        <tr>
+            <td style="width:65%;">Số: @soPhieu</td>
+            <td style="width:35%;">Nợ: @DOTS_SHORT</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Có: @DOTS_SHORT</td>
+        </tr>
+    </table>
+
+    <div class="pnk-text" style="margin-top:10px;">- Họ và tên người giao hàng: @nguoiGiao</div>
+    <div class="pnk-text">- Theo @DOTS_SHORT số @DOTS_SHORT ngày @DOTS_SHORT của @DOTS_MEDIUM</div>
+    <div class="pnk-text">- Nhập tại kho: @tenKho Địa điểm: @DOTS_SHORT</div>
+
+    <table class="pnk-table">
+        <thead>
+            <tr>
+                <th style="width:6%;" rowspan="2">STT</th>
+                <th style="width:34%;" rowspan="2">Tên, nhãn hiệu, quy cách, phẩm chất vật tư, dụng cụ sản phẩm, hàng hóa</th>
+                <th style="width:8%;" rowspan="2">Mã số</th>
+                <th style="width:8%;" rowspan="2">Đơn vị tính</th>
+                <th style="width:16%;" colspan="2">Số lượng</th>
+                <th style="width:10%;" rowspan="2">Đơn giá</th>
+                <th style="width:10%;" rowspan="2">Thành tiền</th>
+            </tr>
+            <tr>
+                <th style="width:8%;">Theo chứng từ</th>
+                <th style="width:8%;">Thực nhập</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var stt = 0;
+            }
+            @if (Model.lstChiTiet != null && Model.lstChiTiet.Count > 0)
+            {
+                foreach (var item in Model.lstChiTiet)
+                {
+                    <tr>
+                        <td style="text-align:center;">@(++stt)</td>
+                        <td>@orDots(item.TenSanPham, "")</td>
+                        <td style="text-align:center;">@orDots(item.MaSanPham, "...")</td>
+                        <td style="text-align:center;">@orDots(item.sDonVi, "...")</td>
+                        <td style="text-align:right;">@item.SoLuong.ToString("n2")</td>
+                        <td style="text-align:right;">@item.SoLuong.ToString("n2")</td>
+                        <td style="text-align:right;">...</td>
+                        <td style="text-align:right;">...</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td style="text-align:center;">1</td>
+                    <td>...</td>
+                    <td style="text-align:center;">...</td>
+                    <td style="text-align:center;">...</td>
+                    <td style="text-align:right;">...</td>
+                    <td style="text-align:right;">...</td>
+                    <td style="text-align:right;">...</td>
+                    <td style="text-align:right;">...</td>
+                </tr>
+            }
+            <tr>
+                <td></td>
+                <td><strong>Cộng</strong></td>
+                <td style="text-align:center;"><strong>x</strong></td>
+                <td style="text-align:center;"><strong>x</strong></td>
+                <td style="text-align:right;"><strong>@tongSoLuong.ToString("n2")</strong></td>
+                <td style="text-align:right;"><strong>@tongSoLuong.ToString("n2")</strong></td>
+                <td style="text-align:center;"><strong>x</strong></td>
+                <td style="text-align:center;"><strong>x</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="pnk-text" style="margin-top:8px;">- Tổng số tiền (viết bằng chữ): @DOTS_LONG</div>
+    <div class="pnk-text">- Số chứng từ gốc kèm theo: @DOTS_LONG</div>
+
+    <table class="pnk-sign">
+        <tr>
+            <td colspan="5" class="pnk-date-line">Ngày <span class="pnk-dot">...</span> tháng <span class="pnk-dot">...</span> năm <span class="pnk-dot">.....</span></td>
+        </tr>
+        <tr>
+            <td class="pnk-sign-title">Người lập phiếu</td>
+            <td class="pnk-sign-title">Người giao hàng</td>
+            <td class="pnk-sign-title">Thủ kho</td>
+            <td class="pnk-sign-title" colspan="2">Kế toán trưởng<br />(Hoặc bộ phận có nhu cầu nhập)</td>
+        </tr>
+        <tr>
+            <td><em>(Ký, họ tên)</em></td>
+            <td><em>(Ký, họ tên)</em></td>
+            <td><em>(Ký, họ tên)</em></td>
+            <td colspan="2"><em>(Ký, họ tên)</em></td>
+        </tr>
+    </table>
+
+    <div class="no-print">
+        <button type="button" onclick="window.print();" style="padding:8px 14px;">In phiếu</button>
+    </div>
+</div>

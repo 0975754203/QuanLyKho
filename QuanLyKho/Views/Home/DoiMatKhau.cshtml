@@ -1,0 +1,65 @@
+﻿
+@model  QuanLyKho.Models.DangNhapModel
+<div class="row content-all-crmnt login-formNew">
+    @using (Html.BeginForm("DoiMatKhau1", "Home", new { backurl = ViewContext.HttpContext.Request.QueryString["backurl"] }, FormMethod.Post, new { @id = "changePassform", }))
+    {
+    <div class="form-signin">
+
+        <h6 class="card-subtitle line-on-side1 text-muted text-center  mb-1 pt-2">
+            <span class="label-control">
+               Đổi mật khẩu
+            </span>
+        </h6>
+        <div class="form-group">
+           
+                <label class="label-control">Mật khẩu cũ</label>
+         
+                @Html.PasswordFor(x => x.Password, new { @class = "form-control input-sm", @placeholder = "Mật khẩu cũ" })
+          
+        </div>
+
+        <div class="form-group">
+           
+                <label class="label-control">Mật khẩu mới</label>
+          
+                @Html.PasswordFor(x => x.PasswordNew, new { @class = "form-control input-sm", @placeholder = "Mật khẩu mới" })
+          
+        </div>
+
+
+        <div class="form-group">
+         
+                <label class="label-control">Nhập lại mật khẩu mới</label>
+       
+                @Html.PasswordFor(x => x.PasswordNewComfirm, new { @class = "form-control input-sm", @placeholder = "Nhập lại mật khẩu mới" })
+           
+        </div>
+
+        <div class="text-right" style="padding-top:15px">
+            <button type="submit" class="btn btn-lg-new btn-primary-new btn-block">Lưu</button>
+        </div>
+
+    </div>
+    }
+    </div>
+<script>
+    $('#changePassform').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: $('#changePassform').attr("action"),
+            data: $('#changePassform').serialize(),
+            success: function (data) {
+                if (data.Sucess) {
+                    alert("Đổi mật khẩu thành công.")
+                } else {
+                    alert(data.Errors);
+                }
+            },
+            error: function (data) {
+                alert("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.")
+            },
+        });
+    });
+   
+</script>

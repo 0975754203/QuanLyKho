@@ -1,0 +1,125 @@
+﻿@using QuanLyKho.Utility
+@using BusinessLogic.Utils;
+@model QuanLyKho.Models.TaiKhoanForm
+@{
+    string status = ViewBag.Status.ToString();
+}
+@using (Html.BeginForm("FormTaiKhoan", "QuanLyTaiKhoan", FormMethod.Post, new { enctype = "multipart/form-data", @id = "fTaiKhoan", @class = "form-crmnt" }))
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@ViewBag.TitleModal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="ti-close"></i></span>
+                </button>
+            </div>
+            <div class="modal-body m-b-35">
+                <div class="form-wizard-right form-main-crmnt">
+                    <div class="row">
+
+                        <div class="col-xl-12 col-sm-12">
+                            <h4 class="card-title">Thông tin tài khoản</h4>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="text-label">Tên đăng nhập <span class="red-crmnt">(*)</span></label>
+                                    @Html.TextBoxFor(x => x.UserName, new
+                               {
+                                   @class = "form-control input-sm",
+                                   @id = "UserName"
+                               })
+                                    @Html.ValidationMessageFor(x => x.UserName)
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="text-label">Mật khẩu <span class="red-crmnt">(*)</span></label>
+                                    @Html.PasswordFor(x => x.Pass, new { @class = "form-control input-sm" })
+                                    @Html.ValidationMessageFor(x => x.Pass)
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="text-label">Nhập lại mật khẩu <span class="red-crmnt">(*)</span></label>
+                                    @Html.PasswordFor(x => x.RePass, new { @class = "form-control input-sm" })
+                                    @Html.ValidationMessageFor(x => x.RePass)
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="text-label">Loại tài khoản <span class="red-crmnt">(*)</span></label>
+
+                                    @Html.DropDownListFor(x => x.Role, new SelectList(SelectData.ComboDoiLoaiTaiKhoan(), "Value", "Text"), new { @autocomplete = "off", @class = "form-control select2" })
+                                    @Html.ValidationMessageFor(x => x.Role)
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @if (ViewBag.status != "true")
+                {
+                    <button type="submit" class="btn btn-main" id="btnSave"><i class="ti-save"></i>Lưu dữ liệu</button>
+                }
+                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+                <input type="hidden" id="status" value="@status" />
+            </div>
+        </div>
+    </div>
+
+}
+
+<script>
+    $(document).ready(function () {
+        $("#UserName").prop('readonly', @ViewBag.isSua);
+        $("#IdDonViSearch").prop('disabled', @ViewBag.isSua);
+        @*document.getelementbyid("iddonvisearch").readonly = @viewbag.issua;*@
+    });
+    $(".select2").select2();
+    $('#fTaiKhoan').submit(function (e) {
+        e.preventDefault();
+        $("#btnSave").hide();
+        $.ajax({
+            type: "POST",
+            url: "/QuanLyTaiKhoan/FormTaiKhoan",
+            data: $('#fTaiKhoan').serialize(),
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    var pageIndex = $("#pageIndex").val();
+                    DanhSachUser(pageIndex);
+                    $("#modalTruong").modal("hide");
+                    if ($("#Id").val() == undefined || $("#Id").val() == "" || $("#Id").val() == '')
+                        toastr.success("Thêm mới thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+                    else
+                        toastr.success("Cập nhật thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+                }
+                else {
+                    DisplayErrors(data.Errors);
+                    toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+                    $("#btnSave").show();
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                throw errorThrown;
+                $("#btnSave").show();
+                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+            },
+        });
+    });
+    function DisplayErrors(errors) {
+        $(".field-validation-valid").html("");
+        for (var i = 0; i < errors.length; i++) {
+            if (i === 0) {
+                $("#" + errors[i].Key).focus();
+            }
+            $("span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+        }
+    }
+
+</script>

@@ -1,0 +1,50 @@
+.treegrid-indent {width: 20px; display: inline-block; position: relative;    top: -0.5rem;left: 1.5rem;}
+
+.treegrid-expander {width: 20px;display: inline-block; position: relative; cursor: pointer;top: -0.2rem; margin: 0 0px 0 0}
+
+.treegrid-expander-expanded{background-image: url(../img/collapse.png); }
+.treegrid-expander-collapsed{background-image: url(../img/expand.png);}
+.glyphicon {
+    display: inline-block;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 2rem;
+    display: inline-block;
+    vertical-align: middle;
+    color: #707070;
+
+}
+
+.glyphicon-chevron-down:before {
+    content: "\f0d7";
+}
+
+.glyphicon-chevron-right:before {
+    content:"\f0da";
+}
+
+.treegrid-indent {
+    font-family: 'themify';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    font-size: 2rem;
+    display: inline-block;
+    vertical-align: middle;
+    color: #707070;
+}
+
+/*.treegrid-indent::before {
+    content: "|--";
+}
+*/
+
+

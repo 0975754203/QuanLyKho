@@ -1,0 +1,182 @@
+.col-lg-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.print-top {
+    margin: 0 0 15px 0;
+}
+
+.media:last-child {
+    border-bottom: 0;
+}
+
+.media {
+    display: flex;
+    align-items: flex-start;
+}
+
+.print-top .media img {
+    width: 115px;
+    height: 85px;
+}
+
+.print-top .media-body {
+    margin: 0 0 0 15px;
+}
+
+.media-body {
+    flex: 1;
+}
+
+.print-top .media-body h5 {
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.mb-1, .my-1 {
+    margin-bottom: .25rem!important;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+h5, h6 {
+    line-height: 1.8rem;
+    font-size: 1.6rem;
+    font-weight: 400;
+}
+
+a.link, h1, h2, h3, h4, h5, h6 {
+    color: #464a53;
+}
+
+.print-top .media-body p {
+    margin-bottom: 0px;
+    font-weight: 400;
+}
+
+.header-print-bg h4 {
+    border-bottom: 1px solid #f2f2f2;
+    padding: 0 0 5px 0;
+    margin: 0 0 15px 0;
+    font-size: 2rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.mb-5, .my-5 {
+    margin-bottom: 3rem!important;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -12px;
+    margin-left: -12px;
+}
+.col-xl-9 {
+    flex: 0 0 75%;
+    max-width: 75%;
+}
+
+.table-bg h4 {
+    font-size: 1.5rem;
+}
+
+.text-center {
+    text-align: center!important;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.table-responsive>.table-bordered {
+    border: 0;
+}
+
+.table-bordered, .table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+.table-nomal-crmnt .table>tbody>tr>td, .table-nomal-crmnt .table>tbody>tr>th, .table-nomal-crmnt .table>tfoot>tr>td, .table-nomal-crmnt .table>tfoot>tr>th, .table-nomal-crmnt .table>thead>tr>td, .table-nomal-crmnt .table>thead>tr>th {
+    border-top: .1rem solid rgba(120,130,140,.13) !important;
+}
+
+.table-nomal-crmnt .table-striped thead th {
+    font-weight: 700 !important;
+    color: #367896 !important;
+    background-color: #f8f8f9 !important;
+    vertical-align: middle;
+}
+
+.table-nomal-crmnt .table-bordered td, .table-nomal-crmnt .table-bordered th {
+    border: .1rem solid rgba(120,130,140,.13) !important;
+}
+
+.table>thead>tr>th {
+    border-bottom: 0 solid rgba(120,130,140,.13);
+    font-weight: 500;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    border-top: .1rem solid rgba(120,130,140,.13);
+}
+
+.w-table-5 {
+    width: 5%;
+}
+
+.w-table-15 {
+    width: 10%;
+}
+
+.w-table-10 {
+    width: 15%;
+}
+
+.w-table-7 {
+    width: 7%;
+}
+
+.w-table-17 {
+    width: 17%;
+}
+
+.text-right {
+    text-align: right!important;
+}
+
+.table-nomal-crmnt .table-striped tbody tr:nth-of-type(odd) {
+    background: #fff;
+}
+
+dl, ol, p, ul {
+    margin-bottom: 1rem;
+}
+
+.name-company {
+    text-transform: uppercase;
+}

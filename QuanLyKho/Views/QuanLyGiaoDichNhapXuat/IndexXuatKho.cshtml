@@ -1,0 +1,156 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var comboKho = ViewBag.ComboKho as IEnumerable<SelectListItem>;
+}
+@Html.Partial("_PermissionMessage")
+
+<div class="row content-all-crmnt">
+    <div class="col-sm-12">
+        <div class="tab-content br-n pn">
+            <div class="content-tab-crmnt">
+                <div class="row align-items-end">
+                    <div class="col-xl-2 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Mã giao dịch</label>
+                            <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Mã giao dịch">
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Kho</label>
+                            @Html.DropDownList("idKho", comboKho, new { @class = "form-control input-sm", id = "ddlIdKho" })
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Từ ngày</label>
+                            <input type="date" id="tuNgay" class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Đến ngày</label>
+                            <input type="date" id="denNgay" class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachXuatKho(1)">Tìm kiếm</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-12 content-bg text-xl-right">
+                        <div class="form-group mb-2">
+                            @if (QuanLyKho.Utility.Global.IsAdmin())
+                            {
+                                <a href="@Url.Action("XuatKho", "QuanLyGiaoDichNhapXuat")" class="btn btn-main"><i class="ti-plus"></i>Xuất kho</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-crmnt table-job" id="content_XuatKho"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modelDeleteXuatKho" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="ti-close"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span class="text-delete">Bạn có chắc chắn muốn xóa giao dịch xuất kho này không?</span>
+                <input type="hidden" id="delete_id" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-main" onclick="ActionDeleteXuatKho()"><i class="ti-trash"></i>Xóa</button>
+                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+    function toYmd(d) {
+        var m = (d.getMonth() + 1).toString();
+        if (m.length === 1) m = '0' + m;
+        var day = d.getDate().toString();
+        if (day.length === 1) day = '0' + day;
+        return d.getFullYear() + '-' + m + '-' + day;
+    }
+
+    function initNgayMacDinh() {
+        var now = new Date();
+        var first = new Date(now.getFullYear(), now.getMonth(), 1);
+        $("#tuNgay").val(toYmd(first));
+        $("#denNgay").val(toYmd(now));
+    }
+
+    $(document).ready(function () {
+        initNgayMacDinh();
+        DanhSachXuatKho(1);
+    });
+
+    $("#txtSearch").on('keypress', function (e) {
+        if (e.keyCode === 13) {
+            DanhSachXuatKho(1);
+        }
+    });
+
+    function DanhSachXuatKho(pageIndex) {
+        var sSearch = $("#txtSearch").val();
+        var payload = { pageIndex: pageIndex, sSearch: sSearch };
+        var idKho = $("#ddlIdKho").val();
+        if (idKho) payload.idKho = idKho;
+        var t1 = $("#tuNgay").val();
+        var t2 = $("#denNgay").val();
+        if (t1) payload.tuNgay = t1;
+        if (t2) payload.denNgay = t2;
+        $("#LoadingModal").modal('show');
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("DanhSachXuatKho")',
+            data: payload,
+            dataType: "html",
+            success: function (data) {
+                $("#content_XuatKho").html(data);
+                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 500);
+            }
+        });
+    }
+
+    function pagingData(pageIndex) {
+        DanhSachXuatKho(pageIndex);
+    }
+
+    function DeleteXuatKho(id) {
+        $("#modelDeleteXuatKho").modal("show");
+        $("#delete_id").val(id);
+    }
+
+    function ActionDeleteXuatKho() {
+        $("#modelDeleteXuatKho").modal("hide");
+        $.ajax({
+            type: "POST",
+            url: '/QuanLyGiaoDichNhapXuat/XoaXuatKho',
+            data: { id: $("#delete_id").val() },
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    DanhSachXuatKho($("#pageIndex").val() || 1);
+                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    toastr.warning(data.Message || "Không thể xóa giao dịch.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+                }
+            }
+        });
+        $(".modal-backdrop").remove();
+    }
+</script>
+}

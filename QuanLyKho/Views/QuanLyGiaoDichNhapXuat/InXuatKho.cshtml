@@ -1,0 +1,187 @@
+@model BusinessLogic.Model.KhoGiaoDichModel
+@{
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+    const string DOTS_SHORT = "..............................";
+    const string DOTS_MEDIUM = "..................................................";
+    const string DOTS_LONG = "..............................................................................";
+    Func<string, string, string> orDots = (value, dots) => string.IsNullOrWhiteSpace(value) ? dots : value;
+    var ngay = Model.NgayTao;
+    var tongSoLuong = (Model.lstChiTiet != null) ? Model.lstChiTiet.Sum(x => x.SoLuong) : 0m;
+}
+
+<style>
+    .px-wrap { padding: 16px 32px; font-family: 'Times New Roman', Times, serif; font-size: 13pt; color: #000; }
+    .px-header { width: 100%; margin-bottom: 6px; }
+    .px-header td { vertical-align: top; }
+    .px-header .left p { margin: 0; }
+    .px-header .right { text-align: center; }
+    .px-header .right .mauso { font-weight: bold; }
+    .px-header .right .small { font-size: 11pt; font-style: italic; }
+    .px-title { text-align: center; margin: 14px 0 4px 0; }
+    .px-title h2 { margin: 0; font-size: 18pt; font-weight: bold; }
+    .px-title .ngay { font-style: italic; font-size: 13pt; margin-top: 4px; }
+    .px-no-co { width: 100%; margin-top: 4px; }
+    .px-no-co td { padding: 2px 0; }
+    .px-info { margin: 8px 0 10px 0; line-height: 1.7; }
+    .px-info p { margin: 0; }
+    .px-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+    .px-table th, .px-table td { border: 1px solid #000; padding: 6px 4px; font-size: 12pt; }
+    .px-table th { text-align: center; vertical-align: middle; font-weight: bold; }
+    .px-table td.center { text-align: center; }
+    .px-table td.right { text-align: right; }
+    .px-table .row-letter td { text-align: center; font-weight: bold; }
+    .px-table .row-cong td { font-weight: bold; }
+    .px-foot { margin-top: 10px; line-height: 1.8; }
+    .px-foot p { margin: 0; }
+    .px-sign { width: 100%; margin-top: 24px; text-align: center; }
+    .px-sign td { vertical-align: top; padding: 6px 4px; width: 20%; }
+    .px-sign .role { font-weight: bold; }
+    .px-sign .ky { font-style: italic; }
+    .px-sign .ten { margin-top: 70px; }
+    .px-actions { margin-top: 24px; text-align: right; }
+    @@media print {
+        .px-actions { display: none; }
+    }
+</style>
+
+<div class="px-wrap">
+    <table class="px-header">
+        <tr>
+            <td class="left" style="width:55%;">
+                <p><strong>Đơn vị:</strong> @DOTS_SHORT</p>
+                <p><strong>Bộ phận:</strong> @DOTS_SHORT</p>
+            </td>
+            <td class="right" style="width:45%;">
+                <p class="mauso">Mẫu số 02 - VT</p>
+                <p class="small">(Ban hành theo Thông tư số 200/2014/TT-BTC</p>
+                <p class="small">Ngày 22/12/2014 của Bộ Tài chính)</p>
+            </td>
+        </tr>
+    </table>
+
+    <div class="px-title">
+        <h2>PHIẾU XUẤT KHO</h2>
+        <div class="ngay"><em>Ngày @ngay.Day tháng @ngay.Month năm @ngay.Year</em></div>
+    </div>
+
+    <table class="px-no-co">
+        <tr>
+            <td style="width:65%;">Số: @orDots(Model.MaGiaoDich, DOTS_SHORT)</td>
+            <td style="width:35%;">Nợ: @DOTS_SHORT</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Có: @DOTS_SHORT</td>
+        </tr>
+    </table>
+
+    <div class="px-info">
+        <p>- Họ và tên người nhận hàng: @orDots(Model.NguoiGiaoNhan, DOTS_MEDIUM) Địa chỉ (bộ phận): @orDots(Model.sTenKhoaPhong, DOTS_SHORT)</p>
+        <p>- Lý do xuất kho: @orDots(Model.GhiChu, DOTS_LONG)</p>
+        <p>- Xuất tại kho (ngăn lô): @orDots(Model.sTenKho, DOTS_MEDIUM) Địa điểm: @DOTS_SHORT</p>
+    </div>
+
+    <table class="px-table">
+        <thead>
+            <tr>
+                <th rowspan="2" style="width:5%;">STT</th>
+                <th rowspan="2">Tên, nhãn hiệu, quy cách, phẩm chất vật tư, dụng cụ, sản phẩm, hàng hoá</th>
+                <th rowspan="2" style="width:9%;">Mã số</th>
+                <th rowspan="2" style="width:9%;">Đơn vị tính</th>
+                <th colspan="2" style="width:20%;">Số lượng</th>
+                <th rowspan="2" style="width:11%;">Đơn giá</th>
+                <th rowspan="2" style="width:13%;">Thành tiền</th>
+            </tr>
+            <tr>
+                <th style="width:10%;">Yêu cầu</th>
+                <th style="width:10%;">Thực xuất</th>
+            </tr>
+            <tr class="row-letter">
+                <td>A</td>
+                <td>B</td>
+                <td>C</td>
+                <td>D</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var index = 0;
+                var hasItems = Model.lstChiTiet != null && Model.lstChiTiet.Count > 0;
+            }
+            @if (hasItems)
+            {
+                foreach (var item in Model.lstChiTiet)
+                {
+                    <tr>
+                        <td class="center">@(++index)</td>
+                        <td>@orDots(item.TenSanPham, "")</td>
+                        <td class="center">@orDots(item.MaSanPham, "...")</td>
+                        <td class="center">@orDots(item.sDonVi, "...")</td>
+                        <td class="right">@item.SoLuong.ToString("n2")</td>
+                        <td class="right">@item.SoLuong.ToString("n2")</td>
+                        <td class="right">...</td>
+                        <td class="right">...</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="center">Không có chi tiết</td>
+                </tr>
+            }
+            <tr class="row-cong">
+                <td colspan="4" class="center">Cộng</td>
+                <td class="right">@tongSoLuong.ToString("n2")</td>
+                <td class="right">@tongSoLuong.ToString("n2")</td>
+                <td class="center">x</td>
+                <td class="center">x</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="px-foot">
+        <p>- Tổng số tiền (viết bằng chữ): @DOTS_LONG</p>
+        <p>- Số chứng từ gốc kèm theo: @DOTS_LONG</p>
+        <p style="text-align:right; font-style:italic; margin-top:10px;">Ngày @ngay.Day tháng @ngay.Month năm @ngay.Year</p>
+    </div>
+
+    <table class="px-sign">
+        <tr>
+            <td>
+                <div class="role">Người lập phiếu</div>
+                <div class="ky">(Ký, họ tên)</div>
+                <div class="ten">&nbsp;</div>
+            </td>
+            <td>
+                <div class="role">Người nhận hàng</div>
+                <div class="ky">(Ký, họ tên)</div>
+                <div class="ten">@orDots(Model.NguoiGiaoNhan, "")</div>
+            </td>
+            <td>
+                <div class="role">Thủ kho</div>
+                <div class="ky">(Ký, họ tên)</div>
+                <div class="ten">&nbsp;</div>
+            </td>
+            <td>
+                <div class="role">Kế toán trưởng</div>
+                <div class="ky">(Hoặc bộ phận có nhu cầu nhập)</div>
+                <div class="ky">(Ký, họ tên)</div>
+                <div class="ten">&nbsp;</div>
+            </td>
+            <td>
+                <div class="role">Giám đốc</div>
+                <div class="ky">(Ký, họ tên)</div>
+                <div class="ten">&nbsp;</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="px-actions">
+        <button type="button" onclick="window.print();" style="padding:8px 14px;">In phiếu</button>
+    </div>
+</div>

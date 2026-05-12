@@ -1,0 +1,67 @@
+<style type="text/css" >
+body {
+    font-size: 12px
+}
+
+.text-left {
+    text-align: left !important
+}
+
+.text-right {
+    text-align: right !important
+}
+
+.text-center {
+    text-align: center !important
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar
+}
+
+    .table-responsive > .table-bordered {
+        border: .1rem solid black
+    }
+
+.table > thead > tr > th {
+    border-bottom: .1rem solid black;
+    /*font-weight: 500*/
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    border-top: .1rem solid black
+}
+
+.table > tbody > tr > td {
+    border-top: none
+}
+
+.table > tbody > tr > td {
+    border-bottom: none !important
+}
+
+.table > thead > tr > th {
+    border-bottom: .1rem solid black;
+    /*font-weight: 500*/
+}
+
+.table-bordered td, .table-bordered th {
+    border: .1rem solid black;
+    border-bottom: none;
+    border-top: none;
+}
+
+.table td, .table th {
+    padding: .25rem;
+    border-top: 1px solid #dee2e6
+}
+
+</style >

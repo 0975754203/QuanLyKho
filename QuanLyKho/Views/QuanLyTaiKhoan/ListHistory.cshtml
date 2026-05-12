@@ -1,0 +1,104 @@
+﻿
+@using QuanLyKho.Utility
+@using SQLDataAccess
+@using BusinessLogic;
+@{
+    ViewBag.Title = "DanhSachHistory";
+}
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Lịch sử</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="ti-close"></i></span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="formDetail">
+                <div class="table-nomal-crmnt">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered verticle-middle table-hover  table-responsive-fix-big">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-left">Lịch sử thao tác</th>
+                                    <th scope="col" class="text-center w-table-25">Thời gian</th>
+                                    <th scope="col" class="text-center w-table-15">Thao tác</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int i = 0;
+                                }
+                                @if (Model.TBL_Data != null)
+                                {
+                                    foreach (var item in Model.TBL_Data)
+                                    {
+                                        <tr>
+                                            <td class="">@item.Content</td>
+                                            <td class="text-center">@item.CreateDate</td>
+                                            <td class="text-center">
+                                                @if (item.Link != "" && item.Link != null)
+                                                {
+                                                    <input type="hidden" id="txtLink@(++i)" value="@item.Link" />
+                                                    <button type="button" class="btn btn-search-crmnt" onclick="download_file(@(i))">
+                                                        Tải file
+                                                    </button>
+
+                                                }
+                                            </td>
+
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.GenPaging().PagingHTML_Modal(Model.PageIndex, Model.Pagecount, Model.Total)
+        <input type="hidden" id="pageIndexModal" name="pageIndexModal" value="@Model.PageIndex" />
+
+        <div class="modal-footer ">
+            <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+        </div>
+    </div>
+
+
+</div>
+<script type="text/javascript">
+    function download_file(id, fileName) {
+        // for non-IE
+        fileURL = $('#txtLink' + id).val();
+        if (!window.ActiveXObject) {
+            var save = document.createElement('a');
+            save.href = fileURL;
+            save.target = '_blank';
+            var filename = fileURL.substring(fileURL.lastIndexOf('/') + 1);
+            save.download = fileName || filename;
+            if (navigator.userAgent.toLowerCase().match(/(ipad|iphone|safari)/) && navigator.userAgent.search("Chrome") < 0) {
+                document.location = save.href;
+                // window event not working here
+            } else {
+                var evt = new MouseEvent('click', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': false
+                });
+                save.dispatchEvent(evt);
+                (window.URL || window.webkitURL).revokeObjectURL(save.href);
+            }
+        }
+
+        // for IE < 11
+        else if (!!window.ActiveXObject && document.execCommand) {
+            var _window = window.open(fileURL, '_blank');
+            _window.document.close();
+            _window.document.execCommand('SaveAs', true, fileName || fileURL)
+            _window.close();
+        }
+    }
+</script>

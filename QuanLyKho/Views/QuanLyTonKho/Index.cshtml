@@ -1,0 +1,75 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var comboKho = ViewBag.ComboKho as System.Collections.Generic.IEnumerable<System.Web.Mvc.SelectListItem>;
+}
+
+<div class="row content-all-crmnt">
+    <div class="col-sm-12">
+        <div class="tab-content br-n pn">
+            <div class="content-tab-crmnt">
+                <div class="row align-items-end">
+                    <div class="col-xl-3 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Từ khóa</label>
+                            <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Mã sản phẩm / Tên sản phẩm">
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Kho</label>
+                            @Html.DropDownList("idKho", comboKho, new { @class = "form-control select2", id = "idKho" })
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachTonKho(1)" id="btnTimKiem">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-crmnt table-job" id="content_TonKho"></div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+    $(document).ready(function () {
+        $("#idKho").select2({ width: '100%' });
+        DanhSachTonKho(1);
+    });
+
+    $("#txtSearch").on('keypress', function (e) {
+        if (e.keyCode === 13) {
+            DanhSachTonKho(1);
+        }
+    });
+
+    function DanhSachTonKho(pageIndex) {
+        var sSearch = $("#txtSearch").val();
+        var idKho = $("#idKho").val();
+        $("#LoadingModal").modal('show');
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("DanhSachTonKho")',
+            data: {
+                pageIndex: pageIndex,
+                sSearch: sSearch,
+                idKho: idKho
+            },
+            dataType: "html",
+            success: function (data) {
+                $("#content_TonKho").html(data);
+                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 500);
+            }
+        });
+    }
+
+    function pagingData(pageIndex) {
+        DanhSachTonKho(pageIndex);
+    }
+</script>
+}
+

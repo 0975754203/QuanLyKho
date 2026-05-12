@@ -1,0 +1,51 @@
+@using QuanLyKho.Utility
+@model QuanLyKho.Models.KhoGiaoDich_DSModel
+@{
+    var laAdmin = Global.IsAdmin();
+}
+<div class="table-responsive">
+    <table class="table table-striped table-bordered verticle-middle table-hover table-responsive-fix-big">
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Mã giao dịch</th>
+                <th scope="col">Thời gian</th>
+                <th scope="col">Kho</th>
+                <th scope="col">Khoa/Phòng</th>
+                <th scope="col">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var i = 0; }
+            @if (Model.TBL_KhoGiaoDich != null && Model.TBL_KhoGiaoDich.Count > 0)
+            {
+                foreach (var item in Model.TBL_KhoGiaoDich)
+                {
+                    <tr>
+                        <td>@(++i)</td>
+                        <td>@item.MaGiaoDich</td>
+                        <td>@item.NgayTao.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@item.sTenKho</td>
+                        <td>@item.sTenKhoaPhong</td>
+                        <td>
+                            <a href="@Url.Action("InXuatKho", "QuanLyGiaoDichNhapXuat", new { id = item.Id })" target="_blank" class="mr-3" title="In"><i class="ti-printer"></i></a>
+                            @if (laAdmin)
+                            {
+                                <a href="#" onclick="DeleteXuatKho('@item.Id')" class="mr-3" title="Xóa"><i class="ti-trash"></i></a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6">Không có dữ liệu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@Html.GenPaging().PagingHTML(Model.PageIndex, Model.Pagecount, Model.Total)
+<input type="hidden" id="pageIndex" name="pageIndex" value="@Model.PageIndex" />
