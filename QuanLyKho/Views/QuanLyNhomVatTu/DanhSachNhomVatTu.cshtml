@@ -1,31 +1,35 @@
 @using QuanLyKho.Utility
 @model QuanLyKho.Models.NhomVatTu_DSModel
+@{
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+    var danhSach = Model.TBL_NhomVatTu ?? new System.Collections.Generic.List<BusinessLogic.Model.NhomVatTuModel>();
+    var stt = (Model.PageIndex - 1) * Model.PageSize;
+}
 
 <div class="table-responsive">
-    <table class="table table-striped table-bordered verticle-middle table-hover  table-responsive-fix-big">
+    <table class="nhom-list-table">
         <thead>
             <tr>
-                <th scope="col" class="">STT</th>
-                <th scope="col" class="">Mã nhóm</th>
-                <th scope="col" class="">Tên nhóm</th>
-                <th scope="col" class="">Thao tác</th>
+                <th style="width:70px;">STT</th>
+                <th style="width:160px;">Mã nhóm</th>
+                <th>Tên nhóm</th>
+                <th style="width:110px;">Thao tác</th>
             </tr>
         </thead>
         <tbody>
-            @{ var i = 0;}
-            @if (Model.TBL_NhomVatTu != null && Model.TBL_NhomVatTu.Count > 0)
+            @if (danhSach.Count > 0)
             {
-                foreach (var item in Model.TBL_NhomVatTu)
+                foreach (var item in danhSach)
                 {
                     <tr>
-                        <td>@(++i)</td>
+                        <td>@(++stt)</td>
                         <td>@item.MaNhom</td>
-                        <td>@item.TenNhom</td>
-                        <td>
-                            @if (Global.CoQuyenThaoTacDuLieuKho())
+                        <td class="text-left">@item.TenNhom</td>
+                        <td class="nhom-action-cell">
+                            @if (coQuyenThaoTac)
                             {
-                                <a href="#" onclick="FormNhomVatTu('@item.Id')" class="mr-3" title="Sửa"><i class="ti-pencil-alt"></i></a>
-                                <a href="#" onclick="DeleteNhomVatTu('@item.Id')" class="mr-3" title="Xóa"><i class="ti-trash"></i></a>
+                                <a href="javascript:void(0)" onclick="FormNhomVatTu('@item.Id')" class="nhom-action-btn" title="Sửa"><i class="ti-pencil-alt"></i></a>
+                                <a href="javascript:void(0)" onclick="DeleteNhomVatTu('@item.Id')" class="nhom-action-btn danger" title="Xóa"><i class="ti-trash"></i></a>
                             }
                             else
                             {
@@ -44,5 +48,6 @@
         </tbody>
     </table>
 </div>
+
 @Html.GenPaging().PagingHTML(Model.PageIndex, Model.Pagecount, Model.Total)
 <input type="hidden" id="pageIndex" name="pageIndex" value="@Model.PageIndex" />

@@ -1,58 +1,312 @@
 @using QuanLyKho.Utility
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
 }
+@Html.Partial("_PermissionMessage")
 
-<div class="row content-all-crmnt">
-    <div class="col-sm-12">
-        <div class="tab-content br-n pn">
-            <div class="content-tab-crmnt">
-                <div class="row">
-                    <div class="col-xl-3 col-sm-3 content-bg">
-                        <div class="form-group">
-                            <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Mã kho / Tên kho">
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-2 content-bg">
-                        <div class="form-group">
-                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachDanhMucKho(1)" id="btnTimKiem">Tìm kiếm</button>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-sm-4"></div>
-                    @if (Global.CoQuyenThaoTacDuLieuKho())
-                    {
-                        <div class="col-xl-3 col-sm-3 content-bg">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-main" onclick="FormDanhMucKho('')"><i class="ti-plus"></i>Thêm mới</button>
-                            </div>
-                        </div>
-                    }
+<style>
+    .kho-page {
+        color: #263238;
+    }
+
+    .kho-hero {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        padding: 22px 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .kho-hero h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: #17324d;
+    }
+
+    .kho-hero p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 14px;
+    }
+
+    .kho-layout {
+        display: grid;
+        grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+    }
+
+    .kho-card {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        overflow: hidden;
+    }
+
+    .kho-card-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #edf1f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .kho-card-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #17324d;
+    }
+
+    .kho-card-header span {
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .kho-card-body {
+        padding: 20px;
+    }
+
+    .kho-form-intro {
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border: 1px solid #dcebe4;
+        border-radius: 8px;
+        background: #f6faf8;
+    }
+
+    .kho-form-intro h5 {
+        margin: 0 0 4px;
+        color: #17324d;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .kho-form-intro p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .kho-form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .kho-form .form-group {
+        margin-bottom: 0;
+    }
+
+    .kho-form .form-control {
+        min-height: 38px;
+        border-radius: 6px;
+        padding: 7px 10px;
+        font-size: 14px;
+    }
+
+    .kho-form textarea.form-control {
+        min-height: 88px;
+        resize: vertical;
+    }
+
+    .kho-form-actions {
+        margin-top: 14px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .kho-toolbar {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+
+    .kho-toolbar .form-control {
+        height: 42px;
+        border-radius: 6px;
+    }
+
+    .kho-empty-permission {
+        padding: 18px;
+        border: 1px dashed #cdd8e4;
+        border-radius: 8px;
+        background: #f8fbfd;
+        color: #6b7c8f;
+    }
+
+    .kho-delete-panel {
+        display: none;
+        margin-bottom: 14px;
+        padding: 14px 16px;
+        border: 1px solid #ffd6d6;
+        border-radius: 8px;
+        background: #fff7f7;
+    }
+
+    .kho-delete-panel strong {
+        color: #bf1f1f;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .kho-delete-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .kho-list-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .kho-list-table th {
+        background: #f7f9fb;
+        color: #25729b;
+        font-size: 14px;
+        font-weight: 700;
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+        white-space: nowrap;
+    }
+
+    .kho-list-table td {
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+    }
+
+    .kho-list-table .text-left {
+        text-align: left;
+    }
+
+    .kho-action-cell {
+        white-space: nowrap;
+    }
+
+    .kho-action-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 6px;
+        border: 1px solid #dbe4ee;
+        background: #ffffff;
+        color: #345;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 3px;
+    }
+
+    .kho-action-btn:hover,
+    .kho-action-btn:focus {
+        color: #ffffff;
+        background: #1f7a63;
+        border-color: #1f7a63;
+    }
+
+    .kho-action-btn.danger:hover,
+    .kho-action-btn.danger:focus {
+        background: #c0392b;
+        border-color: #c0392b;
+    }
+
+    @@media (max-width: 991px) {
+        .kho-hero,
+        .kho-card-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .kho-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .kho-toolbar {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 575px) {
+        .kho-list-table {
+            min-width: 720px;
+        }
+    }
+</style>
+
+<div class="kho-page">
+    <div class="kho-hero">
+        <div>
+            <h3>Danh mục kho</h3>
+            <p>Thêm, cập nhật và quản lý danh sách kho ngay trên một màn hình.</p>
+        </div>
+        @if (coQuyenThaoTac)
+        {
+            <button type="button" class="btn btn-main" onclick="ResetDanhMucKhoForm()"><i class="ti-plus"></i>Thêm kho</button>
+        }
+    </div>
+
+    <div class="kho-layout">
+        <div class="kho-card">
+            <div class="kho-card-header">
+                <div>
+                    <h4>Thông tin kho</h4>
+                    <span>Thêm mới hoặc chỉnh sửa thông tin kho.</span>
                 </div>
             </div>
-
-            <div class="table-crmnt table-job" id="content_DanhMucKho"></div>
+            <div class="kho-card-body" id="danhMucKhoFormPanel">
+                @if (coQuyenThaoTac)
+                {
+                    @Html.Action("FormDanhMucKho", "QuanLyDanhMucKho", new { id = "" })
+                }
+                else
+                {
+                    <div class="kho-empty-permission">Bạn chỉ có quyền xem danh mục kho.</div>
+                }
+            </div>
         </div>
-    </div>
-</div>
 
-<div class="modal popup-detail fade" id="modalDanhMucKho" role="dialog" data-backdrop="static" aria-hidden="true"></div>
+        <div class="kho-card">
+            <div class="kho-card-header">
+                <div>
+                    <h4>Danh sách kho</h4>
+                    <span>Tìm kiếm theo mã kho hoặc tên kho.</span>
+                </div>
+            </div>
+            <div class="kho-card-body">
+                <div class="kho-toolbar">
+                    <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Mã kho / Tên kho">
+                    <button type="button" class="btn btn-search-crmnt" onclick="DanhSachDanhMucKho(1)" id="btnTimKiem"><i class="ti-search"></i>Tìm kiếm</button>
+                </div>
 
-<div class="modal fade" id="modelDelete" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Xóa</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="ti-close"></i></span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <span class="text-delete">Bạn có chắc chắn muốn xóa kho này không?</span>
-                <input type="hidden" id="delete_id" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
-                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+                <div class="kho-delete-panel" id="deleteDanhMucKhoPanel">
+                    <strong>Xác nhận xóa kho</strong>
+                    <span>Bạn có chắc chắn muốn xóa kho này không?</span>
+                    <input type="hidden" id="delete_id" />
+                    <div class="kho-delete-actions">
+                        <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
+                        <button type="button" class="btn btn-main" onclick="CancelDeleteDanhMucKho()"><i class="ti-close"></i>Hủy</button>
+                    </div>
+                </div>
+
+                <div class="table-crmnt table-job" id="content_DanhMucKho"></div>
             </div>
         </div>
     </div>
@@ -63,7 +317,7 @@
         DanhSachDanhMucKho(1);
     });
 
-    $("#txtSearch").on('keypress', function (e) {
+    $("#txtSearch").on("keypress", function (e) {
         if (e.keyCode === 13) {
             DanhSachDanhMucKho(1);
         }
@@ -71,7 +325,7 @@
 
     function DanhSachDanhMucKho(pageIndex) {
         var sSearch = $("#txtSearch").val();
-        $("#LoadingModal").modal('show');
+        $("#LoadingModal").modal("show");
         $.ajax({
             type: "GET",
             url: '@Url.Action("DanhSachDanhMucKho")',
@@ -79,7 +333,11 @@
             dataType: "html",
             success: function (data) {
                 $("#content_DanhMucKho").html(data);
-                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 500);
+                setTimeout(function () { $("#LoadingModal").modal("hide"); }, 300);
+            },
+            error: function () {
+                $("#LoadingModal").modal("hide");
+                toastr.error("Không tải được danh sách kho.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
             }
         });
     }
@@ -91,38 +349,92 @@
     function FormDanhMucKho(id) {
         $.ajax({
             type: "GET",
-            url: '/QuanLyDanhMucKho/FormDanhMucKho',
+            url: "/QuanLyDanhMucKho/FormDanhMucKho",
             data: { id: id },
             dataType: "html",
             success: function (data) {
-                $("#modalDanhMucKho").html(data);
-                $("#modalDanhMucKho").modal('show')
+                $("#danhMucKhoFormPanel").html(data);
+                $("html, body").animate({ scrollTop: $(".kho-card").first().offset().top - 12 }, 250);
+            },
+            error: function () {
+                toastr.error("Không tải được form kho.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
             }
         });
     }
 
+    function ResetDanhMucKhoForm() {
+        FormDanhMucKho("");
+    }
+
     function DeleteDanhMucKho(id) {
-        $("#modelDelete").modal("show");
         $("#delete_id").val(id);
+        $("#deleteDanhMucKhoPanel").slideDown(150);
+    }
+
+    function CancelDeleteDanhMucKho() {
+        $("#delete_id").val("");
+        $("#deleteDanhMucKhoPanel").slideUp(150);
     }
 
     function ActionDelete() {
-        $("#modelDelete").modal("hide");
         $.ajax({
             type: "POST",
-            url: '/QuanLyDanhMucKho/XoaDanhMucKho',
+            url: "/QuanLyDanhMucKho/XoaDanhMucKho",
             data: { id: $("#delete_id").val() },
             dataType: "json",
             success: function (data) {
                 if (data.Sucess) {
-                    DanhSachDanhMucKho($("#pageIndex").val());
-                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0 })
+                    CancelDeleteDanhMucKho();
+                    DanhSachDanhMucKho($("#pageIndex").val() || 1);
+                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
                 } else {
-                    toastr.warning("Không thể xóa dữ liệu.", "Cảnh báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0 })
+                    toastr.warning("Không thể xóa dữ liệu.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
                 }
+            },
+            error: function () {
+                toastr.error("Xảy ra lỗi khi xóa kho.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
             }
         });
-        $(".modal-backdrop").remove();
+    }
+
+    $(document).on("submit", "#fDanhMucKho", function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        var $btn = $("#btnSaveDanhMucKho");
+        var isEdit = !!$("#Id").val();
+        $btn.prop("disabled", true);
+
+        $.ajax({
+            type: "POST",
+            url: "/QuanLyDanhMucKho/FormDanhMucKho",
+            data: $form.serialize(),
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    DanhSachDanhMucKho($("#pageIndex").val() || 1);
+                    ResetDanhMucKhoForm();
+                    toastr.success(isEdit ? "Cập nhật thành công." : "Thêm mới thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    DisplayDanhMucKhoErrors(data.Errors);
+                    toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+                    $btn.prop("disabled", false);
+                }
+            },
+            error: function () {
+                $btn.prop("disabled", false);
+                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    });
+
+    function DisplayDanhMucKhoErrors(errors) {
+        $("#fDanhMucKho .field-validation-valid, #fDanhMucKho .field-validation-error").html("");
+        if (!errors) return;
+        for (var i = 0; i < errors.length; i++) {
+            if (i === 0) {
+                $("#" + errors[i].Key).focus();
+            }
+            $("#fDanhMucKho span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+        }
     }
 </script>
-

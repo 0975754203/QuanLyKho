@@ -48,7 +48,7 @@ namespace QuanLyKho.Controllers
                 ViewBag.status = "false";
                 ViewBag.isSua = "false";
 
-                if (!string.IsNullOrEmpty(id) || id != "")
+                if (!string.IsNullOrEmpty(id))
                 {
                     ViewBag.TitleModal = "Cập nhật kho";
                     model.Id = Guid.Parse(id);

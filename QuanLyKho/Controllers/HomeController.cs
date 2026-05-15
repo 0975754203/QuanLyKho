@@ -29,8 +29,7 @@ namespace QuanLyKho.Controllers
                     return Redirect("/dang-nhap");
                 }
 
-                ViewBag.Title = "Bệnh viện K";
-                return View();
+                return Redirect("/kho/danh-sach-nhap-kho");
             }
             catch (Exception ex)
             {

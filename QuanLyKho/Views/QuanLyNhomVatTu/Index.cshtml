@@ -1,67 +1,307 @@
 @using QuanLyKho.Utility
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
 }
-<div class="row content-all-crmnt">
-    <div class="col-sm-12">
-        <div class="tab-content br-n pn">
-            <div class="content-tab-crmnt ">
-                <div class="row">
-                    <div class="col-xl-2 col-sm-2 content-bg">
-                        <div class="form-group ">
-                            <input type="text" id="txtName" class="form-control input-sm" value="" name="fname" placeholder="Mã nhóm / Tên nhóm">
-                        </div>
-                    </div>
+@Html.Partial("_PermissionMessage")
 
+<style>
+    .nhom-page {
+        color: #263238;
+    }
 
-                    <div class="col-xl-2 col-sm-2 content-bg">
-                        <div class="form-group ">
-                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachNhomVatTu(1)" id="btnTimKiem">Tìm kiếm</button>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-2">
-                    </div>
-                    @if (Global.CoQuyenThaoTacDuLieuKho())
-                    {
-                        <div class="col-xl-3 col-sm-3 content-bg">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-main" onclick="FormNhomVatTu('')"><i class="ti-plus"></i>Thêm mới</button>
-                            </div>
-                        </div>
-                    }
+    .nhom-hero {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        padding: 22px 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .nhom-hero h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: #17324d;
+    }
+
+    .nhom-hero p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 14px;
+    }
+
+    .nhom-layout {
+        display: grid;
+        grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+    }
+
+    .nhom-card {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        overflow: hidden;
+    }
+
+    .nhom-card-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #edf1f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .nhom-card-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #17324d;
+    }
+
+    .nhom-card-header span {
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .nhom-card-body {
+        padding: 20px;
+    }
+
+    .nhom-form-intro {
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border: 1px solid #dcebe4;
+        border-radius: 8px;
+        background: #f6faf8;
+    }
+
+    .nhom-form-intro h5 {
+        margin: 0 0 4px;
+        color: #17324d;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .nhom-form-intro p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .nhom-form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .nhom-form .form-group {
+        margin-bottom: 0;
+    }
+
+    .nhom-form .form-control {
+        min-height: 38px;
+        border-radius: 6px;
+        padding: 7px 10px;
+        font-size: 14px;
+    }
+
+    .nhom-form-actions {
+        margin-top: 14px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .nhom-toolbar {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+
+    .nhom-toolbar .form-control {
+        height: 42px;
+        border-radius: 6px;
+    }
+
+    .nhom-empty-permission {
+        padding: 18px;
+        border: 1px dashed #cdd8e4;
+        border-radius: 8px;
+        background: #f8fbfd;
+        color: #6b7c8f;
+    }
+
+    .nhom-delete-panel {
+        display: none;
+        margin-bottom: 14px;
+        padding: 14px 16px;
+        border: 1px solid #ffd6d6;
+        border-radius: 8px;
+        background: #fff7f7;
+    }
+
+    .nhom-delete-panel strong {
+        color: #bf1f1f;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .nhom-delete-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .nhom-list-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .nhom-list-table th {
+        background: #f7f9fb;
+        color: #25729b;
+        font-size: 14px;
+        font-weight: 700;
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+        white-space: nowrap;
+    }
+
+    .nhom-list-table td {
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+    }
+
+    .nhom-list-table .text-left {
+        text-align: left;
+    }
+
+    .nhom-action-cell {
+        white-space: nowrap;
+    }
+
+    .nhom-action-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 6px;
+        border: 1px solid #dbe4ee;
+        background: #ffffff;
+        color: #345;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 3px;
+    }
+
+    .nhom-action-btn:hover,
+    .nhom-action-btn:focus {
+        color: #ffffff;
+        background: #1f7a63;
+        border-color: #1f7a63;
+    }
+
+    .nhom-action-btn.danger:hover,
+    .nhom-action-btn.danger:focus {
+        background: #c0392b;
+        border-color: #c0392b;
+    }
+
+    @@media (max-width: 991px) {
+        .nhom-hero,
+        .nhom-card-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .nhom-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .nhom-toolbar {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 575px) {
+        .nhom-list-table {
+            min-width: 620px;
+        }
+    }
+</style>
+
+<div class="nhom-page">
+    <div class="nhom-hero">
+        <div>
+            <h3>Nhóm vật tư</h3>
+            <p>Thêm, cập nhật và quản lý nhóm phân loại vật tư ngay trên một màn hình.</p>
+        </div>
+        @if (coQuyenThaoTac)
+        {
+            <button type="button" class="btn btn-main" onclick="ResetNhomVatTuForm()"><i class="ti-plus"></i>Thêm nhóm</button>
+        }
+    </div>
+
+    <div class="nhom-layout">
+        <div class="nhom-card">
+            <div class="nhom-card-header">
+                <div>
+                    <h4>Thông tin nhóm</h4>
+                    <span>Thêm mới hoặc chỉnh sửa nhóm vật tư.</span>
                 </div>
             </div>
-
-            <div class="table-crmnt table-job" id="content_NhomVatTu">
-
+            <div class="nhom-card-body" id="nhomVatTuFormPanel">
+                @if (coQuyenThaoTac)
+                {
+                    @Html.Action("FormNhomVatTu", "QuanLyNhomVatTu", new { id = "" })
+                }
+                else
+                {
+                    <div class="nhom-empty-permission">Bạn chỉ có quyền xem danh sách nhóm vật tư.</div>
+                }
             </div>
-
         </div>
-    </div>
-</div>
-<div class="modal popup-detail fade" id="modalNhomVatTu" role="dialog" data-backdrop="static"
-     aria-labelledby="exampleModalLabel" aria-hidden="true">
-</div>
 
-
-
-<div class="modal fade" id="modelDelete" tabindex="-1" role="dialog" data-backdrop="static"
-     aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Xóa</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="ti-close"></i></span>
-                </button>
+        <div class="nhom-card">
+            <div class="nhom-card-header">
+                <div>
+                    <h4>Danh sách nhóm</h4>
+                    <span>Tìm kiếm theo mã nhóm hoặc tên nhóm.</span>
+                </div>
             </div>
-            <div class="modal-body">
-                <span class="text-delete">Bạn có chắc chắn muốn xóa nhóm vật tư này không?</span>
-                <input type="hidden" id="delete_id" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
-                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+            <div class="nhom-card-body">
+                <div class="nhom-toolbar">
+                    <input type="text" id="txtName" class="form-control input-sm" placeholder="Mã nhóm / Tên nhóm">
+                    <button type="button" class="btn btn-search-crmnt" onclick="DanhSachNhomVatTu(1)" id="btnTimKiem"><i class="ti-search"></i>Tìm kiếm</button>
+                </div>
+
+                <div class="nhom-delete-panel" id="deleteNhomVatTuPanel">
+                    <strong>Xác nhận xóa nhóm vật tư</strong>
+                    <span>Bạn có chắc chắn muốn xóa nhóm vật tư này không?</span>
+                    <input type="hidden" id="delete_id" />
+                    <div class="nhom-delete-actions">
+                        <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
+                        <button type="button" class="btn btn-main" onclick="CancelDeleteNhomVatTu()"><i class="ti-close"></i>Hủy</button>
+                    </div>
+                </div>
+
+                <div class="table-crmnt table-job" id="content_NhomVatTu"></div>
             </div>
         </div>
     </div>
@@ -69,31 +309,34 @@
 
 <script>
     $(document).ready(function () {
-        $(".select2").select2();
         DanhSachNhomVatTu(1);
-     });
-    $("#txtName").on('keypress', function (e) {
+    });
+
+    $("#txtName").on("keypress", function (e) {
         if (e.keyCode === 13) {
             DanhSachNhomVatTu(1);
         }
     });
+
     function DanhSachNhomVatTu(pageIndex) {
         var name = $("#txtName").val();
-        $("#LoadingModal").modal('show');
+        $("#LoadingModal").modal("show");
         $.ajax({
             type: "GET",
             url: '@Url.Action("DanhSachNhomVatTu")',
-            data: {
-                pageIndex: pageIndex,
-                name: name
-            },
+            data: { pageIndex: pageIndex, name: name },
             dataType: "html",
             success: function (data) {
                 $("#content_NhomVatTu").html(data);
-                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 1000);
+                setTimeout(function () { $("#LoadingModal").modal("hide"); }, 300);
+            },
+            error: function () {
+                $("#LoadingModal").modal("hide");
+                toastr.error("Không tải được danh sách nhóm vật tư.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
             }
         });
     }
+
     function pagingData(pageIndex) {
         DanhSachNhomVatTu(pageIndex);
     }
@@ -105,19 +348,30 @@
             data: { id: id },
             dataType: "html",
             success: function (data) {
-                $("#modalNhomVatTu").html(data);
-                $("#modalNhomVatTu").modal('show')
+                $("#nhomVatTuFormPanel").html(data);
+                $("html, body").animate({ scrollTop: $(".nhom-card").first().offset().top - 12 }, 250);
+            },
+            error: function () {
+                toastr.error("Không tải được form nhóm vật tư.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
             }
         });
     }
 
+    function ResetNhomVatTuForm() {
+        FormNhomVatTu("");
+    }
+
     function DeleteNhomVatTu(id) {
-        $("#modelDelete").modal("show");
         $("#delete_id").val(id);
+        $("#deleteNhomVatTuPanel").slideDown(150);
+    }
+
+    function CancelDeleteNhomVatTu() {
+        $("#delete_id").val("");
+        $("#deleteNhomVatTuPanel").slideUp(150);
     }
 
     function ActionDelete() {
-        $("#modelDelete").modal("hide");
         $.ajax({
             type: "POST",
             url: '@Url.Action("XoaNhomVatTu")',
@@ -125,14 +379,58 @@
             dataType: "json",
             success: function (data) {
                 if (data.Sucess) {
-                    DanhSachNhomVatTu($("#pageIndex").val());
-                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+                    CancelDeleteNhomVatTu();
+                    DanhSachNhomVatTu($("#pageIndex").val() || 1);
+                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
                 } else {
                     var msg = data.Message ? data.Message : "Không xóa được.";
-                    toastr.warning(msg, "Cảnh báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+                    toastr.warning(msg, "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
                 }
+            },
+            error: function () {
+                toastr.error("Xảy ra lỗi khi xóa nhóm vật tư.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
             }
         });
-        $(".modal-backdrop").remove();
+    }
+
+    $(document).on("submit", "#fNhomVatTu", function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        var $btn = $("#btnSaveNhomVatTu");
+        var isEdit = !!$("#Id").val();
+        $btn.prop("disabled", true);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FormNhomVatTu", "QuanLyNhomVatTu")',
+            data: $form.serialize(),
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    DanhSachNhomVatTu($("#pageIndex").val() || 1);
+                    ResetNhomVatTuForm();
+                    toastr.success(isEdit ? "Cập nhật thành công." : "Thêm mới thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    DisplayNhomVatTuErrors(data.Errors);
+                    toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+                    $btn.prop("disabled", false);
+                }
+            },
+            error: function () {
+                $btn.prop("disabled", false);
+                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    });
+
+    function DisplayNhomVatTuErrors(errors) {
+        $("#fNhomVatTu .field-validation-valid, #fNhomVatTu .field-validation-error").html("");
+        if (!errors) return;
+        for (var i = 0; i < errors.length; i++) {
+            if (i === 0) {
+                $("#" + errors[i].Key).focus();
+            }
+            $("#fNhomVatTu span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+        }
     }
 </script>

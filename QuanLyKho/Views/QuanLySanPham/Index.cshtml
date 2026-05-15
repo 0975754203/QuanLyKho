@@ -1,101 +1,380 @@
-﻿@using QuanLyKho.Utility
+@using QuanLyKho.Utility
 @using BusinessLogic.Utils;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
 }
-<div class="row content-all-crmnt">
-    <div class="col-sm-12">
-        <div class="tab-content br-n pn">
-            <div class="content-tab-crmnt ">
-                <div class="row">
-                    <div class="col-xl-2 col-sm-2 content-bg">
-                        <div class="form-group ">
-                            <input type="text" id="txtsSearch" class="form-control input-sm" value="" name="fname" placeholder="Tên, mã sản phẩm">
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-sm-3 content-bg">
-                        <div class="form-group">
-                            <label class="text-label sr-only" for="ddlNhomVatTu">Nhóm vật tư</label>
-                            @Html.DropDownList("ddlNhomVatTu", new SelectList(SelectData.ComboNhomVatTuTimKiem(), "Value", "Text"), new { @class = "form-control select2", @id = "ddlNhomVatTu" })
-                        </div>
-                    </div>
+@Html.Partial("_PermissionMessage")
 
-                    <div class="col-xl-2 col-sm-2 content-bg">
-                        <div class="form-group ">
-                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachSanPham(1)" id="btnTimKiem">Tìm kiếm</button>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-2">
-                    </div>
-                    @if (Global.CoQuyenThaoTacDuLieuKho())
-                    {
-                        <div class="col-xl-3 col-sm-3 content-bg">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-main" onclick="FormSanPham('')"><i class="ti-plus"></i>Thêm mới vật tư</button>
-                            </div>
-                        </div>
-                    }
+<style>
+    .sanpham-page {
+        color: #263238;
+    }
+
+    .sanpham-hero {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        padding: 22px 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .sanpham-hero h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: #17324d;
+    }
+
+    .sanpham-hero p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 14px;
+    }
+
+    .sanpham-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        align-items: start;
+    }
+
+    .sanpham-card {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        overflow: hidden;
+    }
+
+    .sanpham-card-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #edf1f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .sanpham-card-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #17324d;
+    }
+
+    .sanpham-card-header span {
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .sanpham-card-body {
+        padding: 20px;
+    }
+
+    .sanpham-form-intro {
+        max-width: 940px;
+        margin: 0 auto 12px;
+        padding: 10px 12px;
+        background: #f6faf8;
+        border: 1px solid #dcebe4;
+        border-radius: 8px;
+    }
+
+    .sanpham-form-intro h5 {
+        margin: 0 0 4px;
+        color: #17324d;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .sanpham-form-intro p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .sanpham-form-grid {
+        display: grid;
+        grid-template-columns: 180px minmax(250px, 1fr) 180px 180px;
+        gap: 10px 12px;
+        align-items: start;
+        max-width: 940px;
+        margin: 0 auto;
+    }
+
+    .sanpham-name-field {
+        grid-column: span 1;
+    }
+
+    .sanpham-note-field {
+        grid-column: 1 / -1;
+    }
+
+    .sanpham-form .form-group {
+        margin-bottom: 8px;
+    }
+
+    .sanpham-form .form-control {
+        min-height: 34px;
+        height: 34px;
+        border-radius: 6px;
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+
+    .sanpham-form textarea.form-control {
+        height: 58px;
+        min-height: 58px;
+        resize: vertical;
+    }
+
+    .sanpham-form .select2-container .select2-selection--single {
+        min-height: 34px;
+        height: 34px;
+        border-color: #ddd;
+        border-radius: 6px;
+    }
+
+    .sanpham-form .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 32px;
+        padding-left: 10px;
+    }
+
+    .sanpham-form .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 32px;
+    }
+
+    .sanpham-form-actions {
+        max-width: 940px;
+        margin: 14px auto 0;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .sanpham-toolbar {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) minmax(220px, 280px) auto;
+        gap: 10px;
+        align-items: end;
+        margin-bottom: 14px;
+    }
+
+    .sanpham-filter label {
+        display: block;
+        margin-bottom: 5px;
+        color: #526273;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .sanpham-toolbar .form-control,
+    .sanpham-toolbar .select2-container .select2-selection--single {
+        min-height: 42px;
+        border-radius: 6px;
+    }
+
+    .sanpham-toolbar .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 40px;
+    }
+
+    .sanpham-delete-panel {
+        display: none;
+        margin-bottom: 14px;
+        padding: 14px 16px;
+        border: 1px solid #ffd6d6;
+        border-radius: 8px;
+        background: #fff7f7;
+    }
+
+    .sanpham-delete-panel strong {
+        color: #bf1f1f;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .sanpham-delete-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .sanpham-empty-permission {
+        max-width: 940px;
+        margin: 0 auto;
+        padding: 18px;
+        border: 1px dashed #cdd8e4;
+        border-radius: 8px;
+        background: #f8fbfd;
+        color: #6b7c8f;
+    }
+
+    .sanpham-list-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .sanpham-list-table th {
+        background: #f7f9fb;
+        color: #25729b;
+        font-size: 14px;
+        font-weight: 700;
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+        white-space: nowrap;
+    }
+
+    .sanpham-list-table td {
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+    }
+
+    .sanpham-list-table .text-left {
+        text-align: left;
+    }
+
+    .sanpham-price {
+        font-weight: 700;
+        color: #17324d;
+        white-space: nowrap;
+    }
+
+    .sanpham-action-cell {
+        white-space: nowrap;
+    }
+
+    .sanpham-action-btn {
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #d8e6f2;
+        border-radius: 7px;
+        background: #ffffff;
+        color: #25729b;
+        margin: 0 3px;
+        transition: all .15s ease;
+    }
+
+    .sanpham-action-btn:hover {
+        border-color: #25729b;
+        background: #eef8fc;
+        color: #17324d;
+    }
+
+    .sanpham-action-btn.danger {
+        color: #e53935;
+        border-color: #ffd0d0;
+    }
+
+    .sanpham-action-btn.danger:hover {
+        background: #fff2f2;
+        border-color: #e53935;
+    }
+
+    @@media (max-width: 991px) {
+        .sanpham-hero,
+        .sanpham-card-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .sanpham-form-grid {
+            grid-template-columns: repeat(2, minmax(220px, 1fr));
+        }
+
+        .sanpham-toolbar {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 575px) {
+        .sanpham-form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .sanpham-list-table {
+            min-width: 920px;
+        }
+    }
+</style>
+
+<div class="sanpham-page">
+    <div class="sanpham-hero">
+        <div>
+            <h3>Quản lý vật tư</h3>
+            <p>Thêm, cập nhật và tra cứu danh sách vật tư ngay trên một màn hình.</p>
+        </div>
+        @if (coQuyenThaoTac)
+        {
+            <button type="button" class="btn btn-main" onclick="ResetSanPhamForm()"><i class="ti-plus"></i>Thêm vật tư</button>
+        }
+    </div>
+
+    <div class="sanpham-layout">
+        <div class="sanpham-card">
+            <div class="sanpham-card-header">
+                <div>
+                    <h4>Thông tin vật tư</h4>
+                    <span>Nhập thông tin vật tư và lưu trực tiếp tại đây.</span>
                 </div>
             </div>
-
-            <div class="table-crmnt table-job" id="content_Truong">
-
-            </div>
-
-        </div>
-    </div>
-</div>
-<div class="modal popup-detail fade" id="modalTruong" role="dialog" data-backdrop="static"
-     aria-labelledby="exampleModalLabel" aria-hidden="true">
-</div>
-
-
-
-<div class="modal fade" id="modelDelete" tabindex="-1" role="dialog" data-backdrop="static"
-     aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Xóa</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="ti-close"></i></span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <span class="text-delete">Bạn có chắc chắn muốn xóa sản phẩm này không?</span>
-                <input type="hidden" id="delete_id" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
-                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+            <div class="sanpham-card-body" id="sanPhamFormPanel">
+                @if (coQuyenThaoTac)
+                {
+                    @Html.Action("FormSanPham", "QuanLySanPham", new { id = "" })
+                }
+                else
+                {
+                    <div class="sanpham-empty-permission">Bạn chỉ có quyền xem danh sách vật tư.</div>
+                }
             </div>
         </div>
-    </div>
-</div>
 
-
-<!---Lịch sử-->
-<div class="modal fade" id="exampleModalDetail" tabindex="-1" role="dialog" data-backdrop="static"
-     aria-labelledby="exampleModalLabel" aria-hidden="true">
-
-</div>
-<div class="modal fade" id="modelReset" tabindex="-1" role="dialog" data-backdrop="static"
-     aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Đặt lại mật khẩu</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="ti-close"></i></span>
-                </button>
+        <div class="sanpham-card">
+            <div class="sanpham-card-header">
+                <div>
+                    <h4>Danh sách vật tư</h4>
+                    <span>Lọc theo tên, mã vật tư hoặc nhóm vật tư.</span>
+                </div>
             </div>
-            <div class="modal-body">
-                <span class="text-delete">Bạn có chắc chắn muốn đặt lại mật khẩu về mặc định?</span>
-                <input type="hidden" id="reset_id" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-main" onclick="KhoaOrMo()"><i class="ti-check"></i>Đồng ý</button>
-                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+            <div class="sanpham-card-body">
+                <div class="sanpham-toolbar">
+                    <div class="sanpham-filter">
+                        <label>Tên, mã vật tư</label>
+                        <input type="text" id="txtsSearch" class="form-control input-sm" value="" name="fname" placeholder="Tên, mã vật tư">
+                    </div>
+                    <div class="sanpham-filter">
+                        <label>Nhóm vật tư</label>
+                        @Html.DropDownList("ddlNhomVatTu", new SelectList(SelectData.ComboNhomVatTuTimKiem(), "Value", "Text"), new { @class = "form-control select2", id = "ddlNhomVatTu" })
+                    </div>
+                    <button type="button" class="btn btn-search-crmnt" onclick="DanhSachSanPham(1)" id="btnTimKiem"><i class="ti-search"></i>Tìm kiếm</button>
+                </div>
+
+                <div class="sanpham-delete-panel" id="deleteSanPhamPanel">
+                    <strong>Xác nhận xóa vật tư</strong>
+                    <span>Bạn có chắc chắn muốn xóa vật tư này không?</span>
+                    <input type="hidden" id="delete_id" />
+                    <div class="sanpham-delete-actions">
+                        <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
+                        <button type="button" class="btn btn-main" onclick="CancelDeleteSanPham()"><i class="ti-close"></i>Hủy</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive" id="content_Truong"></div>
             </div>
         </div>
     </div>
@@ -103,22 +382,29 @@
 
 <script>
     $(document).ready(function () {
-        $(".select2").select2();
+        $(".select2").select2({ width: "100%" });
         DanhSachSanPham(1);
-     });
-    $("#txtsSearch").on('keypress', function (e) {
+    });
+
+    $("#txtsSearch").on("keypress", function (e) {
         if (e.keyCode === 13) {
             DanhSachSanPham(1);
         }
     });
 
+    function InitSanPhamForm() {
+        $("#sanPhamFormPanel .select2").select2({ width: "100%" });
+    }
+
     function DanhSachSanPham(pageIndex) {
-       var sSearch = $("#txtsSearch").val();
+        var sSearch = $("#txtsSearch").val();
         var idNhom = $("#ddlNhomVatTu").val();
         var reqData = { pageIndex: pageIndex, sSearch: sSearch };
-        if (idNhom && idNhom.length > 0)
+        if (idNhom && idNhom.length > 0) {
             reqData.idNhomVatTu = idNhom;
-        $("#LoadingModal").modal('show');
+        }
+
+        $("#LoadingModal").modal("show");
         $.ajax({
             type: "GET",
             url: '@Url.Action("DanhSachSanPham")',
@@ -126,30 +412,15 @@
             dataType: "html",
             success: function (data) {
                 $("#content_Truong").html(data);
-                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 1000);
-            }
-        });
-    }
-    function KhoaOrMo(id, isDaKhoa) {
-        $.ajax({
-            type: "POST",
-            url: '/QuanLyTaiKhoan/KhoaOrMo',
-            data: {
-                Id: id,
-                IsDaKhoa: isDaKhoa
+                setTimeout(function () { $("#LoadingModal").modal("hide"); }, 300);
             },
-            dataType: "json",
-            success: function (data) {
-                if (data.Sucess) {
-                    DanhSachSanPham($("#pageIndex").val());
-                    toastr.success("Thao tác thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
-                } else {
-                    toastr.error(data.Errors, "Cảnh báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
-                }
+            error: function () {
+                $("#LoadingModal").modal("hide");
+                toastr.error("Không tải được danh sách vật tư.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
             }
         });
-        $(".modal-backdrop").remove();
     }
+
     function pagingData(pageIndex) {
         DanhSachSanPham(pageIndex);
     }
@@ -161,19 +432,32 @@
             data: { id: id },
             dataType: "html",
             success: function (data) {
-                $("#modalTruong").html(data);
-                $("#modalTruong").modal('show')
+                $("#sanPhamFormPanel").html(data);
+                InitSanPhamForm();
+                $("html, body").animate({ scrollTop: $(".sanpham-card").first().offset().top - 12 }, 250);
+            },
+            error: function () {
+                toastr.error("Không tải được form vật tư.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
             }
         });
     }
 
+    function ResetSanPhamForm() {
+        FormSanPham("");
+    }
+
     function DeleteSanPham(id) {
-        $("#modelDelete").modal("show");
         $("#delete_id").val(id);
+        $("#deleteSanPhamPanel").slideDown(150);
+        $("html, body").animate({ scrollTop: $("#deleteSanPhamPanel").offset().top - 80 }, 250);
+    }
+
+    function CancelDeleteSanPham() {
+        $("#delete_id").val("");
+        $("#deleteSanPhamPanel").slideUp(150);
     }
 
     function ActionDelete() {
-        $("#modelDelete").modal("hide");
         $.ajax({
             type: "POST",
             url: '/QuanLySanPham/XoaSanPham',
@@ -181,12 +465,57 @@
             dataType: "json",
             success: function (data) {
                 if (data.Sucess) {
+                    CancelDeleteSanPham();
                     DanhSachSanPham($("#pageIndex").val());
-                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
+                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    toastr.warning(data.Msg || "Không thể xóa vật tư này.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
                 }
+            },
+            error: function () {
+                toastr.error("Xảy ra lỗi khi xóa vật tư.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
             }
         });
-        $(".modal-backdrop").remove();
     }
 
+    $(document).on("submit", "#fSanPham", function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        var $btn = $("#btnSaveSanPham");
+        $btn.prop("disabled", true);
+
+        $.ajax({
+            type: "POST",
+            url: "/QuanLySanPham/FormSanPham",
+            data: $form.serialize(),
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    var isEdit = !!$("#Id").val();
+                    DanhSachSanPham($("#pageIndex").val() || 1);
+                    ResetSanPhamForm();
+                    toastr.success(isEdit ? "Cập nhật thành công." : "Thêm mới thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    DisplaySanPhamErrors(data.Errors);
+                    toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+                    $btn.prop("disabled", false);
+                }
+            },
+            error: function () {
+                $btn.prop("disabled", false);
+                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    });
+
+    function DisplaySanPhamErrors(errors) {
+        $("#fSanPham .field-validation-valid, #fSanPham .field-validation-error").html("");
+        if (!errors) return;
+        for (var i = 0; i < errors.length; i++) {
+            if (i === 0) {
+                $("#" + errors[i].Key).focus();
+            }
+            $("#fSanPham span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+        }
+    }
 </script>

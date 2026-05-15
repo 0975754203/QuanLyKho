@@ -76,7 +76,7 @@ namespace QuanLyKho.Controllers
                         }
                         else if (string.IsNullOrEmpty(backurl))
                         {
-                            backurl = "/";
+                            backurl = "/kho/danh-sach-nhap-kho";
                         }
                         return Json(new { Sucess = true, Errors = ModelState.Errors(), Url = backurl }, JsonRequestBehavior.AllowGet);
 

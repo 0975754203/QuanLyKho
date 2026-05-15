@@ -26,8 +26,8 @@ namespace QuanLyKho.Controllers
         {
             using (UnitOfWork uow = new UnitOfWork())
             {
-                ViewBag.Title = "Quản lý sản phẩm";
-                ViewBag.TitleUrl = " / Quản lý sản phẩm";
+                ViewBag.Title = "Quản lý vật tư";
+                ViewBag.TitleUrl = " / Quản lý vật tư";
                 string UserName = Global.ThongTinTaiKhoan_Login.UserName;
                 ViewBag.Level = null;
 
@@ -76,7 +76,7 @@ namespace QuanLyKho.Controllers
                 }
                 if (!string.IsNullOrEmpty(id))
                 {
-                    ViewBag.TitleModal = "Cập nhật sản phẩm";
+                    ViewBag.TitleModal = "Cập nhật vật tư";
                     var sanpham = KhoSanPhamManager.Instance.SelectById(Guid.Parse(id));
                     var result = sanpham.CopyAs<KhoSanPhamForm>();
                     result.IdNhomVatTu = sanpham.IdNhomVatTu ?? Guid.Empty;
@@ -85,7 +85,7 @@ namespace QuanLyKho.Controllers
                 else
                 {
                     KhoSanPhamForm model = new KhoSanPhamForm();
-                    ViewBag.TitleModal = "Thêm mới sản phẩm";
+                    ViewBag.TitleModal = "Thêm mới vật tư";
                     return PartialView(model);
                 }
             }

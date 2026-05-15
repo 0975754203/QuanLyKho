@@ -1,106 +1,53 @@
-@using BusinessLogic.Utils;
+@using QuanLyKho.Utility
 @model QuanLyKho.Models.DanhMucKhoForm
 @{
-    string status = ViewBag.Status.ToString();
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+    var laCapNhat = Model != null && Model.Id.HasValue && Model.Id.Value != Guid.Empty;
 }
 
-@using (Html.BeginForm("FormDanhMucKho", "QuanLyDanhMucKho", FormMethod.Post, new { enctype = "multipart/form-data", @id = "fDanhMucKho", @class = "form-crmnt" }))
+@using (Html.BeginForm("FormDanhMucKho", "QuanLyDanhMucKho", FormMethod.Post, new { enctype = "multipart/form-data", id = "fDanhMucKho", @class = "form-crmnt kho-form" }))
 {
     @Html.HiddenFor(x => x.Id)
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">@ViewBag.TitleModal</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="ti-close"></i></span>
-                </button>
-            </div>
-            <div class="modal-body m-b-35">
-                <div class="form-wizard-right form-main-crmnt">
-                    <div class="row">
-                        <div class="col-xl-12 col-sm-12">
-                            <h4 class="card-title">Thông tin kho</h4>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="text-label">Mã kho <span class="red-crmnt">(*)</span></label>
-                                    @Html.TextBoxFor(x => x.MaKho, new { @class = "form-control input-sm", @id = "MaKho" })
-                                    @Html.ValidationMessageFor(x => x.MaKho)
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="text-label">Tên kho <span class="red-crmnt">(*)</span></label>
-                                    @Html.TextBoxFor(x => x.TenKho, new { @class = "form-control input-sm", @id = "TenKho" })
-                                    @Html.ValidationMessageFor(x => x.TenKho)
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="text-label">Địa chỉ</label>
-                                    @Html.TextAreaFor(x => x.DiaChi, new { @class = "form-control input-sm", rows = "3" })
-                                    @Html.ValidationMessageFor(x => x.DiaChi)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                @if (ViewBag.status != "true")
-                {
-                    <button type="submit" class="btn btn-main" id="btnSave"><i class="ti-save"></i>Lưu dữ liệu</button>
-                }
-                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
-                <input type="hidden" id="status" value="@status" />
-            </div>
+
+    <div class="kho-form-intro">
+        <h5>Thông tin kho</h5>
+        <p>Nhập mã kho, tên kho và địa chỉ để quản lý nơi lưu trữ vật tư.</p>
+    </div>
+
+    <div class="kho-form-grid">
+        <div class="form-group">
+            <label class="text-label">Mã kho <span class="red-crmnt">(*)</span></label>
+            @if (laCapNhat)
+            {
+                @Html.TextBoxFor(x => x.MaKho, new { @class = "form-control input-sm", id = "MaKho", @readonly = "readonly", placeholder = "Nhập mã kho" })
+            }
+            else
+            {
+                @Html.TextBoxFor(x => x.MaKho, new { @class = "form-control input-sm", id = "MaKho", placeholder = "Nhập mã kho" })
+            }
+            @Html.ValidationMessageFor(x => x.MaKho)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Tên kho <span class="red-crmnt">(*)</span></label>
+            @Html.TextBoxFor(x => x.TenKho, new { @class = "form-control input-sm", id = "TenKho", placeholder = "Nhập tên kho" })
+            @Html.ValidationMessageFor(x => x.TenKho)
+        </div>
+
+        <div class="form-group kho-note-field">
+            <label class="text-label">Địa chỉ</label>
+            @Html.TextAreaFor(x => x.DiaChi, 4, 0, new { @class = "form-control input-sm", placeholder = "Nhập địa chỉ hoặc ghi chú vị trí kho" })
+            @Html.ValidationMessageFor(x => x.DiaChi)
         </div>
     </div>
-}
 
-<script>
-    $(document).ready(function () {
-        $("#MaKho").prop('readonly', @ViewBag.isSua);
-    });
-
-    $('#fDanhMucKho').submit(function (e) {
-        e.preventDefault();
-        $("#btnSave").hide();
-        $.ajax({
-            type: "POST",
-            url: "/QuanLyDanhMucKho/FormDanhMucKho",
-            data: $('#fDanhMucKho').serialize(),
-            dataType: "json",
-            success: function (data) {
-                if (data.Sucess) {
-                    var pageIndex = $("#pageIndex").val();
-                    DanhSachDanhMucKho(pageIndex);
-                    $("#modalDanhMucKho").modal("hide");
-                    if ($("#Id").val() == undefined || $("#Id").val() == "" || $("#Id").val() == '')
-                        toastr.success("Thêm mới thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0 })
-                    else
-                        toastr.success("Cập nhật thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0 })
-                }
-                else {
-                    DisplayErrors(data.Errors);
-                    toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0 })
-                    $("#btnSave").show();
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                $("#btnSave").show();
-                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0 })
-            },
-        });
-    });
-
-    function DisplayErrors(errors) {
-        $(".field-validation-valid").html("");
-        for (var i = 0; i < errors.length; i++) {
-            if (i === 0) {
-                $("#" + errors[i].Key).focus();
-            }
-            $("span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+    <div class="kho-form-actions">
+        @if (coQuyenThaoTac)
+        {
+            <button type="submit" class="btn btn-main" id="btnSaveDanhMucKho">
+                <i class="ti-save"></i>@(laCapNhat ? "Cập nhật kho" : "Lưu kho")
+            </button>
+            <button type="button" class="btn btn-main" onclick="ResetDanhMucKhoForm()"><i class="ti-reload"></i>Làm mới</button>
         }
-    }
-</script>
-
+    </div>
+}

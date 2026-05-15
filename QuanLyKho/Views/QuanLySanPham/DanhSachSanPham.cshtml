@@ -1,78 +1,71 @@
-﻿@using QuanLyKho.Utility
-@using SQLDataAccess;
-@model  QuanLyKho.Models.KhoSanPham_DSModel
-@{ var uow = new UnitOfWork(); }
+@using QuanLyKho.Utility
+@model QuanLyKho.Models.KhoSanPham_DSModel
 @{
-    var login = QuanLyKho.Utility.Global.ThongTinTaiKhoan_Login;
     var laCoQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
-    decimal totalDonGia = Model.TBL_SanPham.Sum(x => x.DonGia);
+    var danhSach = Model.TBL_SanPham ?? new System.Collections.Generic.List<BusinessLogic.Model.KhoSanPhamModel>();
+    decimal totalDonGia = danhSach.Sum(x => x.DonGia);
+    var stt = (Model.PageIndex - 1) * Model.PageSize;
 }
+
 <div class="table-responsive">
-    <table class="table table-striped table-bordered verticle-middle table-hover  table-responsive-fix-big">
+    <table class="sanpham-list-table">
         <thead>
             <tr>
-                <th scope="col" class="">STT</th>
-                <th scope="col" class="">Mã sản phẩm</th>
-                <th scope="col" class="">Tên sản phẩm</th>
-                <th scope="col" class="">Xuất xứ</th>
-                <th scope="col" class="">Thời gian bảo hành</th>
-                <th scope="col" class="">Đơn vị</th>
-                <th scope="col" class="">Nhóm vật tư</th>
-                <th scope="col" class="">Ghi chú</th>
-                <th scope="col" class="">Đơn giá</th>
-                <th scope="col" class="">Thao tác</th>
+                <th style="width:70px;">STT</th>
+                <th style="width:130px;">Mã vật tư</th>
+                <th>Tên vật tư</th>
+                <th style="width:130px;">Đơn giá</th>
+                <th style="width:130px;">Xuất xứ</th>
+                <th style="width:130px;">Bảo hành</th>
+                <th style="width:110px;">Đơn vị</th>
+                <th style="width:150px;">Nhóm vật tư</th>
+                <th>Ghi chú</th>
+                <th style="width:110px;">Thao tác</th>
             </tr>
         </thead>
         <tbody>
-            @{ var i = 0;
-
-            }
-            @if (Model.TBL_SanPham.Count > 0)
+            @if (danhSach.Count > 0)
             {
-                foreach (var item in Model.TBL_SanPham)
+                foreach (var item in danhSach)
                 {
                     <tr>
-                        <td>@(++i)</td>
+                        <td>@(++stt)</td>
                         <td>@item.MaSanPham</td>
-                        <td>@item.TenSanPham</td>
+                        <td class="text-left">@item.TenSanPham</td>
+                        <td class="sanpham-price">@item.DonGia.ToString("N0")</td>
                         <td>@(string.IsNullOrWhiteSpace(item.XuatXu) ? "—" : item.XuatXu)</td>
                         <td>@(string.IsNullOrWhiteSpace(item.ThoiGianBaoHanh) ? "—" : item.ThoiGianBaoHanh)</td>
                         <td>@item.sDonViTinh</td>
                         <td>@(string.IsNullOrEmpty(item.TenNhomVatTu) ? "—" : item.TenNhomVatTu)</td>
-                        <td>@item.GhiChu</td>
-                        <td>@item.DonGia.ToString("N0")</td>
-                        <td>
+                        <td class="text-left">@(string.IsNullOrWhiteSpace(item.GhiChu) ? "—" : item.GhiChu)</td>
+                        <td class="sanpham-action-cell">
                             @if (laCoQuyenThaoTac)
                             {
-                                <a href="#" onclick="FormSanPham('@item.Id')" class="mr-3" title="Sửa"><i class="ti-pencil-alt"></i></a>
-                                <a href="#" onclick="DeleteSanPham('@item.Id')" class="mr-3" title="Xóa"><i class="ti-trash"></i></a>
+                                <a href="javascript:void(0)" onclick="FormSanPham('@item.Id')" class="sanpham-action-btn" title="Sửa"><i class="ti-pencil-alt"></i></a>
+                                <a href="javascript:void(0)" onclick="DeleteSanPham('@item.Id')" class="sanpham-action-btn danger" title="Xóa"><i class="ti-trash"></i></a>
                             }
                             else
                             {
                                 <span class="text-muted">—</span>
                             }
                         </td>
-                        @*&& PhienBan ==  BusinessLogic.Utils.HangSo.PhienBan.NhapDiem*@
                     </tr>
                 }
                 <tr class="font-weight-bold">
-                    <td colspan="8" class="text-right">Tổng đơn giá</td>
-                    <td>@totalDonGia.ToString("N0")</td>
-                    <td></td>
+                    <td colspan="3" class="text-left">Tổng đơn giá</td>
+                    <td class="sanpham-price">@totalDonGia.ToString("N0")</td>
+                    <td colspan="6"></td>
                 </tr>
             }
             else
             {
                 <tr>
-                    <td colspan="9">
-                        Không có dữ liệu
-                    </td>
+                    <td colspan="10">Không có dữ liệu</td>
                 </tr>
             }
-
-
         </tbody>
     </table>
 </div>
+
 @Html.GenPaging().PagingHTML(Model.PageIndex, Model.Pagecount, Model.Total)
 <input type="hidden" id="pageIndex" name="pageIndex" value="@Model.PageIndex" />

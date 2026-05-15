@@ -1,106 +1,47 @@
-@using BusinessLogic.Utils;
+@using QuanLyKho.Utility
 @model QuanLyKho.Models.NhomVatTuForm
 @{
-    string status = ViewBag.Status.ToString();
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+    var laCapNhat = Model != null && Model.Id.HasValue && Model.Id.Value != Guid.Empty;
 }
 
-@using (Html.BeginForm("FormNhomVatTu", "QuanLyNhomVatTu", FormMethod.Post, new { enctype = "multipart/form-data", @id = "fNhomVatTu", @class = "form-crmnt" }))
+@using (Html.BeginForm("FormNhomVatTu", "QuanLyNhomVatTu", FormMethod.Post, new { enctype = "multipart/form-data", id = "fNhomVatTu", @class = "form-crmnt nhom-form" }))
 {
     @Html.HiddenFor(x => x.Id)
-    <div class="modal-dialog " role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">@ViewBag.TitleModal</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="ti-close"></i></span>
-                </button>
-            </div>
-            <div class="modal-body m-b-35">
-                <div class="form-wizard-right form-main-crmnt">
-                    <div class="row">
 
-                        <div class="col-xl-12 col-sm-12">
-                            <h4 class="card-title">Thông tin nhóm vật tư</h4>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="text-label">Mã nhóm <span class="red-crmnt">(*)</span></label>
-                                    @Html.TextBoxFor(x => x.MaNhom, new
-                               {
-                                   @class = "form-control input-sm",
-                                   @id = "MaNhom"
-                               })
-                                    @Html.ValidationMessageFor(x => x.MaNhom)
-                                </div>
-                            </div>
+    <div class="nhom-form-intro">
+        <h5>Thông tin nhóm vật tư</h5>
+        <p>Nhập mã nhóm và tên nhóm để phân loại danh sách vật tư.</p>
+    </div>
 
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="text-label">Tên nhóm <span class="red-crmnt">(*)</span></label>
-                                    @Html.TextBoxFor(x => x.TenNhom, new { @class = "form-control input-sm", @id = "TenNhom" })
-                                    @Html.ValidationMessageFor(x => x.TenNhom)
-                                </div>
-                            </div>
+    <div class="nhom-form-grid">
+        <div class="form-group">
+            <label class="text-label">Mã nhóm <span class="red-crmnt">(*)</span></label>
+            @if (laCapNhat)
+            {
+                @Html.TextBoxFor(x => x.MaNhom, new { @class = "form-control input-sm", id = "MaNhom", @readonly = "readonly", placeholder = "Nhập mã nhóm" })
+            }
+            else
+            {
+                @Html.TextBoxFor(x => x.MaNhom, new { @class = "form-control input-sm", id = "MaNhom", placeholder = "Nhập mã nhóm" })
+            }
+            @Html.ValidationMessageFor(x => x.MaNhom)
+        </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                @if (ViewBag.status != "true")
-                {
-                    <button type="submit" class="btn btn-main" id="btnSave"><i class="ti-save"></i>Lưu dữ liệu</button>
-                }
-                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
-                <input type="hidden" id="status" value="@status" />
-            </div>
+        <div class="form-group">
+            <label class="text-label">Tên nhóm <span class="red-crmnt">(*)</span></label>
+            @Html.TextBoxFor(x => x.TenNhom, new { @class = "form-control input-sm", id = "TenNhom", placeholder = "Nhập tên nhóm vật tư" })
+            @Html.ValidationMessageFor(x => x.TenNhom)
         </div>
     </div>
 
-}
-
-<script>
-    $(document).ready(function () {
-        $("#MaNhom").prop('readonly', @ViewBag.isSua);
-    });
-    $(".select2").select2();
-    $('#fNhomVatTu').submit(function (e) {
-        e.preventDefault();
-        $("#btnSave").hide();
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("FormNhomVatTu", "QuanLyNhomVatTu")",
-            data: $('#fNhomVatTu').serialize(),
-            dataType: "json",
-            success: function (data) {
-                if (data.Sucess) {
-                    var pageIndex = $("#pageIndex").val();
-                    DanhSachNhomVatTu(pageIndex);
-                    $("#modalNhomVatTu").modal("hide");
-                    if ($("#Id").val() == undefined || $("#Id").val() == "" || $("#Id").val() == '')
-                        toastr.success("Thêm mới thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
-                    else
-                        toastr.success("Cập nhật thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
-                }
-                else {
-                    DisplayErrors(data.Errors);
-                    toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
-                    $("#btnSave").show();
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                $("#btnSave").show();
-                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0, debug: !1, newestOnTop: !0, progressBar: !0, positionClass: "toast-top-right", preventDuplicates: !0, onclick: null, showDuration: "300", hideDuration: "1000", extendedTimeOut: "1000", showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut", tapToDismiss: !1 })
-            },
-        });
-    });
-    function DisplayErrors(errors) {
-        $(".field-validation-valid").html("");
-        for (var i = 0; i < errors.length; i++) {
-            if (i === 0) {
-                $("#" + errors[i].Key).focus();
-            }
-            $("span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+    <div class="nhom-form-actions">
+        @if (coQuyenThaoTac)
+        {
+            <button type="submit" class="btn btn-main" id="btnSaveNhomVatTu">
+                <i class="ti-save"></i>@(laCapNhat ? "Cập nhật nhóm" : "Lưu nhóm")
+            </button>
+            <button type="button" class="btn btn-main" onclick="ResetNhomVatTuForm()"><i class="ti-reload"></i>Làm mới</button>
         }
-    }
-
-</script>
+    </div>
+}
