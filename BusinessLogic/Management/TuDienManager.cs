@@ -32,6 +32,8 @@ namespace BusinessLogic.Management
             using (UnitOfWork uow = new UnitOfWork())
             {
                 var tudien = uow.Repository<TuDien>().Query().Filter(x => x.Id == id).FirstOrDefault();
+                if (tudien == null)
+                    return null;
                 var result = tudien.CopyAs<TuDienModel>();
                 return result;
             }
@@ -98,6 +100,8 @@ namespace BusinessLogic.Management
             using (UnitOfWork uow = new UnitOfWork())
             {
                 var tudien = uow.Repository<TuDienLoai>().Query().Filter(x => x.Id == id).FirstOrDefault();
+                if (tudien == null)
+                    return null;
                 var result = tudien.CopyAs<TuDienLoaiModel>();
                 return result;
             }
@@ -107,6 +111,8 @@ namespace BusinessLogic.Management
             using (UnitOfWork uow = new UnitOfWork())
             {
                 var tudien = uow.Repository<TuDienLoai>().Query().Filter(x => x.MaLoai == sMa).FirstOrDefault();
+                if (tudien == null)
+                    return null;
                 var result = tudien.CopyAs<TuDienLoaiModel>();
                 return result;
             }

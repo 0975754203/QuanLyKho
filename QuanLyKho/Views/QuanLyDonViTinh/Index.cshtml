@@ -1,0 +1,441 @@
+@using QuanLyKho.Utility
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+}
+@Html.Partial("_PermissionMessage")
+
+<style>
+    .dvt-page {
+        color: #263238;
+    }
+
+    .dvt-hero {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        padding: 22px 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .dvt-hero h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: #17324d;
+    }
+
+    .dvt-hero p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 14px;
+    }
+
+    .dvt-layout {
+        display: grid;
+        grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+    }
+
+    .dvt-card {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        overflow: hidden;
+    }
+
+    .dvt-card-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #edf1f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .dvt-card-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #17324d;
+    }
+
+    .dvt-card-header span {
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .dvt-card-body {
+        padding: 20px;
+    }
+
+    .dvt-form-intro {
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border: 1px solid #dcebe4;
+        border-radius: 8px;
+        background: #f6faf8;
+    }
+
+    .dvt-form-intro h5 {
+        margin: 0 0 4px;
+        color: #17324d;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .dvt-form-intro p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .dvt-form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .dvt-form .form-group {
+        margin-bottom: 0;
+    }
+
+    .dvt-form .form-control {
+        min-height: 38px;
+        border-radius: 6px;
+        padding: 7px 10px;
+        font-size: 14px;
+    }
+
+    .dvt-form textarea.form-control {
+        min-height: 88px;
+        resize: vertical;
+    }
+
+    .dvt-form-actions {
+        margin-top: 14px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .dvt-toolbar {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+
+    .dvt-toolbar .form-control {
+        height: 42px;
+        border-radius: 6px;
+    }
+
+    .dvt-empty-permission {
+        padding: 18px;
+        border: 1px dashed #cdd8e4;
+        border-radius: 8px;
+        background: #f8fbfd;
+        color: #6b7c8f;
+    }
+
+    .dvt-delete-panel {
+        display: none;
+        margin-bottom: 14px;
+        padding: 14px 16px;
+        border: 1px solid #ffd6d6;
+        border-radius: 8px;
+        background: #fff7f7;
+    }
+
+    .dvt-delete-panel strong {
+        color: #bf1f1f;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .dvt-delete-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .dvt-list-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .dvt-list-table th {
+        background: #f7f9fb;
+        color: #25729b;
+        font-size: 14px;
+        font-weight: 700;
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+        white-space: nowrap;
+    }
+
+    .dvt-list-table td {
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+    }
+
+    .dvt-list-table .text-left {
+        text-align: left;
+    }
+
+    .dvt-action-cell {
+        white-space: nowrap;
+    }
+
+    .dvt-action-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 6px;
+        border: 1px solid #dbe4ee;
+        background: #ffffff;
+        color: #345;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 3px;
+    }
+
+    .dvt-action-btn:hover,
+    .dvt-action-btn:focus {
+        color: #ffffff;
+        background: #1f7a63;
+        border-color: #1f7a63;
+    }
+
+    .dvt-action-btn.danger:hover,
+    .dvt-action-btn.danger:focus {
+        background: #c0392b;
+        border-color: #c0392b;
+    }
+
+    @@media (max-width: 991px) {
+        .dvt-hero,
+        .dvt-card-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .dvt-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .dvt-toolbar {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 575px) {
+        .dvt-list-table {
+            min-width: 720px;
+        }
+    }
+</style>
+
+<div class="dvt-page">
+    <div class="dvt-hero">
+        <div>
+            <h3>Đơn vị tính</h3>
+            <p>Thêm, cập nhật và quản lý đơn vị dùng cho danh sách vật tư.</p>
+        </div>
+        @if (coQuyenThaoTac)
+        {
+            <button type="button" class="btn btn-main" onclick="ResetDonViTinhForm()"><i class="ti-plus"></i>Thêm đơn vị</button>
+        }
+    </div>
+
+    <div class="dvt-layout">
+        <div class="dvt-card">
+            <div class="dvt-card-header">
+                <div>
+                    <h4>Thông tin đơn vị</h4>
+                    <span>Thêm mới hoặc chỉnh sửa đơn vị tính.</span>
+                </div>
+            </div>
+            <div class="dvt-card-body" id="donViTinhFormPanel">
+                @if (coQuyenThaoTac)
+                {
+                    @Html.Action("FormDonViTinh", "QuanLyDonViTinh", new { id = "" })
+                }
+                else
+                {
+                    <div class="dvt-empty-permission">Bạn chỉ có quyền xem danh sách đơn vị tính.</div>
+                }
+            </div>
+        </div>
+
+        <div class="dvt-card">
+            <div class="dvt-card-header">
+                <div>
+                    <h4>Danh sách đơn vị</h4>
+                    <span>Tìm kiếm theo mã hoặc tên đơn vị.</span>
+                </div>
+            </div>
+            <div class="dvt-card-body">
+                <div class="dvt-toolbar">
+                    <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Mã đơn vị / Tên đơn vị">
+                    <button type="button" class="btn btn-search-crmnt" onclick="DanhSachDonViTinh(1)" id="btnTimKiem"><i class="ti-search"></i>Tìm kiếm</button>
+                </div>
+
+                <div class="dvt-delete-panel" id="deleteDonViTinhPanel">
+                    <strong>Xác nhận xóa đơn vị tính</strong>
+                    <span>Bạn có chắc chắn muốn xóa đơn vị tính này không?</span>
+                    <input type="hidden" id="delete_id" />
+                    <div class="dvt-delete-actions">
+                        <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
+                        <button type="button" class="btn btn-main" onclick="CancelDeleteDonViTinh()"><i class="ti-close"></i>Hủy</button>
+                    </div>
+                </div>
+
+                <div class="table-crmnt table-job" id="content_DonViTinh"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        DanhSachDonViTinh(1);
+    });
+
+    $("#txtSearch").on("keypress", function (e) {
+        if (e.keyCode === 13) {
+            DanhSachDonViTinh(1);
+        }
+    });
+
+    function DanhSachDonViTinh(pageIndex) {
+        var sSearch = $("#txtSearch").val();
+        $("#LoadingModal").modal("show");
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("DanhSachDonViTinh")',
+            data: { pageIndex: pageIndex, sSearch: sSearch },
+            dataType: "html",
+            success: function (data) {
+                $("#content_DonViTinh").html(data);
+                setTimeout(function () { $("#LoadingModal").modal("hide"); }, 300);
+            },
+            error: function () {
+                $("#LoadingModal").modal("hide");
+                toastr.error("Không tải được danh sách đơn vị tính.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    }
+
+    function pagingData(pageIndex) {
+        DanhSachDonViTinh(pageIndex);
+    }
+
+    function FormDonViTinh(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("FormDonViTinh")',
+            data: { id: id },
+            dataType: "html",
+            success: function (data) {
+                $("#donViTinhFormPanel").html(data);
+                $("html, body").animate({ scrollTop: $(".dvt-card").first().offset().top - 12 }, 250);
+            },
+            error: function () {
+                toastr.error("Không tải được form đơn vị tính.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    }
+
+    function ResetDonViTinhForm() {
+        FormDonViTinh("");
+    }
+
+    function DeleteDonViTinh(id) {
+        $("#delete_id").val(id);
+        $("#deleteDonViTinhPanel").slideDown(150);
+    }
+
+    function CancelDeleteDonViTinh() {
+        $("#delete_id").val("");
+        $("#deleteDonViTinhPanel").slideUp(150);
+    }
+
+    function ActionDelete() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("XoaDonViTinh")',
+            data: { id: $("#delete_id").val() },
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    CancelDeleteDonViTinh();
+                    DanhSachDonViTinh($("#pageIndex").val() || 1);
+                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    var msg = data.Message ? data.Message : "Không xóa được đơn vị tính.";
+                    toastr.warning(msg, "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+                }
+            },
+            error: function () {
+                toastr.error("Xảy ra lỗi khi xóa đơn vị tính.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    }
+
+    $(document).on("submit", "#fDonViTinh", function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        var $btn = $("#btnSaveDonViTinh");
+        var isEdit = !!$("#Id").val();
+        $btn.prop("disabled", true);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FormDonViTinh", "QuanLyDonViTinh")',
+            data: $form.serialize(),
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    DanhSachDonViTinh($("#pageIndex").val() || 1);
+                    ResetDonViTinhForm();
+                    toastr.success(isEdit ? "Cập nhật thành công." : "Thêm mới thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    DisplayDonViTinhErrors(data.Errors);
+                    toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+                    $btn.prop("disabled", false);
+                }
+            },
+            error: function () {
+                $btn.prop("disabled", false);
+                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    });
+
+    function DisplayDonViTinhErrors(errors) {
+        $("#fDonViTinh .field-validation-valid, #fDonViTinh .field-validation-error").html("");
+        if (!errors) return;
+        for (var i = 0; i < errors.length; i++) {
+            if (i === 0) {
+                $("#" + errors[i].Key).focus();
+            }
+            $("#fDonViTinh span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+        }
+    }
+</script>

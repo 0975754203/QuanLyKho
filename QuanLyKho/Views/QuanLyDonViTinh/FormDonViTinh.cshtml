@@ -1,0 +1,53 @@
+@using QuanLyKho.Utility
+@model QuanLyKho.Models.DonViTinhForm
+@{
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+    var laCapNhat = Model != null && Model.Id.HasValue && Model.Id.Value != Guid.Empty;
+}
+
+@using (Html.BeginForm("FormDonViTinh", "QuanLyDonViTinh", FormMethod.Post, new { enctype = "multipart/form-data", id = "fDonViTinh", @class = "form-crmnt dvt-form" }))
+{
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="dvt-form-intro">
+        <h5>Thông tin đơn vị tính</h5>
+        <p>Quản lý đơn vị dùng khi khai báo vật tư như cái, mét, hộp, bộ.</p>
+    </div>
+
+    <div class="dvt-form-grid">
+        <div class="form-group">
+            <label class="text-label">Mã đơn vị <span class="red-crmnt">(*)</span></label>
+            @if (laCapNhat)
+            {
+                @Html.TextBoxFor(x => x.MaTuDien, new { @class = "form-control input-sm", id = "MaTuDien", @readonly = "readonly", placeholder = "Nhập mã đơn vị" })
+            }
+            else
+            {
+                @Html.TextBoxFor(x => x.MaTuDien, new { @class = "form-control input-sm", id = "MaTuDien", placeholder = "Ví dụ: CAI, HOP, MET" })
+            }
+            @Html.ValidationMessageFor(x => x.MaTuDien)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Tên đơn vị <span class="red-crmnt">(*)</span></label>
+            @Html.TextBoxFor(x => x.TenTuDien, new { @class = "form-control input-sm", id = "TenTuDien", placeholder = "Ví dụ: Cái, Hộp, Mét" })
+            @Html.ValidationMessageFor(x => x.TenTuDien)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Ghi chú</label>
+            @Html.TextAreaFor(x => x.GhiChu, 4, 0, new { @class = "form-control input-sm", placeholder = "Nhập ghi chú nếu cần" })
+            @Html.ValidationMessageFor(x => x.GhiChu)
+        </div>
+    </div>
+
+    <div class="dvt-form-actions">
+        @if (coQuyenThaoTac)
+        {
+            <button type="submit" class="btn btn-main" id="btnSaveDonViTinh">
+                <i class="ti-save"></i>@(laCapNhat ? "Cập nhật đơn vị" : "Lưu đơn vị")
+            </button>
+            <button type="button" class="btn btn-main" onclick="ResetDonViTinhForm()"><i class="ti-reload"></i>Làm mới</button>
+        }
+    </div>
+}

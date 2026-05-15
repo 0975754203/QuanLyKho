@@ -61,6 +61,12 @@ namespace QuanLyKho
             );
 
             routes.MapRoute(
+                 name: "QuanLyDonViTinh",
+                 url: "he-thong/don-vi-tinh",
+                 defaults: new { controller = "QuanLyDonViTinh", action = "Index", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                  name: "QuanLyTonKho",
                  url: "he-thong/ton-kho",
                  defaults: new { controller = "QuanLyTonKho", action = "Index", id = UrlParameter.Optional }
