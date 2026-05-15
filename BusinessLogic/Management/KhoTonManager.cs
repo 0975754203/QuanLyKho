@@ -55,7 +55,9 @@ namespace BusinessLogic.Management
                     MaSanPham = x.KhoSanPham != null ? x.KhoSanPham.MaSanPham : null,
                     TenSanPham = x.KhoSanPham != null ? x.KhoSanPham.TenSanPham : null,
                     DonViTinh = (x.KhoSanPham != null && x.KhoSanPham.TuDien != null) ? x.KhoSanPham.TuDien.TenTuDien : null,
-                    TenKho = x.Kho != null ? x.Kho.TenKho : null
+                    TenKho = x.Kho != null ? x.Kho.TenKho : null,
+                    DonGia = x.KhoSanPham != null ? x.KhoSanPham.DonGia : 0,
+                    ThoiGianBaoHanh = x.KhoSanPham != null ? x.KhoSanPham.ThoiGianBaoHanh : null
                 }).ToList();
             }
         }
@@ -100,7 +102,12 @@ namespace BusinessLogic.Management
                     return new KhoSanPhamTrongKhoOption
                     {
                         IdSanPham = x.IdSanPham,
-                        DisplayText = display
+                        DisplayText = display,
+                        TenSanPham = ten,
+                        TonKho = x.SoLuong,
+                        DonViTinh = dvt,
+                        DonGia = x.KhoSanPham != null ? x.KhoSanPham.DonGia : 0,
+                        XuatXu = x.KhoSanPham != null ? x.KhoSanPham.XuatXu : string.Empty
                     };
                 }).ToList();
             }

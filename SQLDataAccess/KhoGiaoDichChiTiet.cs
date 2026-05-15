@@ -20,7 +20,7 @@ namespace SQLDataAccess
         public decimal SoLuong { get; set; }
         public decimal DonGia { get; set; }
     
-        public virtual KhoSanPham KhoSanPham { get; set; }
         public virtual KhoGiaoDich KhoGiaoDich { get; set; }
+        public virtual KhoSanPham KhoSanPham { get; set; }
     }
 }

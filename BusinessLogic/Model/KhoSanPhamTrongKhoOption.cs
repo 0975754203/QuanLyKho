@@ -9,5 +9,10 @@ namespace BusinessLogic.Model
     {
         public Guid IdSanPham { get; set; }
         public string DisplayText { get; set; }
+        public string TenSanPham { get; set; }
+        public decimal TonKho { get; set; }
+        public string DonViTinh { get; set; }
+        public decimal DonGia { get; set; }
+        public string XuatXu { get; set; }
     }
 }

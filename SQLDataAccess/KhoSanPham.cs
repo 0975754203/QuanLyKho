@@ -29,12 +29,14 @@ namespace SQLDataAccess
         public decimal DonGia { get; set; }
         public Nullable<System.Guid> IdNhomVatTu { get; set; }
         public string XuatXu { get; set; }
+        public string KyhieuNhanmac { get; set; }
+        public string ThoiGianBaoHanh { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KhoGiaoDichChiTiet> KhoGiaoDichChiTiets { get; set; }
+        public virtual NhomVatTu NhomVatTu { get; set; }
         public virtual TuDien TuDien { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KhoTon> KhoTons { get; set; }
-        public virtual NhomVatTu NhomVatTu { get; set; }
     }
 }

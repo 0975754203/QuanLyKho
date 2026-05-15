@@ -1,156 +1,318 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var comboKho = ViewBag.ComboKho as IEnumerable<SelectListItem>;
+    var coQuyenThaoTac = QuanLyKho.Utility.Global.CoQuyenThaoTacDuLieuKho();
 }
 @Html.Partial("_PermissionMessage")
 
-<div class="row content-all-crmnt">
-    <div class="col-sm-12">
-        <div class="tab-content br-n pn">
-            <div class="content-tab-crmnt">
-                <div class="row align-items-end">
-                    <div class="col-xl-2 col-sm-6 content-bg">
-                        <div class="form-group mb-2">
-                            <label class="text-label d-block mb-1">Mã giao dịch</label>
-                            <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Mã giao dịch">
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
-                        <div class="form-group mb-2">
-                            <label class="text-label d-block mb-1">Kho</label>
-                            @Html.DropDownList("idKho", comboKho, new { @class = "form-control input-sm", id = "ddlIdKho" })
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
-                        <div class="form-group mb-2">
-                            <label class="text-label d-block mb-1">Từ ngày</label>
-                            <input type="date" id="tuNgay" class="form-control input-sm">
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
-                        <div class="form-group mb-2">
-                            <label class="text-label d-block mb-1">Đến ngày</label>
-                            <input type="date" id="denNgay" class="form-control input-sm">
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
-                        <div class="form-group mb-2">
-                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachNhapKho(1)">Tìm kiếm</button>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-12 content-bg text-xl-right">
-                        <div class="form-group mb-2">
-                            @if (QuanLyKho.Utility.Global.IsAdmin())
-                            {
-                                <a href="@Url.Action("NhapKho", "QuanLyGiaoDichNhapXuat")" class="btn btn-main"><i class="ti-plus"></i>Nhập kho</a>
-                            }
-                        </div>
-                    </div>
+<style>
+    .nhap-page {
+        color: #263238;
+    }
+
+    .nhap-hero {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        padding: 22px 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .nhap-hero h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: #17324d;
+    }
+
+    .nhap-hero p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 14px;
+    }
+
+    .nhap-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        align-items: start;
+    }
+
+    .nhap-card {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        overflow: hidden;
+    }
+
+    .nhap-card-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #edf1f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .nhap-card-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #17324d;
+    }
+
+    .nhap-card-header span {
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .nhap-card-body {
+        padding: 20px;
+    }
+
+    .nhap-toolbar {
+        display: grid;
+        grid-template-columns: minmax(160px, 1fr) minmax(160px, 220px) 140px 140px auto;
+        gap: 10px;
+        align-items: end;
+        margin-bottom: 14px;
+    }
+
+    .nhap-filter label {
+        display: block;
+        margin-bottom: 5px;
+        color: #526273;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .nhap-toolbar .form-control {
+        min-height: 42px;
+        border-radius: 6px;
+    }
+
+    .nhap-delete-panel {
+        display: none;
+        margin-bottom: 14px;
+        padding: 14px 16px;
+        border: 1px solid #ffd6d6;
+        border-radius: 8px;
+        background: #fff7f7;
+    }
+
+    .nhap-delete-panel strong {
+        color: #bf1f1f;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .nhap-delete-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .nhap-empty-permission {
+        padding: 18px;
+        border: 1px dashed #cdd8e4;
+        border-radius: 8px;
+        background: #f8fbfd;
+        color: #6b7c8f;
+    }
+
+    .nhap-table-wrap .table-crmnt {
+        margin-top: 0;
+    }
+
+    @@media (max-width: 991px) {
+        .nhap-hero,
+        .nhap-card-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .nhap-toolbar {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="nhap-page">
+    <div class="nhap-hero">
+        <div>
+            <h3>Nhập kho</h3>
+            <p>Lập phiếu nhập và theo dõi lịch sử nhập kho ngay trên một màn hình.</p>
+        </div>
+        @if (coQuyenThaoTac)
+        {
+            <button type="button" class="btn btn-main" onclick="ResetNhapKhoForm()"><i class="ti-plus"></i>Phiếu nhập mới</button>
+        }
+    </div>
+
+    <div class="nhap-layout">
+        <div class="nhap-card">
+            <div class="nhap-card-header">
+                <div>
+                    <h4>Lập phiếu nhập</h4>
+                    <span>Thêm vật tư, số lượng và lưu phiếu trực tiếp tại đây.</span>
                 </div>
             </div>
-
-            <div class="table-crmnt table-job" id="content_NhapKho"></div>
+            <div class="nhap-card-body" id="nhapKhoFormPanel">
+                @if (coQuyenThaoTac)
+                {
+                    @Html.Action("FormNhapKho", "QuanLyGiaoDichNhapXuat")
+                }
+                else
+                {
+                    <div class="nhap-empty-permission">Bạn chỉ có quyền xem danh sách nhập kho.</div>
+                }
+            </div>
         </div>
-    </div>
-</div>
 
-<div class="modal fade" id="modelDeleteNhapKho" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Xóa</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="ti-close"></i></span>
-                </button>
+        <div class="nhap-card nhap-table-wrap">
+            <div class="nhap-card-header">
+                <div>
+                    <h4>Danh sách phiếu nhập</h4>
+                    <span>Lọc theo mã giao dịch, kho và khoảng thời gian.</span>
+                </div>
             </div>
-            <div class="modal-body">
-                <span class="text-delete">Bạn có chắc chắn muốn xóa giao dịch nhập kho này không?</span>
-                <input type="hidden" id="delete_id" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-main" onclick="ActionDeleteNhapKho()"><i class="ti-trash"></i>Xóa</button>
-                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+            <div class="nhap-card-body">
+                <div class="nhap-toolbar">
+                    <div class="nhap-filter">
+                        <label>Mã giao dịch</label>
+                        <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Mã giao dịch">
+                    </div>
+                    <div class="nhap-filter">
+                        <label>Kho</label>
+                        @Html.DropDownList("idKho", comboKho, new { @class = "form-control input-sm", id = "ddlIdKho" })
+                    </div>
+                    <div class="nhap-filter">
+                        <label>Từ ngày</label>
+                        <input type="date" id="tuNgay" class="form-control input-sm">
+                    </div>
+                    <div class="nhap-filter">
+                        <label>Đến ngày</label>
+                        <input type="date" id="denNgay" class="form-control input-sm">
+                    </div>
+                    <button type="button" class="btn btn-search-crmnt" onclick="DanhSachNhapKho(1)"><i class="ti-search"></i>Tìm kiếm</button>
+                </div>
+
+                <div class="nhap-delete-panel" id="deleteNhapPanel">
+                    <strong>Xác nhận xóa phiếu nhập</strong>
+                    <span>Bạn có chắc chắn muốn xóa giao dịch nhập kho này không?</span>
+                    <input type="hidden" id="delete_id" />
+                    <div class="nhap-delete-actions">
+                        <button type="button" class="btn btn-main" onclick="ActionDeleteNhapKho()"><i class="ti-trash"></i>Xóa</button>
+                        <button type="button" class="btn btn-main" onclick="CancelDeleteNhapKho()"><i class="ti-close"></i>Hủy</button>
+                    </div>
+                </div>
+
+                <div class="table-crmnt table-job" id="content_NhapKho"></div>
             </div>
         </div>
     </div>
 </div>
 
 @section scripts {
-<script>
-    function toYmd(d) {
-        var m = (d.getMonth() + 1).toString();
-        if (m.length === 1) m = '0' + m;
-        var day = d.getDate().toString();
-        if (day.length === 1) day = '0' + day;
-        return d.getFullYear() + '-' + m + '-' + day;
-    }
-
-    function initNgayMacDinh() {
-        var now = new Date();
-        var first = new Date(now.getFullYear(), now.getMonth(), 1);
-        $("#tuNgay").val(toYmd(first));
-        $("#denNgay").val(toYmd(now));
-    }
-
-    $(document).ready(function () {
-        initNgayMacDinh();
-        DanhSachNhapKho(1);
-    });
-
-    $("#txtSearch").on('keypress', function (e) {
-        if (e.keyCode === 13) {
-            DanhSachNhapKho(1);
+    @Html.Partial("_NhapKhoScripts")
+    <script>
+        function toYmd(d) {
+            var m = (d.getMonth() + 1).toString();
+            if (m.length === 1) m = '0' + m;
+            var day = d.getDate().toString();
+            if (day.length === 1) day = '0' + day;
+            return d.getFullYear() + '-' + m + '-' + day;
         }
-    });
 
-    function DanhSachNhapKho(pageIndex) {
-        var sSearch = $("#txtSearch").val();
-        var payload = { pageIndex: pageIndex, sSearch: sSearch };
-        var idKho = $("#ddlIdKho").val();
-        if (idKho) payload.idKho = idKho;
-        var t1 = $("#tuNgay").val();
-        var t2 = $("#denNgay").val();
-        if (t1) payload.tuNgay = t1;
-        if (t2) payload.denNgay = t2;
-        $("#LoadingModal").modal('show');
-        $.ajax({
-            type: "GET",
-            url: '@Url.Action("DanhSachNhapKho")',
-            data: payload,
-            dataType: "html",
-            success: function (data) {
-                $("#content_NhapKho").html(data);
-                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 500);
+        function initNgayMacDinh() {
+            var now = new Date();
+            var first = new Date(now.getFullYear(), now.getMonth(), 1);
+            $("#tuNgay").val(toYmd(first));
+            $("#denNgay").val(toYmd(now));
+        }
+
+        $(document).ready(function () {
+            initNgayMacDinh();
+            DanhSachNhapKho(1);
+        });
+
+        $("#txtSearch").on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                DanhSachNhapKho(1);
             }
         });
-    }
 
-    function pagingData(pageIndex) {
-        DanhSachNhapKho(pageIndex);
-    }
+        function DanhSachNhapKho(pageIndex) {
+            var payload = {
+                pageIndex: pageIndex,
+                sSearch: $("#txtSearch").val()
+            };
 
-    function DeleteNhapKho(id) {
-        $("#modelDeleteNhapKho").modal("show");
-        $("#delete_id").val(id);
-    }
+            var idKho = $("#ddlIdKho").val();
+            if (idKho) payload.idKho = idKho;
 
-    function ActionDeleteNhapKho() {
-        $("#modelDeleteNhapKho").modal("hide");
-        $.ajax({
-            type: "POST",
-            url: '/QuanLyGiaoDichNhapXuat/XoaNhapKho',
-            data: { id: $("#delete_id").val() },
-            dataType: "json",
-            success: function (data) {
-                if (data.Sucess) {
-                    DanhSachNhapKho($("#pageIndex").val() || 1);
-                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
-                } else {
-                    toastr.warning(data.Message || "Không thể xóa giao dịch.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+            var t1 = $("#tuNgay").val();
+            var t2 = $("#denNgay").val();
+            if (t1) payload.tuNgay = t1;
+            if (t2) payload.denNgay = t2;
+
+            $("#LoadingModal").modal('show');
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("DanhSachNhapKho")',
+                data: payload,
+                dataType: "html",
+                success: function (data) {
+                    $("#content_NhapKho").html(data);
+                    setTimeout(function () { $("#LoadingModal").modal('hide'); }, 300);
+                },
+                error: function () {
+                    $("#LoadingModal").modal('hide');
+                    toastr.error("Không tải được danh sách nhập kho.", "Thông báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
                 }
-            }
-        });
-        $(".modal-backdrop").remove();
-    }
-</script>
+            });
+        }
+
+        function pagingData(pageIndex) {
+            DanhSachNhapKho(pageIndex);
+        }
+
+        function DeleteNhapKho(id) {
+            $("#delete_id").val(id);
+            $("#deleteNhapPanel").slideDown(150);
+        }
+
+        function CancelDeleteNhapKho() {
+            $("#delete_id").val("");
+            $("#deleteNhapPanel").slideUp(150);
+        }
+
+        function ActionDeleteNhapKho() {
+            $.ajax({
+                type: "POST",
+                url: '/QuanLyGiaoDichNhapXuat/XoaNhapKho',
+                data: { id: $("#delete_id").val() },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Sucess) {
+                        CancelDeleteNhapKho();
+                        DanhSachNhapKho($("#pageIndex").val() || 1);
+                        toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                    } else {
+                        toastr.warning(data.Message || "Không thể xóa giao dịch.", "Cảnh báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                    }
+                },
+                error: function () {
+                    toastr.error("Xảy ra lỗi khi xóa phiếu nhập.", "Thông báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                }
+            });
+        }
+    </script>
 }

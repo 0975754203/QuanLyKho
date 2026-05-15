@@ -6,25 +6,11 @@
     <div class="nk-nav-scroll">
 
         <ul class="metismenu" id="menu">
-            @if (laAdmin)
-            {
-                <li>
-                    <a href="/he-thong/quan-ly-tai-khoan" aria-expanded="false"><i class="mdi mdi-cogs"></i> <span class="nav-text">Quản lý tài khoản</span></a>
-                </li>
-            }
             <li>
-                <a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="mdi mdi-cogs"></i> <span class="nav-text">Danh mục</span></a>
+                <a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="mdi mdi-chart-bar"></i> <span class="nav-text">Nhập xuất kho</span></a>
                 <ul aria-expanded="false">
-                    <li><a href="/he-thong/quan-ly-san-pham"><i class="fas fa-caret-right"></i>Danh sách sản phẩm</a></li>
-                    <li><a href="/he-thong/danh-muc-kho"><i class="fas fa-caret-right"></i>Danh mục kho</a></li>
-                    <li><a href="/he-thong/nhom-vat-tu"><i class="fas fa-caret-right"></i>Nhóm vật tư</a></li>
-                </ul>
-            </li>
-            <li>
-                <a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="mdi mdi-chart-bar"></i> <span class="nav-text">Giao dịch kho</span></a>
-                <ul aria-expanded="false">
-                    <li><a href="/kho/danh-sach-nhap-kho" aria-expanded="false"><i class="fas fa-caret-right"></i> <span class="nav-text">Danh sách nhập kho</span></a></li>
-                    <li><a href="/kho/danh-sach-xuat-kho" aria-expanded="false"><i class="fas fa-caret-right"></i> <span class="nav-text">Danh sách xuất kho</span></a></li>
+                    <li><a href="/kho/danh-sach-nhap-kho" aria-expanded="false"><i class="fas fa-caret-right"></i> <span class="nav-text">Nhập Kho</span></a></li>
+                    <li><a href="/kho/danh-sach-xuat-kho" aria-expanded="false"><i class="fas fa-caret-right"></i> <span class="nav-text">Xuất Kho</span></a></li>
                 </ul>
             </li>
             <li>
@@ -36,6 +22,20 @@
                     <li><a href="/he-thong/bao-cao-xuat-khoa-phong" aria-expanded="false"><i class="fas fa-caret-right"></i> <span class="nav-text">Báo cáo xuất khoa phòng</span></a></li>
                 </ul>
             </li>
+            <li>
+                <a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="mdi mdi-cogs"></i> <span class="nav-text">Cài đặt Kho</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="/he-thong/quan-ly-san-pham"><i class="fas fa-caret-right"></i>Danh sách vật tư</a></li>
+                    <li><a href="/he-thong/danh-muc-kho"><i class="fas fa-caret-right"></i>Danh mục kho</a></li>
+                    <li><a href="/he-thong/nhom-vat-tu"><i class="fas fa-caret-right"></i>Nhóm vật tư</a></li>
+                </ul>
+            </li>
+            @if (laAdmin)
+            {
+                <li>
+                    <a href="/quan-ly-tai-khoan" aria-expanded="false"><i class="mdi mdi-cogs"></i> <span class="nav-text">Quản lý tài khoản</span></a>
+                </li>
+            }
         </ul>
     </div>
     <div class="footer footer-crmnt">

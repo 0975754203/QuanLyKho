@@ -6147,6 +6147,10 @@
     <Content Include="Views\QuanLyGiaoDichNhapXuat\InNhapKho.cshtml" />
     <Content Include="Views\QuanLyGiaoDichNhapXuat\InXuatKho.cshtml" />
     <Content Include="Views\QuanLyGiaoDichNhapXuat\NhapKho.cshtml" />
+    <Content Include="Views\QuanLyGiaoDichNhapXuat\_FormNhapKho.cshtml" />
+    <Content Include="Views\QuanLyGiaoDichNhapXuat\_NhapKhoScripts.cshtml" />
+    <Content Include="Views\QuanLyGiaoDichNhapXuat\_FormXuatKho.cshtml" />
+    <Content Include="Views\QuanLyGiaoDichNhapXuat\_XuatKhoScripts.cshtml" />
     <Content Include="Views\QuanLyGiaoDichNhapXuat\XuatKho.cshtml" />
     <Content Include="Views\QuanLyDanhMucKho\DanhSachDanhMucKho.cshtml" />
     <Content Include="Views\QuanLyDanhMucKho\FormDanhMucKho.cshtml" />

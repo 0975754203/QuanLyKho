@@ -22,7 +22,7 @@
                         <td>@item.MaNhom</td>
                         <td>@item.TenNhom</td>
                         <td>
-                            @if (Global.IsAdmin())
+                            @if (Global.CoQuyenThaoTacDuLieuKho())
                             {
                                 <a href="#" onclick="FormNhomVatTu('@item.Id')" class="mr-3" title="Sửa"><i class="ti-pencil-alt"></i></a>
                                 <a href="#" onclick="DeleteNhomVatTu('@item.Id')" class="mr-3" title="Xóa"><i class="ti-trash"></i></a>

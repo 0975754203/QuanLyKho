@@ -68,7 +68,10 @@ namespace BusinessLogic.Management
                     taikhoan.GhiChu = values.GhiChu;
                     taikhoan.IdDonViTinh = values.IdDonViTinh;
                     taikhoan.IdNhomVatTu = values.IdNhomVatTu;
+                    taikhoan.DonGia = values.DonGia;
                     taikhoan.XuatXu = values.XuatXu == null ? "" : values.XuatXu.Trim();
+                    taikhoan.KyhieuNhanmac = values.KyhieuNhanmac == null ? "" : values.KyhieuNhanmac.Trim();
+                    taikhoan.ThoiGianBaoHanh = values.ThoiGianBaoHanh == null ? "" : values.ThoiGianBaoHanh.Trim();
                     taikhoan.State = EDataState.Modified;
                     uow.Repository<KhoSanPham>().InsertOrUpdate(taikhoan);
                     uow.Save();
@@ -82,7 +85,10 @@ namespace BusinessLogic.Management
                     objUserAdd.MaSanPham = GenCodeSaPham(uow);
                     objUserAdd.IdDonViTinh = values.IdDonViTinh;
                     objUserAdd.IdNhomVatTu = values.IdNhomVatTu;
+                    objUserAdd.DonGia = values.DonGia;
                     objUserAdd.XuatXu = values.XuatXu == null ? "" : values.XuatXu.Trim();
+                    objUserAdd.KyhieuNhanmac = values.KyhieuNhanmac == null ? "" : values.KyhieuNhanmac.Trim();
+                    objUserAdd.ThoiGianBaoHanh = values.ThoiGianBaoHanh == null ? "" : values.ThoiGianBaoHanh.Trim();
                     objUserAdd.GhiChu = values.GhiChu;
                     uow.Repository<KhoSanPham>().InsertOrUpdate(objUserAdd);
                     uow.Save();

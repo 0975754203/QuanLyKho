@@ -1,10 +1,51 @@
 @using QuanLyKho.Utility
 @model QuanLyKho.Models.KhoGiaoDich_DSModel
 @{
-    var laAdmin = Global.IsAdmin();
+    var laCoQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
 }
+
+<style>
+    .nhap-list-table th,
+    .nhap-list-table td {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .nhap-list-actions {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .nhap-action-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 6px;
+        border: 1px solid #dbe4ee;
+        background: #ffffff;
+        color: #345;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nhap-action-btn:hover,
+    .nhap-action-btn:focus {
+        color: #ffffff;
+        background: #1f7a63;
+        border-color: #1f7a63;
+    }
+
+    .nhap-action-btn.delete:hover,
+    .nhap-action-btn.delete:focus {
+        background: #c0392b;
+        border-color: #c0392b;
+    }
+</style>
+
 <div class="table-responsive">
-    <table class="table table-striped table-bordered verticle-middle table-hover table-responsive-fix-big">
+    <table class="table table-striped table-bordered verticle-middle table-hover table-responsive-fix-big nhap-list-table">
         <thead>
             <tr>
                 <th scope="col">STT</th>
@@ -30,13 +71,15 @@
                             }
                         </td>
                         <td>@item.NgayTao.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>@item.sTenKhoaPhong</td>
+                        <td>@item.sTenKho</td>
                         <td>
-                            <a href="@Url.Action("InNhapKho", "QuanLyGiaoDichNhapXuat", new { id = item.Id })" target="_blank" class="mr-3" title="In"><i class="ti-printer"></i></a>
-                            @if (laAdmin && !item.IdGiaoDichCha.HasValue)
-                            {
-                                <a href="#" onclick="DeleteNhapKho('@item.Id')" class="mr-3" title="Xóa"><i class="ti-trash"></i></a>
-                            }
+                            <div class="nhap-list-actions">
+                                <a href="@Url.Action("InNhapKho", "QuanLyGiaoDichNhapXuat", new { id = item.Id })" target="_blank" class="nhap-action-btn" title="In"><i class="ti-printer"></i></a>
+                                @if (laCoQuyenThaoTac && !item.IdGiaoDichCha.HasValue)
+                                {
+                                    <button type="button" onclick="DeleteNhapKho('@item.Id')" class="nhap-action-btn delete" title="Xóa"><i class="ti-trash"></i></button>
+                                }
+                            </div>
                         </td>
                     </tr>
                 }

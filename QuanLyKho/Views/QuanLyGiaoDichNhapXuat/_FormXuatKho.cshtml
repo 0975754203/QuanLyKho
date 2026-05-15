@@ -1,0 +1,99 @@
+@model BusinessLogic.Model.KhoGiaoDichModel
+@{
+    var comboSanPham = ViewBag.ComboSanPhamXuat as IEnumerable<SelectListItem>;
+    var comboKho = ViewBag.ComboKhoXuat as IEnumerable<SelectListItem>;
+    var comboKhoNhan = ViewBag.ComboKhoNhan as IEnumerable<SelectListItem>;
+    var comboKhoaPhong = ViewBag.ComboKhoaPhong as IEnumerable<SelectListItem>;
+}
+
+@using (Html.BeginForm("XuatKho", "QuanLyGiaoDichNhapXuat", FormMethod.Post, new { id = "fXuatKho", @class = "form-crmnt xuat-kho-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.IdNguoiTao)
+
+    <div class="xuat-form-intro">
+        <h5>Thông tin phiếu xuất</h5>
+        <p>Chọn kho xuất, nơi nhận và danh sách vật tư cần xuất.</p>
+    </div>
+
+    <div class="xuat-form-grid">
+        <div class="form-group">
+            <label class="text-label">Kho xuất <span class="red-crmnt">(*)</span></label>
+            @Html.DropDownListFor(x => x.IdKho, comboKho, new { @class = "form-control select2 xuat-select", id = "ddlXuatIdKho" })
+            @Html.ValidationMessageFor(x => x.IdKho)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Kho nhận</label>
+            @Html.DropDownListFor(x => x.IdKhoNhan, comboKhoNhan, new { @class = "form-control select2 xuat-select", id = "ddlXuatIdKhoNhan" })
+            @Html.ValidationMessageFor(x => x.IdKhoNhan)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Khoa/Phòng nhận</label>
+            @Html.DropDownListFor(x => x.IdKhoaPhong, comboKhoaPhong, new { @class = "form-control select2 xuat-select" })
+            @Html.ValidationMessageFor(x => x.IdKhoaPhong)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Mã giao dịch</label>
+            @Html.TextBoxFor(x => x.MaGiaoDich, new { @class = "form-control input-sm", @readonly = "readonly", placeholder = "Tự sinh sau khi lưu" })
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Người nhận hàng</label>
+            @Html.TextBoxFor(x => x.NguoiGiaoNhan, new { @class = "form-control", placeholder = "Nhập họ tên người nhận" })
+            @Html.ValidationMessageFor(x => x.NguoiGiaoNhan)
+        </div>
+
+        <div class="form-group xuat-note-field">
+            <label class="text-label">Ghi chú</label>
+            @Html.TextAreaFor(x => x.GhiChu, 3, 0, new { @class = "form-control", placeholder = "Ghi chú nếu có" })
+        </div>
+    </div>
+
+    <div class="xuat-detail-head">
+        <div>
+            <h5>Chi tiết vật tư</h5>
+            <span id="ChiTietError" class="field-validation-valid" data-valmsg-for="ChiTiet" data-valmsg-replace="true"></span>
+        </div>
+        <button type="button" class="btn btn-main btn-sm" id="btnAddXuatRow"><i class="ti-plus"></i>Thêm vật tư</button>
+    </div>
+
+    <div class="table-responsive xuat-detail-table-wrap">
+        <table class="xuat-detail-table">
+            <thead>
+                <tr>
+                    <th class="xuat-col-stt">STT</th>
+                    <th>Vật tư trong kho</th>
+                    <th class="xuat-col-qty">Số lượng xuất</th>
+                    <th class="xuat-col-action"></th>
+                </tr>
+            </thead>
+            <tbody id="tblXuatChiTiet">
+                @for (int i = 0; i < (Model.lstChiTiet?.Count ?? 0); i++)
+                {
+                    <tr class="xuat-detail-row">
+                        <td class="xuat-row-number"><span class="xuat-row-index">@(i + 1)</span></td>
+                        <td>
+                            @Html.DropDownListFor(m => m.lstChiTiet[i].IdSanPham, comboSanPham, new { @class = "form-control select2 xuat-select xuat-sp-select" })
+                            @Html.ValidationMessageFor(m => m.lstChiTiet[i].IdSanPham)
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.lstChiTiet[i].SoLuong, new { @class = "form-control xuat-qty-input", type = "number", step = "0.01", min = "0" })
+                            @Html.ValidationMessageFor(m => m.lstChiTiet[i].SoLuong)
+                        </td>
+                        <td class="xuat-row-action">
+                            <button type="button" class="xuat-row-delete btnDelXuatRow" title="Xóa dòng"><i class="ti-trash"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="xuat-form-actions">
+        <button type="submit" class="btn btn-main" id="btnSaveXuat"><i class="ti-save"></i>Lưu phiếu xuất</button>
+        <button type="button" class="btn btn-main" onclick="ResetXuatKhoForm()"><i class="ti-reload"></i>Làm mới</button>
+    </div>
+}

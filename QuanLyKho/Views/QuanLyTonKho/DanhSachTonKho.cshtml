@@ -1,6 +1,11 @@
 @using QuanLyKho.Utility
 @model QuanLyKho.Models.KhoTon_DSModel
 
+@{
+    decimal totalTonKho = 0;
+    decimal totalGiaTri = 0;
+}
+
 <div class="table-responsive">
     <table class="table table-striped table-bordered verticle-middle table-hover table-responsive-fix-big">
         <thead>
@@ -11,6 +16,9 @@
                 <th scope="col">Kho</th>
                 <th scope="col">Đơn vị</th>
                 <th scope="col" class="text-right">Tồn kho</th>
+                <th scope="col" class="text-right">Đơn giá</th>
+                <th scope="col">Thời gian bảo hành</th>
+                <th scope="col" class="text-right">Tổng tiền</th>
             </tr>
         </thead>
         <tbody>
@@ -19,6 +27,9 @@
             {
                 foreach (var item in Model.TBL_TonKho)
                 {
+                    var tongTien = item.DonGia * item.TonKho;
+                    totalTonKho += item.TonKho;
+                    totalGiaTri += tongTien;
                     <tr>
                         <td>@(++i)</td>
                         <td>@item.MaSanPham</td>
@@ -26,13 +37,23 @@
                         <td>@item.TenKho</td>
                         <td>@item.DonViTinh</td>
                         <td class="text-right">@string.Format("{0:n0}", item.TonKho)</td>
+                        <td class="text-right">@string.Format("{0:n0}", item.DonGia)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.ThoiGianBaoHanh) ? "—" : item.ThoiGianBaoHanh)</td>
+                        <td class="text-right">@string.Format("{0:n0}", tongTien)</td>
                     </tr>
                 }
+                <tr class="table-info">
+                    <td colspan="5" class="text-right font-weight-bold">Tổng cộng:</td>
+                    <td class="text-right font-weight-bold">@string.Format("{0:n0}", totalTonKho)</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right font-weight-bold">@string.Format("{0:n0}", totalGiaTri)</td>
+                </tr>
             }
             else
             {
                 <tr>
-                    <td colspan="6">Không có dữ liệu</td>
+                    <td colspan="9">Không có dữ liệu</td>
                 </tr>
             }
         </tbody>

@@ -70,7 +70,7 @@ namespace QuanLyKho.Controllers
                 ViewBag.status = "false";
                 ViewBag.Status = "false";
                 ViewBag.isAdmin = "false";
-                if (Global.IsAdmin())
+                if (Global.CoQuyenThaoTacDuLieuKho())
                 {
                     ViewBag.isAdmin = "true";
                 }
@@ -102,7 +102,7 @@ namespace QuanLyKho.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (!Global.IsAdmin())
+                    if (!Global.CoQuyenThaoTacDuLieuKho())
                     {
                         ModelState.AddModelError("MaSanPham", "Không có quyền thao tác.");
                         return Json(new { Sucess = false, Errors = ModelState.Errors() }, JsonRequestBehavior.AllowGet);
@@ -141,7 +141,7 @@ namespace QuanLyKho.Controllers
         {
             try
             {
-                if (!Global.IsAdmin())
+                if (!Global.CoQuyenThaoTacDuLieuKho())
                 {
                     return Json(new { Sucess = false, Errors = ModelState.Errors(), Msg = "Không có quyền thao tác." }, JsonRequestBehavior.AllowGet);
                 }

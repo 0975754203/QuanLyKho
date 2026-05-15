@@ -49,7 +49,7 @@ namespace QuanLyKho.Utility
                 return null;
             }
         }
-        /// <summary>Role Admin trong DB (SelectData): giá trị "admin", so khớp không phân biệt hoa thường.</summary>
+        /// <summary>Role Admin trong DB (SelectData ComboDoiLoaiTaiKhoan): giá trị "admin".</summary>
         public static bool IsAdmin()
         {
             var tk = ThongTinTaiKhoan_Login;
@@ -59,6 +59,24 @@ namespace QuanLyKho.Utility
             }
 
             return string.Equals(tk.Role.Trim(), "admin", StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>Role Nhân viên (SelectData): giá trị "nhanvien". Có quyền thao tác kho/danh mục/giao dịch như Admin, trừ quản lý tài khoản.</summary>
+        public static bool LaNhanVien()
+        {
+            var tk = ThongTinTaiKhoan_Login;
+            if (tk == null || string.IsNullOrWhiteSpace(tk.Role))
+            {
+                return false;
+            }
+
+            return string.Equals(tk.Role.Trim(), "nhanvien", StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>Được thêm/sửa/xóa dữ liệu kho, danh mục, giao dịch, báo cáo (Admin hoặc Nhân viên).</summary>
+        public static bool CoQuyenThaoTacDuLieuKho()
+        {
+            return IsAdmin() || LaNhanVien();
         }
     }
 }

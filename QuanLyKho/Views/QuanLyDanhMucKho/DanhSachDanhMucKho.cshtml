@@ -24,7 +24,7 @@
                         <td>@item.TenKho</td>
                         <td>@item.DiaChi</td>
                         <td>
-                            @if (QuanLyKho.Utility.Global.IsAdmin())
+                            @if (QuanLyKho.Utility.Global.CoQuyenThaoTacDuLieuKho())
                             {
                                 <a href="#" onclick="FormDanhMucKho('@item.Id')" class="mr-3" title="Sửa"><i class="ti-pencil-alt"></i></a>
                                 <a href="#" onclick="DeleteDanhMucKho('@item.Id')" class="mr-3" title="Xóa"><i class="ti-trash"></i></a>

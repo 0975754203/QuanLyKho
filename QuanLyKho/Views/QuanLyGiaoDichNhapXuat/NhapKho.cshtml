@@ -1,196 +1,25 @@
 @model BusinessLogic.Model.KhoGiaoDichModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@{
     ViewBag.Title = "Nhập kho";
-    var comboSanPham = ViewBag.ComboSanPham as IEnumerable<SelectListItem>;
-    var comboKho = ViewBag.ComboKho as IEnumerable<SelectListItem>;
 }
 
 <div class="row content-all-crmnt">
     <div class="col-sm-12">
         <div class="tab-content br-n pn">
-            @using (Html.BeginForm("NhapKho", "QuanLyGiaoDichNhapXuat", FormMethod.Post, new { id = "fNhapKho", @class = "form-crmnt" }))
-            {
-                @Html.AntiForgeryToken()
-
-                @Html.HiddenFor(x => x.IdNguoiTao)
+            <div class="content-tab-crmnt">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-0">Thông tin phiếu nhập</h4>
+                    <h4 class="card-title mb-0">Nhập kho</h4>
+                    <a href="@Url.Action("Index", "QuanLyGiaoDichNhapXuat")" class="btn btn-main"><i class="ti-arrow-left"></i>Danh sách nhập kho</a>
                 </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="text-label">Kho nhập</label>
-                            @Html.DropDownListFor(x => x.IdKho, comboKho, new { @class = "form-control select2" })
-                            @Html.ValidationMessageFor(x => x.IdKho)
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="text-label">Mã giao dịch</label>
-                            @Html.TextBoxFor(x => x.MaGiaoDich, new { @class = "form-control input-sm", @readonly = "readonly", placeholder = "Tự sinh" })
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="text-label">Họ tên người giao</label>
-                            @Html.TextBoxFor(x => x.NguoiGiaoNhan, new { @class = "form-control", placeholder = "Nhập họ tên người giao hàng" })
-                            @Html.ValidationMessageFor(x => x.NguoiGiaoNhan)
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label class="text-label">Ghi chú</label>
-                            @Html.TextAreaFor(x => x.GhiChu, 3, 0, new { @class = "form-control", placeholder = "Nhập ghi chú" })
-                        </div>
-                    </div>
-                </div>
-
-                <hr />
-
-                <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-0">Chi tiết sản phẩm</h4>
-                    <button type="button" class="btn btn-main btn-sm" id="btnAddRow"><i class="ti-plus"></i>Thêm sản phẩm</button>
-                </div>
-
-                <div class="table-responsive mt-3">
-                    <table class="table table-bordered" id="tblChiTiet">
-                        <thead>
-                            <tr>
-                                <th style="width: 60%;">Sản phẩm</th>
-                                <th style="width: 25%;">Số lượng</th>
-                                <th style="width: 15%;"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (int i = 0; i < (Model.lstChiTiet?.Count ?? 0); i++)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DropDownListFor(m => m.lstChiTiet[i].IdSanPham, comboSanPham, new { @class = "form-control select2 sp-select" })
-                                        @Html.ValidationMessageFor(m => m.lstChiTiet[i].IdSanPham)
-                                    </td>
-                                    <td>
-                                        @Html.TextBoxFor(m => m.lstChiTiet[i].SoLuong, new { @class = "form-control", type = "number", step = "0.01", min = "0" })
-                                        @Html.ValidationMessageFor(m => m.lstChiTiet[i].SoLuong)
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-danger btn-sm btnDelRow" title="Xóa dòng"><i class="ti-trash"></i></button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-
-                <button type="submit" class="btn btn-main" id="btnSave"><i class="ti-save"></i>Lưu phiếu nhập</button>
-            }
+            </div>
+            <div class="nhap-kho-standalone">
+                @Html.Partial("_FormNhapKho", Model)
+            </div>
         </div>
     </div>
 </div>
+
 @section scripts {
-<script type="text/javascript">
-    var urlDanhSachNhapKho = '@Url.Action("Index", "QuanLyGiaoDichNhapXuat")';
-</script>
-<style>
-    /* Small UX polish for Nhập kho */
-    #tblChiTiet th { background: #f8fafc; }
-    #tblChiTiet td { vertical-align: middle; }
-    #tblChiTiet .btnDelRow { padding: 0.25rem 0.45rem; line-height: 1; }
-    #tblChiTiet .btnDelRow i { font-size: 0.9rem; }
-    #btnAddRow i, #btnSave i { margin-right: 6px; }
-    textarea.form-control { resize: vertical; }
-</style>
-<script>
-    $(function () {
-        if ($.fn.select2) {
-            $(".select2").select2();
-        }
-
-        function renumberRows() {
-            $("#tblChiTiet tbody tr").each(function (idx) {
-                $(this).find("select, input").each(function () {
-                    var name = $(this).attr("name");
-                    if (!name) return;
-                    name = name.replace(/lstChiTiet\[\d+\]/g, "lstChiTiet[" + idx + "]");
-                    $(this).attr("name", name);
-                });
-            });
-        }
-
-        $("#btnAddRow").on("click", function () {
-            var idx = $("#tblChiTiet tbody tr").length;
-            var row = `
-<tr>
-  <td>
-    <select class="form-control select2 sp-select" name="lstChiTiet[${idx}].IdSanPham">
-      @if (comboSanPham != null)
-      {
-          foreach (var it in comboSanPham)
-          {
-<option value="@it.Value">@it.Text</option>
-          }
-      }
-    </select>
-    <span class="field-validation-valid" data-valmsg-for="lstChiTiet[${idx}].IdSanPham" data-valmsg-replace="true"></span>
-  </td>
-  <td>
-    <input class="form-control" type="number" step="0.01" min="0" name="lstChiTiet[${idx}].SoLuong" value="1" />
-    <span class="field-validation-valid" data-valmsg-for="lstChiTiet[${idx}].SoLuong" data-valmsg-replace="true"></span>
-  </td>
-  <td class="text-center">
-    <button type="button" class="btn btn-danger btn-sm btnDelRow" title="Xóa dòng"><i class="ti-trash"></i></button>
-  </td>
-</tr>`;
-            $("#tblChiTiet tbody").append(row);
-            if ($.fn.select2) {
-                $(".select2").select2();
-            }
-        });
-
-        $(document).on("click", ".btnDelRow", function () {
-            $(this).closest("tr").remove();
-            renumberRows();
-        });
-
-        $("#fNhapKho").submit(function (e) {
-            e.preventDefault();
-            $("#btnSave").hide();
-
-            $.ajax({
-                type: "POST",
-                url: "/QuanLyGiaoDichNhapXuat/NhapKho",
-                data: $("#fNhapKho").serialize(),
-                dataType: "json",
-                success: function (data) {
-                    if (data.Sucess) {
-                        toastr.success("Lưu phiếu nhập thành công.", "Thông báo", { timeOut: 3e3, closeButton: !0 });
-                        setTimeout(function () {
-                            window.location.href = urlDanhSachNhapKho;
-                        }, 700);
-                    } else {
-                        DisplayErrors(data.Errors);
-                        toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
-                        $("#btnSave").show();
-                    }
-                },
-                error: function () {
-                    toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
-                    $("#btnSave").show();
-                }
-            });
-        });
-
-        function DisplayErrors(errors) {
-            $(".field-validation-valid").html("");
-            for (var i = 0; i < errors.length; i++) {
-                $("span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
-            }
-        }
-    });
-</script>
+    @Html.Partial("_NhapKhoScripts")
 }

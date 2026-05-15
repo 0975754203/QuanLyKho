@@ -52,6 +52,8 @@
           <Property Name="DonGia" Type="decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="IdNhomVatTu" Type="uniqueidentifier" />
           <Property Name="XuatXu" Type="nvarchar" MaxLength="500" />
+          <Property Name="KyhieuNhanmac" Type="nvarchar" MaxLength="500" />
+          <Property Name="ThoiGianBaoHanh" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="KhoTon">
           <Key>
@@ -309,25 +311,8 @@
           <Property Name="IdSanPham" Type="Guid" Nullable="false" />
           <Property Name="SoLuong" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="DonGia" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <NavigationProperty Name="KhoSanPham" Relationship="Self.FK_KhoGiaoDichChiTiet_KhoSanPham" FromRole="KhoGiaoDichChiTiet" ToRole="KhoSanPham" />
           <NavigationProperty Name="KhoGiaoDich" Relationship="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoGiaoDich" FromRole="KhoGiaoDichChiTiet" ToRole="KhoGiaoDich" />
-        </EntityType>
-        <EntityType Name="KhoSanPham">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="MaSanPham" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="TenSanPham" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="GhiChu" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
-          <Property Name="IdDonViTinh" Type="Guid" Nullable="false" />
-          <Property Name="DonGia" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <NavigationProperty Name="KhoGiaoDichChiTiets" Relationship="Self.FK_KhoGiaoDichChiTiet_KhoSanPham" FromRole="KhoSanPham" ToRole="KhoGiaoDichChiTiet" />
-          <NavigationProperty Name="TuDien" Relationship="Self.FK_KhoSanPham_TuDien" FromRole="KhoSanPham" ToRole="TuDien" />
-          <NavigationProperty Name="KhoTons" Relationship="Self.FK_KhoTon_KhoSanPham" FromRole="KhoSanPham" ToRole="KhoTon" />
-          <Property Name="IdNhomVatTu" Type="Guid" />
-          <NavigationProperty Name="NhomVatTu" Relationship="QuanLyKhoModel.FK_KhoSanPham_NhomVatTu" FromRole="KhoSanPham" ToRole="NhomVatTu" />
-          <Property Name="XuatXu" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="KhoSanPham" Relationship="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoSanPham" FromRole="KhoGiaoDichChiTiet" ToRole="KhoSanPham" />
         </EntityType>
         <EntityType Name="KhoTon">
           <Key>
@@ -338,7 +323,7 @@
           <Property Name="SoLuong" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="IdKho" Type="Guid" Nullable="false" />
           <NavigationProperty Name="Kho" Relationship="Self.FK_KhoTon_Kho" FromRole="KhoTon" ToRole="Kho" />
-          <NavigationProperty Name="KhoSanPham" Relationship="Self.FK_KhoTon_KhoSanPham" FromRole="KhoTon" ToRole="KhoSanPham" />
+          <NavigationProperty Name="KhoSanPham" Relationship="QuanLyKhoModel.FK_KhoTon_KhoSanPham" FromRole="KhoTon" ToRole="KhoSanPham" />
         </EntityType>
         <EntityType Name="TaiKhoan">
           <Key>
@@ -359,9 +344,9 @@
           <Property Name="MaTuDien" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="TenTuDien" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="KhoSanPhams" Relationship="Self.FK_KhoSanPham_TuDien" FromRole="TuDien" ToRole="KhoSanPham" />
           <NavigationProperty Name="TuDienLoai" Relationship="Self.FK_TuDien_TuDienLoai" FromRole="TuDien" ToRole="TuDienLoai" />
           <NavigationProperty Name="KhoGiaoDiches" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_TuDien" FromRole="TuDien" ToRole="KhoGiaoDich" />
+          <NavigationProperty Name="KhoSanPhams" Relationship="QuanLyKhoModel.FK_KhoSanPham_TuDien" FromRole="TuDien" ToRole="KhoSanPham" />
         </EntityType>
         <EntityType Name="TuDienLoai">
           <Key>
@@ -385,42 +370,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_KhoGiaoDichChiTiet_KhoSanPham">
-          <End Role="KhoSanPham" Type="Self.KhoSanPham" Multiplicity="1" />
-          <End Role="KhoGiaoDichChiTiet" Type="Self.KhoGiaoDichChiTiet" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="KhoSanPham">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="KhoGiaoDichChiTiet">
-              <PropertyRef Name="IdSanPham" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KhoSanPham_TuDien">
-          <End Role="TuDien" Type="Self.TuDien" Multiplicity="1" />
-          <End Role="KhoSanPham" Type="Self.KhoSanPham" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TuDien">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="KhoSanPham">
-              <PropertyRef Name="IdDonViTinh" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KhoTon_KhoSanPham">
-          <End Role="KhoSanPham" Type="Self.KhoSanPham" Multiplicity="1" />
-          <End Role="KhoTon" Type="Self.KhoTon" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="KhoSanPham">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="KhoTon">
-              <PropertyRef Name="IdSanPham" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_TuDien_TuDienLoai">
           <End Role="TuDienLoai" Type="Self.TuDienLoai" Multiplicity="1" />
           <End Role="TuDien" Type="Self.TuDien" Multiplicity="*" />
@@ -436,25 +385,12 @@
         <EntityContainer Name="QuanLyKhoEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Khoes" EntityType="Self.Kho" />
           <EntitySet Name="KhoGiaoDichChiTiets" EntityType="Self.KhoGiaoDichChiTiet" />
-          <EntitySet Name="KhoSanPhams" EntityType="Self.KhoSanPham" />
           <EntitySet Name="KhoTons" EntityType="Self.KhoTon" />
           <EntitySet Name="TaiKhoans" EntityType="Self.TaiKhoan" />
           <EntitySet Name="TuDiens" EntityType="Self.TuDien" />
           <EntitySet Name="TuDienLoais" EntityType="Self.TuDienLoai" />
           <AssociationSet Name="FK_KhoTon_Kho" Association="Self.FK_KhoTon_Kho">
             <End Role="Kho" EntitySet="Khoes" />
-            <End Role="KhoTon" EntitySet="KhoTons" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KhoGiaoDichChiTiet_KhoSanPham" Association="Self.FK_KhoGiaoDichChiTiet_KhoSanPham">
-            <End Role="KhoSanPham" EntitySet="KhoSanPhams" />
-            <End Role="KhoGiaoDichChiTiet" EntitySet="KhoGiaoDichChiTiets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KhoSanPham_TuDien" Association="Self.FK_KhoSanPham_TuDien">
-            <End Role="TuDien" EntitySet="TuDiens" />
-            <End Role="KhoSanPham" EntitySet="KhoSanPhams" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KhoTon_KhoSanPham" Association="Self.FK_KhoTon_KhoSanPham">
-            <End Role="KhoSanPham" EntitySet="KhoSanPhams" />
             <End Role="KhoTon" EntitySet="KhoTons" />
           </AssociationSet>
           <AssociationSet Name="FK_TuDien_TuDienLoai" Association="Self.FK_TuDien_TuDienLoai">
@@ -483,9 +419,22 @@
             <End Role="KhoGiaoDich1" EntitySet="KhoGiaoDiches" />
           </AssociationSet>
           <EntitySet Name="NhomVatTus" EntityType="QuanLyKhoModel.NhomVatTu" />
+          <EntitySet Name="KhoSanPhams" EntityType="QuanLyKhoModel.KhoSanPham" />
+          <AssociationSet Name="FK_KhoGiaoDichChiTiet_KhoSanPham" Association="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoSanPham">
+            <End Role="KhoSanPham" EntitySet="KhoSanPhams" />
+            <End Role="KhoGiaoDichChiTiet" EntitySet="KhoGiaoDichChiTiets" />
+          </AssociationSet>
           <AssociationSet Name="FK_KhoSanPham_NhomVatTu" Association="QuanLyKhoModel.FK_KhoSanPham_NhomVatTu">
             <End Role="NhomVatTu" EntitySet="NhomVatTus" />
             <End Role="KhoSanPham" EntitySet="KhoSanPhams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KhoSanPham_TuDien" Association="QuanLyKhoModel.FK_KhoSanPham_TuDien">
+            <End Role="TuDien" EntitySet="TuDiens" />
+            <End Role="KhoSanPham" EntitySet="KhoSanPhams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KhoTon_KhoSanPham" Association="QuanLyKhoModel.FK_KhoTon_KhoSanPham">
+            <End Role="KhoSanPham" EntitySet="KhoSanPhams" />
+            <End Role="KhoTon" EntitySet="KhoTons" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="KhoGiaoDich">
@@ -579,6 +528,37 @@
           <Property Name="TenNhom" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="KhoSanPhams" Relationship="QuanLyKhoModel.FK_KhoSanPham_NhomVatTu" FromRole="NhomVatTu" ToRole="KhoSanPham" />
         </EntityType>
+        <EntityType Name="KhoSanPham">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="MaSanPham" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="TenSanPham" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="GhiChu" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="IdDonViTinh" Type="Guid" Nullable="false" />
+          <Property Name="DonGia" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="IdNhomVatTu" Type="Guid" />
+          <Property Name="XuatXu" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="KyhieuNhanmac" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ThoiGianBaoHanh" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="KhoGiaoDichChiTiets" Relationship="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoSanPham" FromRole="KhoSanPham" ToRole="KhoGiaoDichChiTiet" />
+          <NavigationProperty Name="NhomVatTu" Relationship="QuanLyKhoModel.FK_KhoSanPham_NhomVatTu" FromRole="KhoSanPham" ToRole="NhomVatTu" />
+          <NavigationProperty Name="TuDien" Relationship="QuanLyKhoModel.FK_KhoSanPham_TuDien" FromRole="KhoSanPham" ToRole="TuDien" />
+          <NavigationProperty Name="KhoTons" Relationship="QuanLyKhoModel.FK_KhoTon_KhoSanPham" FromRole="KhoSanPham" ToRole="KhoTon" />
+        </EntityType>
+        <Association Name="FK_KhoGiaoDichChiTiet_KhoSanPham">
+          <End Type="QuanLyKhoModel.KhoSanPham" Role="KhoSanPham" Multiplicity="1" />
+          <End Type="QuanLyKhoModel.KhoGiaoDichChiTiet" Role="KhoGiaoDichChiTiet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KhoSanPham">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KhoGiaoDichChiTiet">
+              <PropertyRef Name="IdSanPham" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_KhoSanPham_NhomVatTu">
           <End Type="QuanLyKhoModel.NhomVatTu" Role="NhomVatTu" Multiplicity="0..1" />
           <End Type="QuanLyKhoModel.KhoSanPham" Role="KhoSanPham" Multiplicity="*" />
@@ -588,6 +568,30 @@
             </Principal>
             <Dependent Role="KhoSanPham">
               <PropertyRef Name="IdNhomVatTu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KhoSanPham_TuDien">
+          <End Type="QuanLyKhoModel.TuDien" Role="TuDien" Multiplicity="1" />
+          <End Type="QuanLyKhoModel.KhoSanPham" Role="KhoSanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TuDien">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KhoSanPham">
+              <PropertyRef Name="IdDonViTinh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KhoTon_KhoSanPham">
+          <End Type="QuanLyKhoModel.KhoSanPham" Role="KhoSanPham" Multiplicity="1" />
+          <End Type="QuanLyKhoModel.KhoTon" Role="KhoTon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KhoSanPham">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KhoTon">
+              <PropertyRef Name="IdSanPham" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -614,20 +618,6 @@
                 <ScalarProperty Name="IdGiaoDich" ColumnName="IdGiaoDich" />
                 <ScalarProperty Name="IdSanPham" ColumnName="IdSanPham" />
                 <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="KhoSanPhams">
-            <EntityTypeMapping TypeName="QuanLyKhoModel.KhoSanPham">
-              <MappingFragment StoreEntitySet="KhoSanPham">
-                <ScalarProperty Name="XuatXu" ColumnName="XuatXu" />
-                <ScalarProperty Name="IdNhomVatTu" ColumnName="IdNhomVatTu" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="MaSanPham" ColumnName="MaSanPham" />
-                <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
-                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
-                <ScalarProperty Name="IdDonViTinh" ColumnName="IdDonViTinh" />
                 <ScalarProperty Name="DonGia" ColumnName="DonGia" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -695,6 +685,22 @@
               <MappingFragment StoreEntitySet="NhomVatTu">
                 <ScalarProperty Name="TenNhom" ColumnName="TenNhom" />
                 <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KhoSanPhams">
+            <EntityTypeMapping TypeName="QuanLyKhoModel.KhoSanPham">
+              <MappingFragment StoreEntitySet="KhoSanPham">
+                <ScalarProperty Name="ThoiGianBaoHanh" ColumnName="ThoiGianBaoHanh" />
+                <ScalarProperty Name="KyhieuNhanmac" ColumnName="KyhieuNhanmac" />
+                <ScalarProperty Name="XuatXu" ColumnName="XuatXu" />
+                <ScalarProperty Name="IdNhomVatTu" ColumnName="IdNhomVatTu" />
+                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+                <ScalarProperty Name="IdDonViTinh" ColumnName="IdDonViTinh" />
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
+                <ScalarProperty Name="MaSanPham" ColumnName="MaSanPham" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

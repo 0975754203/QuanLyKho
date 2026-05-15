@@ -1,0 +1,500 @@
+<style>
+    .xuat-form-intro {
+        max-width: 940px;
+        margin: 0 auto 12px;
+        padding: 10px 12px;
+        background: #f6faf8;
+        border: 1px solid #dcebe4;
+        border-radius: 8px;
+    }
+
+    .xuat-form-grid {
+        display: grid;
+        grid-template-columns: 220px 220px 240px 200px;
+        gap: 10px 12px;
+        align-items: start;
+        max-width: 940px;
+        margin: 0 auto;
+    }
+
+    .xuat-note-field {
+        grid-column: 1 / -1;
+        max-width: 940px;
+    }
+
+    .xuat-form-intro h5,
+    .xuat-detail-head h5 {
+        margin: 0 0 4px;
+        color: #17324d;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .xuat-form-intro p,
+    .xuat-detail-head span {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .xuat-kho-form .form-group {
+        margin-bottom: 8px;
+    }
+
+    .xuat-kho-form .form-control {
+        min-height: 34px;
+        height: 34px;
+        border-radius: 6px;
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+
+    .xuat-kho-form textarea.form-control {
+        height: 58px;
+        min-height: 58px;
+        resize: vertical;
+    }
+
+    .xuat-kho-form .select2-container .select2-selection--single {
+        min-height: 34px;
+        height: 34px;
+        border-color: #ddd;
+        border-radius: 6px;
+    }
+
+    .xuat-kho-form .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 32px;
+        padding-left: 10px;
+    }
+
+    .xuat-kho-form .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 32px;
+    }
+
+    .xuat-detail-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 940px;
+        margin: 12px auto 8px;
+    }
+
+    .xuat-detail-table-wrap {
+        max-width: 940px;
+        margin: 0 auto;
+        border: 1px solid #dfe8f1;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #ffffff;
+    }
+
+    .xuat-detail-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .xuat-detail-table th {
+        padding: 10px 12px;
+        background: #f5f9fc;
+        color: #526273;
+        font-size: 12px;
+        font-weight: 700;
+        border-bottom: 1px solid #dfe8f1;
+        text-align: left;
+    }
+
+    .xuat-detail-table td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #edf2f6;
+        vertical-align: top;
+    }
+
+    .xuat-detail-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .xuat-detail-table tbody tr:hover {
+        background: #fbfdff;
+    }
+
+    .xuat-col-stt {
+        width: 58px;
+        text-align: center !important;
+    }
+
+    .xuat-col-qty {
+        width: 140px;
+    }
+
+    .xuat-col-action {
+        width: 54px;
+    }
+
+    .xuat-row-number,
+    .xuat-row-action {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .xuat-row-index {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        background: #eef6f9;
+        color: #1f6f8b;
+        font-weight: 700;
+    }
+
+    .xuat-qty-input {
+        text-align: center;
+    }
+
+    .xuat-row-delete {
+        width: 34px;
+        height: 34px;
+        border: 1px solid #ffd6d6;
+        border-radius: 6px;
+        color: #c0392b;
+        background: #fff7f7;
+    }
+
+    .xuat-row-delete:hover,
+    .xuat-row-delete:focus {
+        color: #ffffff;
+        background: #c0392b;
+        border-color: #c0392b;
+    }
+
+    .xuat-form-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        max-width: 940px;
+        margin: 12px auto 0;
+    }
+
+    .xuat-kho-standalone {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+    }
+
+    .xuat-product-option {
+        padding: 4px 0;
+        line-height: 1.35;
+    }
+
+    .xuat-product-option-name {
+        display: block;
+        color: #17324d;
+        font-weight: 700;
+    }
+
+    .xuat-product-option-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px 12px;
+        margin-top: 3px;
+        color: #3f5368;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] .xuat-product-option-name,
+    .select2-container--default .select2-results__option--highlighted[aria-selected] .xuat-product-option-meta {
+        color: #17324d;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #eaf6fb;
+        color: #17324d;
+    }
+
+    @@media (max-width: 991px) {
+        .xuat-form-grid {
+            grid-template-columns: repeat(2, minmax(220px, 1fr));
+        }
+
+        .xuat-note-field {
+            grid-column: 1 / -1;
+            max-width: none;
+        }
+    }
+
+    @@media (max-width: 575px) {
+        .xuat-form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .xuat-detail-table {
+            min-width: 680px;
+        }
+    }
+</style>
+
+<script>
+    var urlDanhSachXuatKho = '@Url.Action("IndexXuatKho", "QuanLyGiaoDichNhapXuat")';
+    var urlSanPhamXuatKho = '@Url.Action("SanPhamCoTonTrongKho", "QuanLyGiaoDichNhapXuat")';
+    var xuatKhoOptionsHtml = '<option value="">-- Chọn kho trước --</option>';
+
+    function xuatEscOpt(s) {
+        if (!s) return '';
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    }
+
+    function buildXuatOptionsHtml(rows) {
+        var html = '<option value="">-- Chọn sản phẩm --</option>';
+        if (!rows || !rows.length) {
+            html += '<option value="" disabled>Không có hàng tồn trong kho này</option>';
+            return html;
+        }
+
+        for (var i = 0; i < rows.length; i++) {
+            html += '<option value="' + xuatEscOpt(rows[i].id) + '"'
+                + ' data-name="' + xuatEscOpt(rows[i].name) + '"'
+                + ' data-price="' + xuatEscOpt(rows[i].price) + '"'
+                + ' data-origin="' + xuatEscOpt(rows[i].origin) + '"'
+                + ' data-stock="' + xuatEscOpt(rows[i].stock) + '"'
+                + ' data-unit="' + xuatEscOpt(rows[i].unit) + '">'
+                + xuatEscOpt(rows[i].text) + '</option>';
+        }
+        return html;
+    }
+
+    function parseXuatProductText(text) {
+        var value = text || "";
+        var sep = value.indexOf("—") >= 0 ? "—" : (value.indexOf("â€”") >= 0 ? "â€”" : "");
+        if (!sep) {
+            return { name: value, meta: "" };
+        }
+        var parts = value.split(sep);
+        return {
+            name: $.trim(parts[0]),
+            meta: $.trim(parts.slice(1).join(sep))
+        };
+    }
+
+    function readXuatProductOption(option) {
+        var product = parseXuatProductText(option.text);
+        var $el = option && option.element ? $(option.element) : $();
+
+        product.price = $el.data("price") || "";
+        product.origin = $el.data("origin") || "";
+        product.stock = $el.data("stock") || "";
+        product.unit = $el.data("unit") || "";
+        product.name = $el.data("name") || product.name;
+
+        return product;
+    }
+
+    function formatXuatProductOption(option) {
+        if (!option.id) {
+            return option.text;
+        }
+        var product = readXuatProductOption(option);
+        var $wrap = $('<div class="xuat-product-option"></div>');
+        $('<span class="xuat-product-option-name"></span>').text(product.name).appendTo($wrap);
+        var $meta = $('<span class="xuat-product-option-meta"></span>').appendTo($wrap);
+        if (product.stock) {
+            $('<span></span>').text('Tồn: ' + product.stock + (product.unit ? ' ' + product.unit : '')).appendTo($meta);
+        } else if (product.meta) {
+            $('<span></span>').text(product.meta).appendTo($meta);
+        }
+        $('<span></span>').text('Đơn giá: ' + (product.price || '0')).appendTo($meta);
+        $('<span></span>').text('Xuất xứ: ' + (product.origin || 'Chưa cập nhật')).appendTo($meta);
+
+        if (!$meta.children().length) {
+            $meta.remove();
+        }
+        return $wrap;
+    }
+
+    function formatSelectedXuatProduct(option) {
+        return readXuatProductOption(option).name;
+    }
+
+    function initXuatKhoEnhancements() {
+        if ($.fn.select2) {
+            $(".xuat-select").not(".xuat-sp-select").select2({ width: "100%" });
+            $(".xuat-sp-select").select2({
+                templateResult: formatXuatProductOption,
+                templateSelection: formatSelectedXuatProduct,
+                width: "100%"
+            });
+        }
+    }
+
+    function refreshXuatProductSelects(html) {
+        $("#tblXuatChiTiet select.xuat-sp-select").each(function () {
+            var $select = $(this);
+            var oldValue = $select.val();
+            try { $select.select2("destroy"); } catch (e) { }
+            $select.html(html);
+            if (oldValue && $select.find('option[value="' + oldValue + '"]').length) {
+                $select.val(oldValue);
+            }
+        });
+        initXuatKhoEnhancements();
+    }
+
+    function reloadSanPhamTheoKhoXuat() {
+        var idKho = $("#ddlXuatIdKho").val();
+        if (!idKho) {
+            xuatKhoOptionsHtml = '<option value="">-- Chọn kho trước --</option>';
+            refreshXuatProductSelects(xuatKhoOptionsHtml);
+            return;
+        }
+
+        $.getJSON(urlSanPhamXuatKho, { idKho: idKho })
+            .done(function (data) {
+                xuatKhoOptionsHtml = buildXuatOptionsHtml(data);
+                refreshXuatProductSelects(xuatKhoOptionsHtml);
+            })
+            .fail(function () {
+                toastr.error("Không tải được danh sách sản phẩm trong kho.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+            });
+    }
+
+    function renumberXuatRows() {
+        $("#tblXuatChiTiet .xuat-detail-row").each(function (idx) {
+            $(this).find(".xuat-row-index").text(idx + 1);
+            $(this).find("select, input").each(function () {
+                var name = $(this).attr("name");
+                if (!name) return;
+                name = name.replace(/lstChiTiet\[\d+\]/g, "lstChiTiet[" + idx + "]");
+                $(this).attr("name", name);
+
+                var id = $(this).attr("id");
+                if (id) {
+                    id = id.replace(/lstChiTiet_\d+__/g, "lstChiTiet_" + idx + "__");
+                    $(this).attr("id", id);
+                }
+            });
+            $(this).find("[data-valmsg-for]").each(function () {
+                var key = $(this).attr("data-valmsg-for");
+                key = key.replace(/lstChiTiet\[\d+\]/g, "lstChiTiet[" + idx + "]");
+                $(this).attr("data-valmsg-for", key).html("");
+            });
+        });
+    }
+
+    function buildXuatRow(idx) {
+        return '<tr class="xuat-detail-row">'
+            + '<td class="xuat-row-number"><span class="xuat-row-index">' + (idx + 1) + '</span></td>'
+            + '<td><select class="form-control select2 xuat-select xuat-sp-select" name="lstChiTiet[' + idx + '].IdSanPham">' + xuatKhoOptionsHtml + '</select>'
+            + '<span class="field-validation-valid" data-valmsg-for="lstChiTiet[' + idx + '].IdSanPham" data-valmsg-replace="true"></span></td>'
+            + '<td><input class="form-control xuat-qty-input" type="number" step="0.01" min="0" name="lstChiTiet[' + idx + '].SoLuong" value="1" />'
+            + '<span class="field-validation-valid" data-valmsg-for="lstChiTiet[' + idx + '].SoLuong" data-valmsg-replace="true"></span></td>'
+            + '<td class="xuat-row-action"><button type="button" class="xuat-row-delete btnDelXuatRow" title="Xóa dòng"><i class="ti-trash"></i></button></td>'
+            + '</tr>';
+    }
+
+    function DisplayXuatKhoErrors(errors) {
+        $(".field-validation-valid, .field-validation-error").html("");
+        if (!errors) return;
+        for (var i = 0; i < errors.length; i++) {
+            $("span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+        }
+    }
+
+    function ResetXuatKhoForm() {
+        if ($("#xuatKhoFormPanel").length) {
+            $.ajax({
+                type: "GET",
+                url: "/QuanLyGiaoDichNhapXuat/FormXuatKho",
+                dataType: "html",
+                success: function (data) {
+                    $("#xuatKhoFormPanel").html(data);
+                    xuatKhoOptionsHtml = '<option value="">-- Chọn kho trước --</option>';
+                    initXuatKhoEnhancements();
+                }
+            });
+        } else {
+            window.location.reload();
+        }
+    }
+
+    $(document).ready(function () {
+        initXuatKhoEnhancements();
+    });
+
+    $(document).on("change", "#ddlXuatIdKho", function () {
+        reloadSanPhamTheoKhoXuat();
+        var idKho = $(this).val();
+        if (idKho && $("#ddlXuatIdKhoNhan").val() === idKho) {
+            $("#ddlXuatIdKhoNhan").val("").trigger("change");
+            toastr.warning("Kho nhận trùng kho xuất, đã được bỏ chọn.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+        }
+    });
+
+    $(document).on("change", "#ddlXuatIdKhoNhan", function () {
+        var idKhoNhan = $(this).val();
+        var idKho = $("#ddlXuatIdKho").val();
+        if (idKhoNhan && idKho && idKhoNhan === idKho) {
+            $(this).val("").trigger("change.select2");
+            toastr.warning("Kho nhận phải khác kho xuất.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+        }
+    });
+
+    $(document).on("click", "#btnAddXuatRow", function () {
+        var idx = $("#tblXuatChiTiet .xuat-detail-row").length;
+        $("#tblXuatChiTiet").append(buildXuatRow(idx));
+        initXuatKhoEnhancements();
+    });
+
+    $(document).on("click", ".btnDelXuatRow", function () {
+        if ($("#tblXuatChiTiet .xuat-detail-row").length <= 1) {
+            toastr.warning("Phiếu xuất cần ít nhất một dòng vật tư.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+            return;
+        }
+        $(this).closest(".xuat-detail-row").remove();
+        renumberXuatRows();
+    });
+
+    $(document).on("submit", "#fXuatKho", function (e) {
+        e.preventDefault();
+        $("#btnSaveXuat").prop("disabled", true);
+
+        $.ajax({
+            type: "POST",
+            url: "/QuanLyGiaoDichNhapXuat/XuatKho",
+            data: $("#fXuatKho").serialize(),
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    toastr.success("Lưu phiếu xuất thành công.", "Thông báo", { timeOut: 3e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                    if (typeof DanhSachXuatKho === "function") {
+                        DanhSachXuatKho(1);
+                        ResetXuatKhoForm();
+                    } else {
+                        setTimeout(function () {
+                            window.location.href = urlDanhSachXuatKho;
+                        }, 700);
+                    }
+                } else {
+                    DisplayXuatKhoErrors(data.Errors);
+                    var msg = data.Message || "Vui lòng kiểm tra dữ liệu nhập.";
+                    if (data.Errors && data.Errors.length && data.Errors[0].Value && data.Errors[0].Value[0]) {
+                        msg = data.Errors[0].Value[0];
+                    }
+                    toastr.warning(msg, "Cảnh báo", { timeOut: 8e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                    $("#btnSaveXuat").prop("disabled", false);
+                }
+            },
+            error: function () {
+                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                $("#btnSaveXuat").prop("disabled", false);
+            }
+        });
+    });
+</script>

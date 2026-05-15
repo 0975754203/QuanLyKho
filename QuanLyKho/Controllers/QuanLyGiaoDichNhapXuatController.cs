@@ -18,15 +18,8 @@ namespace QuanLyKho.Controllers
         {
             ViewBag.Title = "Danh sách nhập kho";
             ViewBag.TitleUrl = " / Danh sách nhập kho";
-            var dsKho = KhoManager.Instance.SelectAll()
-                .Select(x => new SelectListItem
-                {
-                    Value = x.Id.ToString(),
-                    Text = string.IsNullOrWhiteSpace(x.MaKho) ? x.TenKho : (x.MaKho + " - " + x.TenKho)
-                })
-                .ToList();
-            dsKho.Insert(0, new SelectListItem { Value = "", Text = "-- Tất cả kho --" });
-            ViewBag.ComboKho = dsKho;
+            PrepareDanhSachNhapKhoViewData();
+            PrepareNhapKhoFormViewData();
             return View();
         }
 
@@ -99,15 +92,8 @@ namespace QuanLyKho.Controllers
         {
             ViewBag.Title = "Danh sách xuất kho";
             ViewBag.TitleUrl = " / Danh sách xuất kho";
-            var dsKho = KhoManager.Instance.SelectAll()
-                .Select(x => new SelectListItem
-                {
-                    Value = x.Id.ToString(),
-                    Text = string.IsNullOrWhiteSpace(x.MaKho) ? x.TenKho : (x.MaKho + " - " + x.TenKho)
-                })
-                .ToList();
-            dsKho.Insert(0, new SelectListItem { Value = "", Text = "-- Tất cả kho --" });
-            ViewBag.ComboKho = dsKho;
+            PrepareDanhSachXuatKhoViewData();
+            PrepareXuatKhoFormViewData();
             return View();
         }
 
@@ -183,7 +169,16 @@ namespace QuanLyKho.Controllers
                 return Json(new object[0], JsonRequestBehavior.AllowGet);
             }
             var list = KhoTonManager.Instance.LaySanPhamCoTonTrongKho(idKho.Value);
-            return Json(list.Select(x => new { id = x.IdSanPham.ToString(), text = x.DisplayText }), JsonRequestBehavior.AllowGet);
+            return Json(list.Select(x => new
+            {
+                id = x.IdSanPham.ToString(),
+                text = x.DisplayText,
+                name = x.TenSanPham,
+                price = x.DonGia.ToString("N0"),
+                origin = string.IsNullOrWhiteSpace(x.XuatXu) ? "Chưa cập nhật" : x.XuatXu,
+                stock = x.TonKho.ToString("N2"),
+                unit = x.DonViTinh ?? string.Empty
+            }), JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -192,41 +187,18 @@ namespace QuanLyKho.Controllers
             ViewBag.Title = "Xuất kho";
             ViewBag.TitleUrl = " / Xuất kho";
 
-            var acc = Global.ThongTinTaiKhoan_Login;
-            var model = new KhoGiaoDichModel
-            {
-                IdNguoiTao = Guid.Parse(acc.Id),
-                lstChiTiet = new List<KhoGiaoDichChiTietModel>()
-            };
-
-            using (var uow = new UnitOfWork())
-            {
-                var dsKhoSrc = uow.Repository<Kho>().Query().Get()
-                    .OrderBy(x => x.TenKho)
-                    .Select(x => new { Value = x.Id.ToString(), Text = x.TenKho })
-                    .ToList();
-
-                var dsKho = dsKhoSrc.Select(x => new SelectListItem { Value = x.Value, Text = x.Text }).ToList();
-                dsKho.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn kho xuất --" });
-                ViewBag.ComboKho = dsKho;
-
-                var dsKhoNhan = dsKhoSrc.Select(x => new SelectListItem { Value = x.Value, Text = x.Text }).ToList();
-                dsKhoNhan.Insert(0, new SelectListItem { Value = "", Text = "-- Không chuyển kho --" });
-                ViewBag.ComboKhoNhan = dsKhoNhan;
-            }
-
-            var dsKhoaPhong = TuDienManager.Instance.SelectByLoai(cfLoaiTuDien.LoaiKhoaPhong)
-                .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.TenTuDien })
-                .ToList();
-            dsKhoaPhong.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn khoa/phòng --" });
-            ViewBag.ComboKhoaPhong = dsKhoaPhong;
-
-            ViewBag.ComboSanPham = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "", Text = "-- Chọn kho trước --" }
-            };
+            var model = BuildXuatKhoModel();
+            PrepareXuatKhoFormViewData();
 
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult FormXuatKho()
+        {
+            var model = BuildXuatKhoModel();
+            PrepareXuatKhoFormViewData();
+            return PartialView("_FormXuatKho", model);
         }
 
         [HttpPost]
@@ -326,34 +298,18 @@ namespace QuanLyKho.Controllers
             ViewBag.Title = "Nhập kho";
             ViewBag.TitleUrl = " / Nhập kho";
 
-            var acc = Global.ThongTinTaiKhoan_Login;
-            var model = new KhoGiaoDichModel
-            {
-                IdNguoiTao = Guid.Parse(acc.Id)
-            };
-            model.lstChiTiet = new List<KhoGiaoDichChiTietModel>();
-            // Default 3 rows for quicker data entry
-            model.lstChiTiet.Add(new KhoGiaoDichChiTietModel { SoLuong = 1 });
-
-
-            using (var uow = new UnitOfWork())
-            {
-                var dsSanPham = uow.Repository<KhoSanPham>().Query().Get()
-                    .OrderBy(x => x.TenSanPham)
-                    .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.TenSanPham })
-                    .ToList();
-                dsSanPham.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn sản phẩm --" });
-                ViewBag.ComboSanPham = dsSanPham;
-
-                var dsKho = uow.Repository<Kho>().Query().Get()
-                    .OrderBy(x => x.TenKho)
-                    .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.TenKho })
-                    .ToList();
-                dsKho.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn kho --" });
-                ViewBag.ComboKho = dsKho;
-            }
+            var model = BuildNhapKhoModel();
+            PrepareNhapKhoFormViewData();
 
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult FormNhapKho()
+        {
+            var model = BuildNhapKhoModel();
+            PrepareNhapKhoFormViewData();
+            return PartialView("_FormNhapKho", model);
         }
 
         [HttpPost]
@@ -434,6 +390,114 @@ namespace QuanLyKho.Controllers
                 ModelState.AddModelError("ChiTiet", "Xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
                 return Json(new { Sucess = false, Errors = ModelState.Errors() }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        private void PrepareDanhSachNhapKhoViewData()
+        {
+            var dsKho = KhoManager.Instance.SelectAll()
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = string.IsNullOrWhiteSpace(x.MaKho) ? x.TenKho : (x.MaKho + " - " + x.TenKho)
+                })
+                .ToList();
+            dsKho.Insert(0, new SelectListItem { Value = "", Text = "-- Tất cả kho --" });
+            ViewBag.ComboKho = dsKho;
+        }
+
+        private void PrepareDanhSachXuatKhoViewData()
+        {
+            var dsKho = KhoManager.Instance.SelectAll()
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = string.IsNullOrWhiteSpace(x.MaKho) ? x.TenKho : (x.MaKho + " - " + x.TenKho)
+                })
+                .ToList();
+            dsKho.Insert(0, new SelectListItem { Value = "", Text = "-- Tất cả kho --" });
+            ViewBag.ComboKho = dsKho;
+        }
+
+        private KhoGiaoDichModel BuildNhapKhoModel()
+        {
+            var acc = Global.ThongTinTaiKhoan_Login;
+            var model = new KhoGiaoDichModel
+            {
+                IdNguoiTao = Guid.Parse(acc.Id),
+                lstChiTiet = new List<KhoGiaoDichChiTietModel>
+                {
+                    new KhoGiaoDichChiTietModel { SoLuong = 1 }
+                }
+            };
+            return model;
+        }
+
+        private KhoGiaoDichModel BuildXuatKhoModel()
+        {
+            var acc = Global.ThongTinTaiKhoan_Login;
+            var model = new KhoGiaoDichModel
+            {
+                IdNguoiTao = Guid.Parse(acc.Id),
+                lstChiTiet = new List<KhoGiaoDichChiTietModel>
+                {
+                    new KhoGiaoDichChiTietModel { SoLuong = 1 }
+                }
+            };
+            return model;
+        }
+
+        private void PrepareNhapKhoFormViewData()
+        {
+            using (var uow = new UnitOfWork())
+            {
+                var dsSanPham = uow.Repository<KhoSanPham>().Query().Get()
+                    .OrderBy(x => x.TenSanPham)
+                    .Select(x => new SelectListItem
+                    {
+                        Value = x.Id.ToString(),
+                        Text = x.TenSanPham + "||" + x.DonGia.ToString("N0") + "||" + (string.IsNullOrWhiteSpace(x.XuatXu) ? "Chưa cập nhật" : x.XuatXu)
+                    })
+                    .ToList();
+                dsSanPham.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn sản phẩm --" });
+                ViewBag.ComboSanPham = dsSanPham;
+
+                var dsKho = uow.Repository<Kho>().Query().Get()
+                    .OrderBy(x => x.TenKho)
+                    .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.TenKho })
+                    .ToList();
+                dsKho.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn kho --" });
+                ViewBag.ComboKhoNhap = dsKho;
+            }
+        }
+
+        private void PrepareXuatKhoFormViewData()
+        {
+            using (var uow = new UnitOfWork())
+            {
+                var dsKhoSrc = uow.Repository<Kho>().Query().Get()
+                    .OrderBy(x => x.TenKho)
+                    .Select(x => new { Value = x.Id.ToString(), Text = x.TenKho })
+                    .ToList();
+
+                var dsKho = dsKhoSrc.Select(x => new SelectListItem { Value = x.Value, Text = x.Text }).ToList();
+                dsKho.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn kho xuất --" });
+                ViewBag.ComboKhoXuat = dsKho;
+
+                var dsKhoNhan = dsKhoSrc.Select(x => new SelectListItem { Value = x.Value, Text = x.Text }).ToList();
+                dsKhoNhan.Insert(0, new SelectListItem { Value = "", Text = "-- Không chuyển kho --" });
+                ViewBag.ComboKhoNhan = dsKhoNhan;
+            }
+
+            var dsKhoaPhong = TuDienManager.Instance.SelectByLoai(cfLoaiTuDien.LoaiKhoaPhong)
+                .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.TenTuDien })
+                .ToList();
+            dsKhoaPhong.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn khoa/phòng --" });
+            ViewBag.ComboKhoaPhong = dsKhoaPhong;
+
+            ViewBag.ComboSanPhamXuat = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- Chọn kho trước --" }
+            };
         }
     }
 }

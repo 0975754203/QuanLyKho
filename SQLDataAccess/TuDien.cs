@@ -17,8 +17,8 @@ namespace SQLDataAccess
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TuDien()
         {
-            this.KhoSanPhams = new HashSet<KhoSanPham>();
             this.KhoGiaoDiches = new HashSet<KhoGiaoDich>();
+            this.KhoSanPhams = new HashSet<KhoSanPham>();
         }
     
         public System.Guid Id { get; set; }
@@ -27,10 +27,10 @@ namespace SQLDataAccess
         public string TenTuDien { get; set; }
         public string GhiChu { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<KhoSanPham> KhoSanPhams { get; set; }
         public virtual TuDienLoai TuDienLoai { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KhoGiaoDich> KhoGiaoDiches { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<KhoSanPham> KhoSanPhams { get; set; }
     }
 }

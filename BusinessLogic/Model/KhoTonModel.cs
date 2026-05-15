@@ -19,6 +19,10 @@ namespace BusinessLogic.Model
         public string DonViTinh { get; set; }
         public string TenKho { get; set; }
 
+        // Thêm các thuộc tính mới
+        public decimal DonGia { get; set; }
+        public string ThoiGianBaoHanh { get; set; }
+
         // Alias để dùng thống nhất ở view hiện tại
         public decimal TonKho { get; set; }
     }

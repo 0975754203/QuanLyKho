@@ -1,0 +1,85 @@
+@model BusinessLogic.Model.KhoGiaoDichModel
+@{
+    var comboSanPham = ViewBag.ComboSanPham as IEnumerable<SelectListItem>;
+    var comboKho = ViewBag.ComboKhoNhap as IEnumerable<SelectListItem>;
+}
+
+@using (Html.BeginForm("NhapKho", "QuanLyGiaoDichNhapXuat", FormMethod.Post, new { id = "fNhapKho", @class = "form-crmnt nhap-kho-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.IdNguoiTao)
+
+    <div class="nhap-form-intro">
+        <h5>Thông tin phiếu nhập</h5>
+        <p>Chọn kho, nhập người giao và thêm danh sách vật tư cần nhập.</p>
+    </div>
+
+    <div class="nhap-form-grid">
+        <div class="form-group">
+            <label class="text-label">Kho nhập <span class="red-crmnt">(*)</span></label>
+            @Html.DropDownListFor(x => x.IdKho, comboKho, new { @class = "form-control select2 nhap-select" })
+            @Html.ValidationMessageFor(x => x.IdKho)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Mã giao dịch</label>
+            @Html.TextBoxFor(x => x.MaGiaoDich, new { @class = "form-control input-sm", @readonly = "readonly", placeholder = "Tự sinh sau khi lưu" })
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Họ tên người giao</label>
+            @Html.TextBoxFor(x => x.NguoiGiaoNhan, new { @class = "form-control", placeholder = "Nhập họ tên người giao hàng" })
+            @Html.ValidationMessageFor(x => x.NguoiGiaoNhan)
+        </div>
+
+        <div class="form-group nhap-note-field">
+            <label class="text-label">Ghi chú</label>
+            @Html.TextAreaFor(x => x.GhiChu, 3, 0, new { @class = "form-control", placeholder = "Nhập ghi chú" })
+        </div>
+    </div>
+
+    <div class="nhap-detail-head">
+        <div>
+            <h5>Chi tiết vật tư</h5>
+            <span id="ChiTietError" class="field-validation-valid" data-valmsg-for="ChiTiet" data-valmsg-replace="true"></span>
+        </div>
+        <button type="button" class="btn btn-main btn-sm" id="btnAddRow"><i class="ti-plus"></i>Thêm vật tư</button>
+    </div>
+
+    <div class="table-responsive nhap-detail-table-wrap">
+        <table class="nhap-detail-table">
+            <thead>
+                <tr>
+                    <th class="nhap-col-stt">STT</th>
+                    <th>Vật tư</th>
+                    <th class="nhap-col-qty">Số lượng</th>
+                    <th class="nhap-col-action"></th>
+                </tr>
+            </thead>
+            <tbody id="tblChiTiet">
+                @for (int i = 0; i < (Model.lstChiTiet?.Count ?? 0); i++)
+                {
+                    <tr class="nhap-detail-row">
+                        <td class="nhap-row-number"><span class="nhap-row-index">@(i + 1)</span></td>
+                        <td>
+                            @Html.DropDownListFor(m => m.lstChiTiet[i].IdSanPham, comboSanPham, new { @class = "form-control select2 nhap-select sp-select" })
+                            @Html.ValidationMessageFor(m => m.lstChiTiet[i].IdSanPham)
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.lstChiTiet[i].SoLuong, new { @class = "form-control nhap-qty-input", type = "number", step = "0.01", min = "0" })
+                            @Html.ValidationMessageFor(m => m.lstChiTiet[i].SoLuong)
+                        </td>
+                        <td class="nhap-row-action">
+                            <button type="button" class="nhap-row-delete btnDelRow" title="Xóa dòng"><i class="ti-trash"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="nhap-form-actions">
+        <button type="submit" class="btn btn-main" id="btnSave"><i class="ti-save"></i>Lưu phiếu nhập</button>
+        <button type="button" class="btn btn-main" onclick="ResetNhapKhoForm()"><i class="ti-reload"></i>Làm mới</button>
+    </div>
+}

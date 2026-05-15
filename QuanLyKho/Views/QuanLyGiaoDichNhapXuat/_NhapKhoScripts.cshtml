@@ -1,0 +1,436 @@
+@using System.Web
+@{
+    var comboSanPham = ViewBag.ComboSanPham as IEnumerable<SelectListItem>;
+    var optionSanPham = "";
+    if (comboSanPham != null)
+    {
+        foreach (var item in comboSanPham)
+        {
+            optionSanPham += "<option value=\"" + HttpUtility.HtmlAttributeEncode(item.Value) + "\">" + HttpUtility.HtmlEncode(item.Text) + "</option>";
+        }
+    }
+}
+
+<style>
+    .nhap-form-intro {
+        max-width: 940px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 12px;
+        padding: 10px 12px;
+        background: #f6faf8;
+        border: 1px solid #dcebe4;
+        border-radius: 8px;
+    }
+
+    .nhap-form-grid {
+        display: grid;
+        grid-template-columns: 300px 260px 340px;
+        gap: 10px 12px;
+        align-items: start;
+        max-width: 940px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .nhap-note-field {
+        grid-column: 1 / -1;
+        max-width: 940px;
+    }
+
+    .nhap-form-intro h5,
+    .nhap-detail-head h5 {
+        margin: 0 0 4px;
+        color: #17324d;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .nhap-form-intro p,
+    .nhap-detail-head span {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .nhap-kho-form .form-group {
+        margin-bottom: 8px;
+    }
+
+    .nhap-kho-form .form-control {
+        min-height: 34px;
+        height: 34px;
+        border-radius: 6px;
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+
+    .nhap-kho-form textarea.form-control {
+        height: 58px;
+        min-height: 58px;
+        resize: vertical;
+    }
+
+    .nhap-kho-form .select2-container .select2-selection--single {
+        min-height: 34px;
+        height: 34px;
+        border-color: #ddd;
+        border-radius: 6px;
+    }
+
+    .nhap-kho-form .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 32px;
+        padding-left: 10px;
+    }
+
+    .nhap-kho-form .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 32px;
+    }
+
+    .nhap-product-option {
+        padding: 4px 0;
+        line-height: 1.35;
+    }
+
+    .nhap-product-option-name {
+        display: block;
+        color: #17324d;
+        font-weight: 700;
+    }
+
+    .nhap-product-option-meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 3px;
+        color: #3f5368;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] .nhap-product-option-name,
+    .select2-container--default .select2-results__option--highlighted[aria-selected] .nhap-product-option-meta {
+        color: #17324d;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #eaf6fb;
+        color: #17324d;
+    }
+
+    .select2-container--default .select2-results__option[aria-selected=true] {
+        background-color: #f3f8fb;
+        color: #17324d;
+    }
+
+    .nhap-detail-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 940px;
+        margin: 12px auto 8px;
+    }
+
+    .nhap-detail-table-wrap {
+        max-width: 940px;
+        margin: 0 auto;
+        border: 1px solid #dfe8f1;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #ffffff;
+    }
+
+    .nhap-detail-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .nhap-detail-table th {
+        padding: 10px 12px;
+        background: #f5f9fc;
+        color: #526273;
+        font-size: 12px;
+        font-weight: 700;
+        border-bottom: 1px solid #dfe8f1;
+        text-align: left;
+    }
+
+    .nhap-detail-table td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #edf2f6;
+        vertical-align: top;
+    }
+
+    .nhap-detail-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .nhap-detail-table tbody tr:hover {
+        background: #fbfdff;
+    }
+
+    .nhap-col-stt {
+        width: 58px;
+        text-align: center !important;
+    }
+
+    .nhap-col-qty {
+        width: 130px;
+    }
+
+    .nhap-col-action {
+        width: 54px;
+    }
+
+    .nhap-row-number {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .nhap-row-index {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        background: #eef6f9;
+        color: #1f6f8b;
+        font-weight: 700;
+    }
+
+    .nhap-row-action {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .nhap-qty-input {
+        text-align: center;
+    }
+
+    .nhap-row-delete {
+        width: 34px;
+        height: 34px;
+        border: 1px solid #ffd6d6;
+        border-radius: 6px;
+        color: #c0392b;
+        background: #fff7f7;
+    }
+
+    .nhap-row-delete:hover,
+    .nhap-row-delete:focus {
+        color: #ffffff;
+        background: #c0392b;
+        border-color: #c0392b;
+    }
+
+    .nhap-form-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        max-width: 940px;
+        margin: 12px auto 0;
+    }
+
+    .nhap-kho-standalone {
+        max-width: 940px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+    }
+
+    @@media (max-width: 991px) {
+        .nhap-form-grid {
+            grid-template-columns: repeat(2, minmax(220px, 1fr));
+        }
+
+        .nhap-note-field {
+            grid-column: 1 / -1;
+            max-width: none;
+        }
+    }
+
+    @@media (max-width: 575px) {
+        .nhap-form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .nhap-note-field {
+            grid-column: auto;
+            max-width: none;
+        }
+
+        .nhap-detail-table {
+            min-width: 620px;
+        }
+
+        .nhap-row-delete {
+            width: 34px;
+        }
+    }
+</style>
+
+<script>
+    var nhapKhoOptionSanPham = '@Html.Raw(HttpUtility.JavaScriptStringEncode(optionSanPham))';
+    var urlDanhSachNhapKho = '@Url.Action("Index", "QuanLyGiaoDichNhapXuat")';
+
+    function parseProductOption(text) {
+        var parts = (text || "").split("||");
+        return {
+            name: parts[0] || "",
+            price: parts[1] || "",
+            origin: parts[2] || ""
+        };
+    }
+
+    function formatProductOption(option) {
+        if (!option.id) {
+            return option.text;
+        }
+
+        var product = parseProductOption(option.text);
+        var $wrap = $('<div class="nhap-product-option"></div>');
+        $('<span class="nhap-product-option-name"></span>').text(product.name).appendTo($wrap);
+        var $meta = $('<span class="nhap-product-option-meta"></span>').appendTo($wrap);
+        $('<span></span>').text('Đơn giá: ' + product.price).appendTo($meta);
+        $('<span></span>').text('Xuất xứ: ' + product.origin).appendTo($meta);
+        return $wrap;
+    }
+
+    function formatSelectedProduct(option) {
+        return parseProductOption(option.text).name;
+    }
+
+    function initNhapKhoEnhancements() {
+        if ($.fn.select2) {
+            $(".nhap-select").not(".sp-select").select2();
+            $(".sp-select").select2({
+                templateResult: formatProductOption,
+                templateSelection: formatSelectedProduct,
+                width: "100%"
+            });
+        }
+    }
+
+    function renumberNhapKhoRows() {
+        $("#tblChiTiet .nhap-detail-row").each(function (idx) {
+            $(this).find(".nhap-row-index").text(idx + 1);
+            $(this).find("select, input").each(function () {
+                var name = $(this).attr("name");
+                if (!name) return;
+                name = name.replace(/lstChiTiet\[\d+\]/g, "lstChiTiet[" + idx + "]");
+                $(this).attr("name", name);
+
+                var id = $(this).attr("id");
+                if (id) {
+                    id = id.replace(/lstChiTiet_\d+__/g, "lstChiTiet_" + idx + "__");
+                    $(this).attr("id", id);
+                }
+            });
+
+            $(this).find("[data-valmsg-for]").each(function () {
+                var key = $(this).attr("data-valmsg-for");
+                key = key.replace(/lstChiTiet\[\d+\]/g, "lstChiTiet[" + idx + "]");
+                $(this).attr("data-valmsg-for", key).html("");
+            });
+        });
+    }
+
+    function buildNhapKhoRow(idx) {
+        return '<tr class="nhap-detail-row">'
+            + '<td class="nhap-row-number"><span class="nhap-row-index">' + (idx + 1) + '</span></td>'
+            + '<td>'
+            + '<select class="form-control select2 nhap-select sp-select" name="lstChiTiet[' + idx + '].IdSanPham">'
+            + nhapKhoOptionSanPham
+            + '</select>'
+            + '<span class="field-validation-valid" data-valmsg-for="lstChiTiet[' + idx + '].IdSanPham" data-valmsg-replace="true"></span>'
+            + '</td>'
+            + '<td>'
+            + '<input class="form-control nhap-qty-input" type="number" step="0.01" min="0" name="lstChiTiet[' + idx + '].SoLuong" value="1" />'
+            + '<span class="field-validation-valid" data-valmsg-for="lstChiTiet[' + idx + '].SoLuong" data-valmsg-replace="true"></span>'
+            + '</td>'
+            + '<td class="nhap-row-action"><button type="button" class="nhap-row-delete btnDelRow" title="Xóa dòng"><i class="ti-trash"></i></button></td>'
+            + '</tr>';
+    }
+
+    function DisplayNhapKhoErrors(errors) {
+        $(".field-validation-valid, .field-validation-error").html("");
+        for (var i = 0; i < errors.length; i++) {
+            $("span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+        }
+    }
+
+    function ResetNhapKhoForm() {
+        if ($("#nhapKhoFormPanel").length) {
+            $.ajax({
+                type: "GET",
+                url: "/QuanLyGiaoDichNhapXuat/FormNhapKho",
+                dataType: "html",
+                success: function (data) {
+                    $("#nhapKhoFormPanel").html(data);
+                    initNhapKhoEnhancements();
+                }
+            });
+        } else {
+            window.location.reload();
+        }
+    }
+
+    $(document).ready(function () {
+        initNhapKhoEnhancements();
+    });
+
+    $(document).on("click", "#btnAddRow", function () {
+        var idx = $("#tblChiTiet .nhap-detail-row").length;
+        $("#tblChiTiet").append(buildNhapKhoRow(idx));
+        initNhapKhoEnhancements();
+    });
+
+    $(document).on("click", ".btnDelRow", function () {
+        if ($("#tblChiTiet .nhap-detail-row").length <= 1) {
+            toastr.warning("Phiếu nhập cần ít nhất một dòng vật tư.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+            return;
+        }
+        $(this).closest(".nhap-detail-row").remove();
+        renumberNhapKhoRows();
+    });
+
+    $(document).on("submit", "#fNhapKho", function (e) {
+        e.preventDefault();
+        $("#btnSave").prop("disabled", true);
+
+        $.ajax({
+            type: "POST",
+            url: "/QuanLyGiaoDichNhapXuat/NhapKho",
+            data: $("#fNhapKho").serialize(),
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    toastr.success("Lưu phiếu nhập thành công.", "Thông báo", { timeOut: 3e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                    if (typeof DanhSachNhapKho === "function") {
+                        DanhSachNhapKho(1);
+                        ResetNhapKhoForm();
+                    } else {
+                        setTimeout(function () {
+                            window.location.href = urlDanhSachNhapKho;
+                        }, 700);
+                    }
+                } else {
+                    DisplayNhapKhoErrors(data.Errors);
+                    toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                    $("#btnSave").prop("disabled", false);
+                }
+            },
+            error: function () {
+                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                $("#btnSave").prop("disabled", false);
+            }
+        });
+    });
+</script>

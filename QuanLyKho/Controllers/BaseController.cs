@@ -106,6 +106,7 @@ namespace QuanLyKho.Controllers
             base.OnActionExecuting(filterContext);
 
             ViewBag.LaAdmin = Global.IsAdmin();
+            ViewBag.CoQuyenThaoTacDuLieuKho = Global.CoQuyenThaoTacDuLieuKho();
 
             if (Global.IsAdmin())
             {
@@ -118,6 +119,18 @@ namespace QuanLyKho.Controllers
 
             if (string.Equals(ctrl, "Home", StringComparison.OrdinalIgnoreCase)
                 && string.Equals(action, "DoiMatKhau1", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            // Nhân viên không được truy cập module Quản lý tài khoản (chỉ Admin)
+            if (Global.LaNhanVien() && string.Equals(ctrl, "QuanLyTaiKhoan", StringComparison.OrdinalIgnoreCase))
+            {
+                SetAdminRequiredResult(filterContext, action, "Chỉ tài khoản Admin mới được quản lý tài khoản.");
+                return;
+            }
+
+            if (Global.CoQuyenThaoTacDuLieuKho())
             {
                 return;
             }
@@ -154,7 +167,7 @@ namespace QuanLyKho.Controllers
                 var url = string.Equals(action, "NhapKho", StringComparison.OrdinalIgnoreCase)
                     ? "/kho/danh-sach-nhap-kho"
                     : "/kho/danh-sach-xuat-kho";
-                filterContext.Controller.TempData["PermissionMsg"] = "Chỉ tài khoản Admin mới được thêm, sửa hoặc xóa dữ liệu.";
+                filterContext.Controller.TempData["PermissionMsg"] = "Chỉ tài khoản Admin hoặc Nhân viên mới được thêm, sửa hoặc xóa dữ liệu.";
                 filterContext.Result = new RedirectResult(url);
                 return;
             }
@@ -162,8 +175,11 @@ namespace QuanLyKho.Controllers
             SetAdminRequiredResult(filterContext, action);
         }
 
-        private static void SetAdminRequiredResult(ActionExecutingContext filterContext, string action)
+        private static void SetAdminRequiredResult(ActionExecutingContext filterContext, string action, string thongBao = null)
         {
+            var msg = string.IsNullOrWhiteSpace(thongBao)
+                ? "Chỉ tài khoản Admin hoặc Nhân viên mới được thêm, sửa hoặc xóa dữ liệu."
+                : thongBao.Trim();
             var req = filterContext.HttpContext.Request;
             var isAjax = req.IsAjaxRequest()
                 || string.Equals(req.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.OrdinalIgnoreCase);
@@ -176,7 +192,7 @@ namespace QuanLyKho.Controllers
             {
                 filterContext.Result = new ContentResult
                 {
-                    Content = "<div class=\"alert alert-warning m-3 mb-0\" role=\"alert\"><strong>Không có quyền.</strong> Chỉ tài khoản Admin mới được thêm, sửa hoặc xóa dữ liệu.</div>",
+                    Content = "<div class=\"alert alert-warning m-3 mb-0\" role=\"alert\"><strong>Không có quyền.</strong> " + System.Web.HttpUtility.HtmlEncode(msg) + "</div>",
                     ContentType = "text/html; charset=utf-8"
                 };
                 return;
@@ -186,13 +202,13 @@ namespace QuanLyKho.Controllers
             {
                 filterContext.Result = new JsonResult
                 {
-                    Data = new { Sucess = false, Errors = (object)null, Msg = "Chỉ tài khoản Admin mới được thêm, sửa hoặc xóa dữ liệu." },
+                    Data = new { Sucess = false, Errors = (object)null, Msg = msg },
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
                 return;
             }
 
-            filterContext.Result = new HttpStatusCodeResult(403, "Chỉ tài khoản Admin mới được thực hiện thao tác này.");
+            filterContext.Result = new HttpStatusCodeResult(403, msg);
         }
     }
 }

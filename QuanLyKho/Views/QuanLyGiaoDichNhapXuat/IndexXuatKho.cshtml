@@ -1,156 +1,320 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var comboKho = ViewBag.ComboKho as IEnumerable<SelectListItem>;
+    var coQuyenThaoTac = QuanLyKho.Utility.Global.CoQuyenThaoTacDuLieuKho();
 }
 @Html.Partial("_PermissionMessage")
 
-<div class="row content-all-crmnt">
-    <div class="col-sm-12">
-        <div class="tab-content br-n pn">
-            <div class="content-tab-crmnt">
-                <div class="row align-items-end">
-                    <div class="col-xl-2 col-sm-6 content-bg">
-                        <div class="form-group mb-2">
-                            <label class="text-label d-block mb-1">Mã giao dịch</label>
-                            <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Mã giao dịch">
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
-                        <div class="form-group mb-2">
-                            <label class="text-label d-block mb-1">Kho</label>
-                            @Html.DropDownList("idKho", comboKho, new { @class = "form-control input-sm", id = "ddlIdKho" })
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
-                        <div class="form-group mb-2">
-                            <label class="text-label d-block mb-1">Từ ngày</label>
-                            <input type="date" id="tuNgay" class="form-control input-sm">
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
-                        <div class="form-group mb-2">
-                            <label class="text-label d-block mb-1">Đến ngày</label>
-                            <input type="date" id="denNgay" class="form-control input-sm">
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
-                        <div class="form-group mb-2">
-                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachXuatKho(1)">Tìm kiếm</button>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-sm-12 content-bg text-xl-right">
-                        <div class="form-group mb-2">
-                            @if (QuanLyKho.Utility.Global.IsAdmin())
-                            {
-                                <a href="@Url.Action("XuatKho", "QuanLyGiaoDichNhapXuat")" class="btn btn-main"><i class="ti-plus"></i>Xuất kho</a>
-                            }
-                        </div>
-                    </div>
+<style>
+    .xuat-page {
+        color: #263238;
+    }
+
+    .xuat-hero {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        padding: 22px 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .xuat-hero h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: #17324d;
+    }
+
+    .xuat-hero p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 14px;
+    }
+
+    .xuat-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        align-items: start;
+    }
+
+    .xuat-card {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        overflow: hidden;
+    }
+
+    .xuat-card-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #edf1f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .xuat-card-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #17324d;
+    }
+
+    .xuat-card-header span {
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+
+    .xuat-card-body {
+        padding: 20px;
+    }
+
+    .xuat-toolbar {
+        display: grid;
+        grid-template-columns: minmax(160px, 1fr) minmax(160px, 220px) 140px 140px auto;
+        gap: 10px;
+        align-items: end;
+        margin-bottom: 14px;
+    }
+
+    .xuat-filter label {
+        display: block;
+        margin-bottom: 5px;
+        color: #526273;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .xuat-toolbar .form-control {
+        min-height: 42px;
+        border-radius: 6px;
+    }
+
+    .xuat-delete-panel {
+        display: none;
+        margin-bottom: 14px;
+        padding: 14px 16px;
+        border: 1px solid #ffd6d6;
+        border-radius: 8px;
+        background: #fff7f7;
+    }
+
+    .xuat-delete-panel strong {
+        color: #bf1f1f;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .xuat-delete-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .xuat-empty-permission {
+        max-width: 940px;
+        margin: 0 auto;
+        padding: 18px;
+        border: 1px dashed #cdd8e4;
+        border-radius: 8px;
+        background: #f8fbfd;
+        color: #6b7c8f;
+    }
+
+    .xuat-table-wrap .table-crmnt {
+        margin-top: 0;
+    }
+
+    @@media (max-width: 991px) {
+        .xuat-hero,
+        .xuat-card-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .xuat-toolbar {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="xuat-page">
+    <div class="xuat-hero">
+        <div>
+            <h3>Xuất kho</h3>
+            <p>Lập phiếu xuất và theo dõi lịch sử xuất kho ngay trên một màn hình.</p>
+        </div>
+        @if (coQuyenThaoTac)
+        {
+            <button type="button" class="btn btn-main" onclick="ResetXuatKhoForm()"><i class="ti-plus"></i>Phiếu xuất mới</button>
+        }
+    </div>
+
+    <div class="xuat-layout">
+        <div class="xuat-card">
+            <div class="xuat-card-header">
+                <div>
+                    <h4>Lập phiếu xuất</h4>
+                    <span>Chọn kho xuất, nơi nhận và vật tư cần xuất.</span>
                 </div>
             </div>
-
-            <div class="table-crmnt table-job" id="content_XuatKho"></div>
+            <div class="xuat-card-body" id="xuatKhoFormPanel">
+                @if (coQuyenThaoTac)
+                {
+                    @Html.Action("FormXuatKho", "QuanLyGiaoDichNhapXuat")
+                }
+                else
+                {
+                    <div class="xuat-empty-permission">Bạn chỉ có quyền xem danh sách xuất kho.</div>
+                }
+            </div>
         </div>
-    </div>
-</div>
 
-<div class="modal fade" id="modelDeleteXuatKho" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Xóa</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="ti-close"></i></span>
-                </button>
+        <div class="xuat-card xuat-table-wrap">
+            <div class="xuat-card-header">
+                <div>
+                    <h4>Danh sách phiếu xuất</h4>
+                    <span>Lọc theo mã giao dịch, kho và khoảng thời gian.</span>
+                </div>
             </div>
-            <div class="modal-body">
-                <span class="text-delete">Bạn có chắc chắn muốn xóa giao dịch xuất kho này không?</span>
-                <input type="hidden" id="delete_id" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-main" onclick="ActionDeleteXuatKho()"><i class="ti-trash"></i>Xóa</button>
-                <button type="button" class="btn btn-main" data-dismiss="modal"><i class="ti-close"></i>Đóng</button>
+            <div class="xuat-card-body">
+                <div class="xuat-toolbar">
+                    <div class="xuat-filter">
+                        <label>Mã giao dịch</label>
+                        <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Mã giao dịch">
+                    </div>
+                    <div class="xuat-filter">
+                        <label>Kho</label>
+                        @Html.DropDownList("idKho", comboKho, new { @class = "form-control input-sm", id = "ddlIdKho" })
+                    </div>
+                    <div class="xuat-filter">
+                        <label>Từ ngày</label>
+                        <input type="date" id="tuNgay" class="form-control input-sm">
+                    </div>
+                    <div class="xuat-filter">
+                        <label>Đến ngày</label>
+                        <input type="date" id="denNgay" class="form-control input-sm">
+                    </div>
+                    <button type="button" class="btn btn-search-crmnt" onclick="DanhSachXuatKho(1)"><i class="ti-search"></i>Tìm kiếm</button>
+                </div>
+
+                <div class="xuat-delete-panel" id="deleteXuatPanel">
+                    <strong>Xác nhận xóa phiếu xuất</strong>
+                    <span>Bạn có chắc chắn muốn xóa giao dịch xuất kho này không?</span>
+                    <input type="hidden" id="delete_id" />
+                    <div class="xuat-delete-actions">
+                        <button type="button" class="btn btn-main" onclick="ActionDeleteXuatKho()"><i class="ti-trash"></i>Xóa</button>
+                        <button type="button" class="btn btn-main" onclick="CancelDeleteXuatKho()"><i class="ti-close"></i>Hủy</button>
+                    </div>
+                </div>
+
+                <div class="table-crmnt table-job" id="content_XuatKho"></div>
             </div>
         </div>
     </div>
 </div>
 
 @section scripts {
-<script>
-    function toYmd(d) {
-        var m = (d.getMonth() + 1).toString();
-        if (m.length === 1) m = '0' + m;
-        var day = d.getDate().toString();
-        if (day.length === 1) day = '0' + day;
-        return d.getFullYear() + '-' + m + '-' + day;
-    }
-
-    function initNgayMacDinh() {
-        var now = new Date();
-        var first = new Date(now.getFullYear(), now.getMonth(), 1);
-        $("#tuNgay").val(toYmd(first));
-        $("#denNgay").val(toYmd(now));
-    }
-
-    $(document).ready(function () {
-        initNgayMacDinh();
-        DanhSachXuatKho(1);
-    });
-
-    $("#txtSearch").on('keypress', function (e) {
-        if (e.keyCode === 13) {
-            DanhSachXuatKho(1);
+    @Html.Partial("_XuatKhoScripts")
+    <script>
+        function toYmd(d) {
+            var m = (d.getMonth() + 1).toString();
+            if (m.length === 1) m = '0' + m;
+            var day = d.getDate().toString();
+            if (day.length === 1) day = '0' + day;
+            return d.getFullYear() + '-' + m + '-' + day;
         }
-    });
 
-    function DanhSachXuatKho(pageIndex) {
-        var sSearch = $("#txtSearch").val();
-        var payload = { pageIndex: pageIndex, sSearch: sSearch };
-        var idKho = $("#ddlIdKho").val();
-        if (idKho) payload.idKho = idKho;
-        var t1 = $("#tuNgay").val();
-        var t2 = $("#denNgay").val();
-        if (t1) payload.tuNgay = t1;
-        if (t2) payload.denNgay = t2;
-        $("#LoadingModal").modal('show');
-        $.ajax({
-            type: "GET",
-            url: '@Url.Action("DanhSachXuatKho")',
-            data: payload,
-            dataType: "html",
-            success: function (data) {
-                $("#content_XuatKho").html(data);
-                setTimeout(function () { $("#LoadingModal").modal('hide'); }, 500);
+        function initNgayMacDinh() {
+            var now = new Date();
+            var first = new Date(now.getFullYear(), now.getMonth(), 1);
+            $("#tuNgay").val(toYmd(first));
+            $("#denNgay").val(toYmd(now));
+        }
+
+        $(document).ready(function () {
+            initNgayMacDinh();
+            DanhSachXuatKho(1);
+        });
+
+        $("#txtSearch").on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                DanhSachXuatKho(1);
             }
         });
-    }
 
-    function pagingData(pageIndex) {
-        DanhSachXuatKho(pageIndex);
-    }
+        function DanhSachXuatKho(pageIndex) {
+            var payload = {
+                pageIndex: pageIndex,
+                sSearch: $("#txtSearch").val()
+            };
 
-    function DeleteXuatKho(id) {
-        $("#modelDeleteXuatKho").modal("show");
-        $("#delete_id").val(id);
-    }
+            var idKho = $("#ddlIdKho").val();
+            if (idKho) payload.idKho = idKho;
 
-    function ActionDeleteXuatKho() {
-        $("#modelDeleteXuatKho").modal("hide");
-        $.ajax({
-            type: "POST",
-            url: '/QuanLyGiaoDichNhapXuat/XoaXuatKho',
-            data: { id: $("#delete_id").val() },
-            dataType: "json",
-            success: function (data) {
-                if (data.Sucess) {
-                    DanhSachXuatKho($("#pageIndex").val() || 1);
-                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
-                } else {
-                    toastr.warning(data.Message || "Không thể xóa giao dịch.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+            var t1 = $("#tuNgay").val();
+            var t2 = $("#denNgay").val();
+            if (t1) payload.tuNgay = t1;
+            if (t2) payload.denNgay = t2;
+
+            $("#LoadingModal").modal('show');
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("DanhSachXuatKho")',
+                data: payload,
+                dataType: "html",
+                success: function (data) {
+                    $("#content_XuatKho").html(data);
+                    setTimeout(function () { $("#LoadingModal").modal('hide'); }, 300);
+                },
+                error: function () {
+                    $("#LoadingModal").modal('hide');
+                    toastr.error("Không tải được danh sách xuất kho.", "Thông báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
                 }
-            }
-        });
-        $(".modal-backdrop").remove();
-    }
-</script>
+            });
+        }
+
+        function pagingData(pageIndex) {
+            DanhSachXuatKho(pageIndex);
+        }
+
+        function DeleteXuatKho(id) {
+            $("#delete_id").val(id);
+            $("#deleteXuatPanel").slideDown(150);
+        }
+
+        function CancelDeleteXuatKho() {
+            $("#delete_id").val("");
+            $("#deleteXuatPanel").slideUp(150);
+        }
+
+        function ActionDeleteXuatKho() {
+            $.ajax({
+                type: "POST",
+                url: '/QuanLyGiaoDichNhapXuat/XoaXuatKho',
+                data: { id: $("#delete_id").val() },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Sucess) {
+                        CancelDeleteXuatKho();
+                        DanhSachXuatKho($("#pageIndex").val() || 1);
+                        toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                    } else {
+                        toastr.warning(data.Message || "Không thể xóa giao dịch.", "Cảnh báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                    }
+                },
+                error: function () {
+                    toastr.error("Xảy ra lỗi khi xóa phiếu xuất.", "Thông báo", { timeOut: 5e3, closeButton: !0, progressBar: !0, positionClass: "toast-top-right" });
+                }
+            });
+        }
+    </script>
 }

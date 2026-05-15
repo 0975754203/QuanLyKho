@@ -72,7 +72,8 @@ namespace QuanLyKho.Controllers
             {
                 TaiKhoanForm model = new TaiKhoanForm();
                 ViewBag.status = "false";
-                if (!string.IsNullOrEmpty(id) || id != "")
+                ViewBag.isSua = "false";
+                if (!string.IsNullOrEmpty(id))
                 {
                     ViewBag.TitleModal = "Cập nhật tài khoản";
                     model.Id = Guid.Parse(id);
