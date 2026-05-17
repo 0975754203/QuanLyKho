@@ -19,14 +19,14 @@
         <AssociationConnector Association="QuanLyKhoModel.FK_KhoSanPham_NhomVatTu" />
         <AssociationConnector Association="QuanLyKhoModel.FK_KhoSanPham_TuDien" />
         <AssociationConnector Association="QuanLyKhoModel.FK_KhoTon_KhoSanPham" />
-        <EntityTypeShape EntityType="QuanLyKhoModel.KhoGiaoDich" Width="1.5" PointX="3" PointY="3.875" />
+        <EntityTypeShape EntityType="QuanLyKhoModel.KhoGiaoDich" Width="1.5" PointX="3" PointY="4" />
+        <EntityTypeShape EntityType="QuanLyKhoModel.NhaThauCungCap" Width="1.5" PointX="0.75" PointY="15.5" />
         <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDich_Kho" />
-        <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich" />
+        <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDich_NhaThauCungCap1" />
         <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDich_TaiKhoan" />
         <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDich_TuDien" />
         <AssociationConnector Association="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoGiaoDich" />
-        <EntityTypeShape EntityType="QuanLyKhoModel.NhaThauCungCap" Width="1.875" PointX="5" PointY="8.75" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

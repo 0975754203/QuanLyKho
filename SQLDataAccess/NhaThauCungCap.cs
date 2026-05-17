@@ -14,7 +14,16 @@ namespace SQLDataAccess
     
     public partial class NhaThauCungCap
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public NhaThauCungCap()
+        {
+            this.KhoGiaoDiches = new HashSet<KhoGiaoDich>();
+        }
+    
         public System.Guid idNhathaucc { get; set; }
         public string TenNhaThau { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<KhoGiaoDich> KhoGiaoDiches { get; set; }
     }
 }

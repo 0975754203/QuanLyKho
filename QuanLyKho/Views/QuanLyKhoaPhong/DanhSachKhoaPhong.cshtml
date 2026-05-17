@@ -1,0 +1,55 @@
+@using QuanLyKho.Utility
+@model QuanLyKho.Models.KhoaPhong_DSModel
+@{
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+    var danhSach = Model.TBL_KhoaPhong ?? new System.Collections.Generic.List<BusinessLogic.Model.TuDienModel>();
+    var stt = (Model.PageIndex - 1) * Model.PageSize;
+}
+
+<div class="table-responsive">
+    <table class="kp-list-table">
+        <thead>
+            <tr>
+                <th style="width:70px;">STT</th>
+                <th style="width:170px;">Mã khoa/phòng</th>
+                <th style="width:240px;">Tên khoa/phòng</th>
+                <th>Ghi chú</th>
+                <th style="width:110px;">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (danhSach.Count > 0)
+            {
+                foreach (var item in danhSach)
+                {
+                    <tr>
+                        <td>@(++stt)</td>
+                        <td>@item.MaTuDien</td>
+                        <td class="text-left">@item.TenTuDien</td>
+                        <td class="text-left">@(string.IsNullOrWhiteSpace(item.GhiChu) ? "—" : item.GhiChu)</td>
+                        <td class="kp-action-cell">
+                            @if (coQuyenThaoTac)
+                            {
+                                <a href="javascript:void(0)" onclick="FormKhoaPhong('@item.Id')" class="kp-action-btn" title="Sửa"><i class="ti-pencil-alt"></i></a>
+                                <a href="javascript:void(0)" onclick="DeleteKhoaPhong('@item.Id')" class="kp-action-btn danger" title="Xóa"><i class="ti-trash"></i></a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">—</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">Không có dữ liệu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@Html.GenPaging().PagingHTML(Model.PageIndex, Model.Pagecount, Model.Total)
+<input type="hidden" id="pageIndex" name="pageIndex" value="@Model.PageIndex" />

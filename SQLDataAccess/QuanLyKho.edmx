@@ -122,15 +122,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_KhoGiaoDich_KhoGiaoDich">
-          <End Role="KhoGiaoDich" Type="Self.KhoGiaoDich" Multiplicity="0..1" />
-          <End Role="KhoGiaoDich1" Type="Self.KhoGiaoDich" Multiplicity="*" />
+        <Association Name="FK_KhoGiaoDich_NhaThauCungCap1">
+          <End Role="NhaThauCungCap" Type="Self.NhaThauCungCap" Multiplicity="0..1" />
+          <End Role="KhoGiaoDich" Type="Self.KhoGiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="KhoGiaoDich">
-              <PropertyRef Name="Id" />
+            <Principal Role="NhaThauCungCap">
+              <PropertyRef Name="idNhathaucc" />
             </Principal>
-            <Dependent Role="KhoGiaoDich1">
-              <PropertyRef Name="IdGiaoDichCha" />
+            <Dependent Role="KhoGiaoDich">
+              <PropertyRef Name="idNhaCungCap" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -257,9 +257,9 @@
             <End Role="Kho" EntitySet="Kho" />
             <End Role="KhoGiaoDich" EntitySet="KhoGiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK_KhoGiaoDich_KhoGiaoDich" Association="Self.FK_KhoGiaoDich_KhoGiaoDich">
+          <AssociationSet Name="FK_KhoGiaoDich_NhaThauCungCap1" Association="Self.FK_KhoGiaoDich_NhaThauCungCap1">
+            <End Role="NhaThauCungCap" EntitySet="NhaThauCungCap" />
             <End Role="KhoGiaoDich" EntitySet="KhoGiaoDich" />
-            <End Role="KhoGiaoDich1" EntitySet="KhoGiaoDich" />
           </AssociationSet>
           <AssociationSet Name="FK_KhoGiaoDich_TaiKhoan" Association="Self.FK_KhoGiaoDich_TaiKhoan">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
@@ -427,13 +427,14 @@
             <End Role="KhoTon" EntitySet="KhoTons" />
           </AssociationSet>
           <EntitySet Name="KhoGiaoDiches" EntityType="QuanLyKhoModel.KhoGiaoDich" />
+          <EntitySet Name="NhaThauCungCaps" EntityType="QuanLyKhoModel.NhaThauCungCap" />
           <AssociationSet Name="FK_KhoGiaoDich_Kho" Association="QuanLyKhoModel.FK_KhoGiaoDich_Kho">
             <End Role="Kho" EntitySet="Khoes" />
             <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
           </AssociationSet>
-          <AssociationSet Name="FK_KhoGiaoDich_KhoGiaoDich" Association="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich">
+          <AssociationSet Name="FK_KhoGiaoDich_NhaThauCungCap1" Association="QuanLyKhoModel.FK_KhoGiaoDich_NhaThauCungCap1">
+            <End Role="NhaThauCungCap" EntitySet="NhaThauCungCaps" />
             <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
-            <End Role="KhoGiaoDich1" EntitySet="KhoGiaoDiches" />
           </AssociationSet>
           <AssociationSet Name="FK_KhoGiaoDich_TaiKhoan" Association="QuanLyKhoModel.FK_KhoGiaoDich_TaiKhoan">
             <End Role="TaiKhoan" EntitySet="TaiKhoans" />
@@ -447,8 +448,7 @@
             <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
             <End Role="KhoGiaoDichChiTiet" EntitySet="KhoGiaoDichChiTiets" />
           </AssociationSet>
-          <EntitySet Name="NhaThauCungCaps" EntityType="QuanLyKhoModel.NhaThauCungCap" />
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="NhomVatTu">
           <Key>
             <PropertyRef Name="Id" />
@@ -544,11 +544,18 @@
           <Property Name="SoHopDong" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="NgayHopDong" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Kho" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_Kho" FromRole="KhoGiaoDich" ToRole="Kho" />
-          <NavigationProperty Name="KhoGiaoDich1" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich" FromRole="KhoGiaoDich" ToRole="KhoGiaoDich1" />
-          <NavigationProperty Name="KhoGiaoDich2" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich" FromRole="KhoGiaoDich1" ToRole="KhoGiaoDich" />
+          <NavigationProperty Name="NhaThauCungCap" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_NhaThauCungCap1" FromRole="KhoGiaoDich" ToRole="NhaThauCungCap" />
           <NavigationProperty Name="TaiKhoan" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_TaiKhoan" FromRole="KhoGiaoDich" ToRole="TaiKhoan" />
           <NavigationProperty Name="TuDien" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_TuDien" FromRole="KhoGiaoDich" ToRole="TuDien" />
           <NavigationProperty Name="KhoGiaoDichChiTiets" Relationship="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoGiaoDich" FromRole="KhoGiaoDich" ToRole="KhoGiaoDichChiTiet" />
+        </EntityType>
+        <EntityType Name="NhaThauCungCap">
+          <Key>
+            <PropertyRef Name="idNhathaucc" />
+          </Key>
+          <Property Name="idNhathaucc" Type="Guid" Nullable="false" />
+          <Property Name="TenNhaThau" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="KhoGiaoDiches" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_NhaThauCungCap1" FromRole="NhaThauCungCap" ToRole="KhoGiaoDich" />
         </EntityType>
         <Association Name="FK_KhoGiaoDich_Kho">
           <End Type="QuanLyKhoModel.Kho" Role="Kho" Multiplicity="0..1" />
@@ -562,15 +569,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_KhoGiaoDich_KhoGiaoDich">
-          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="0..1" />
-          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich1" Multiplicity="*" />
+        <Association Name="FK_KhoGiaoDich_NhaThauCungCap1">
+          <End Type="QuanLyKhoModel.NhaThauCungCap" Role="NhaThauCungCap" Multiplicity="0..1" />
+          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="KhoGiaoDich">
-              <PropertyRef Name="Id" />
+            <Principal Role="NhaThauCungCap">
+              <PropertyRef Name="idNhathaucc" />
             </Principal>
-            <Dependent Role="KhoGiaoDich1">
-              <PropertyRef Name="IdGiaoDichCha" />
+            <Dependent Role="KhoGiaoDich">
+              <PropertyRef Name="idNhaCungCap" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -610,14 +617,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="NhaThauCungCap">
-          <Key>
-            <PropertyRef Name="idNhathaucc" />
-          </Key>
-          <Property Name="idNhathaucc" Type="Guid" Nullable="false" />
-          <Property Name="TenNhaThau" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-        </EntityType>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>

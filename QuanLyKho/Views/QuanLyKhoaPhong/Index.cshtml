@@ -1,0 +1,390 @@
+@using QuanLyKho.Utility
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+}
+@Html.Partial("_PermissionMessage")
+
+<style>
+    .kp-page { color: #263238; }
+    .kp-hero {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        padding: 22px 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+    .kp-hero h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: #17324d;
+    }
+    .kp-hero p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 14px;
+    }
+    .kp-layout {
+        display: grid;
+        grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+    }
+    .kp-card {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        overflow: hidden;
+    }
+    .kp-card-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #edf1f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+    .kp-card-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #17324d;
+    }
+    .kp-card-header span {
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+    .kp-card-body { padding: 20px; }
+    .kp-form-intro {
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border: 1px solid #dcebe4;
+        border-radius: 8px;
+        background: #f6faf8;
+    }
+    .kp-form-intro h5 {
+        margin: 0 0 4px;
+        color: #17324d;
+        font-size: 17px;
+        font-weight: 700;
+    }
+    .kp-form-intro p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+    .kp-form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .kp-form .form-group { margin-bottom: 0; }
+    .kp-form .form-control {
+        min-height: 38px;
+        border-radius: 6px;
+        padding: 7px 10px;
+        font-size: 14px;
+    }
+    .kp-form textarea.form-control {
+        min-height: 88px;
+        resize: vertical;
+    }
+    .kp-form-actions {
+        margin-top: 14px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .kp-toolbar {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+    .kp-toolbar .form-control {
+        height: 42px;
+        border-radius: 6px;
+    }
+    .kp-empty-permission {
+        padding: 18px;
+        border: 1px dashed #cdd8e4;
+        border-radius: 8px;
+        background: #f8fbfd;
+        color: #6b7c8f;
+    }
+    .kp-delete-panel {
+        display: none;
+        margin-bottom: 14px;
+        padding: 14px 16px;
+        border: 1px solid #ffd6d6;
+        border-radius: 8px;
+        background: #fff7f7;
+    }
+    .kp-delete-panel strong {
+        color: #bf1f1f;
+        display: block;
+        margin-bottom: 4px;
+    }
+    .kp-delete-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .kp-list-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+    .kp-list-table th {
+        background: #f7f9fb;
+        color: #25729b;
+        font-size: 14px;
+        font-weight: 700;
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+        white-space: nowrap;
+    }
+    .kp-list-table td {
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+    }
+    .kp-list-table .text-left { text-align: left; }
+    .kp-action-cell { white-space: nowrap; }
+    .kp-action-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 6px;
+        border: 1px solid #dbe4ee;
+        background: #ffffff;
+        color: #345;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 3px;
+    }
+    .kp-action-btn:hover,
+    .kp-action-btn:focus {
+        color: #ffffff;
+        background: #1f7a63;
+        border-color: #1f7a63;
+    }
+    .kp-action-btn.danger:hover,
+    .kp-action-btn.danger:focus {
+        background: #c0392b;
+        border-color: #c0392b;
+    }
+    @@media (max-width: 991px) {
+        .kp-hero,
+        .kp-card-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+        .kp-layout { grid-template-columns: 1fr; }
+        .kp-toolbar { grid-template-columns: 1fr; }
+    }
+    @@media (max-width: 575px) {
+        .kp-list-table { min-width: 720px; }
+    }
+</style>
+
+<div class="kp-page">
+    <div class="kp-hero">
+        <div>
+            <h3>Quản lý Khoa Phòng</h3>
+            <p>Thêm, cập nhật và quản lý khoa/phòng nhận trong phiếu xuất kho.</p>
+        </div>
+        @if (coQuyenThaoTac)
+        {
+            <button type="button" class="btn btn-main" onclick="ResetKhoaPhongForm()"><i class="ti-plus"></i>Thêm khoa/phòng</button>
+        }
+    </div>
+
+    <div class="kp-layout">
+        <div class="kp-card">
+            <div class="kp-card-header">
+                <div>
+                    <h4>Thông tin khoa/phòng</h4>
+                    <span>Thêm mới hoặc chỉnh sửa khoa/phòng.</span>
+                </div>
+            </div>
+            <div class="kp-card-body" id="khoaPhongFormPanel">
+                @if (coQuyenThaoTac)
+                {
+                    @Html.Action("FormKhoaPhong", "QuanLyKhoaPhong", new { id = "" })
+                }
+                else
+                {
+                    <div class="kp-empty-permission">Bạn chỉ có quyền xem danh sách khoa/phòng.</div>
+                }
+            </div>
+        </div>
+
+        <div class="kp-card">
+            <div class="kp-card-header">
+                <div>
+                    <h4>Danh sách khoa/phòng</h4>
+                    <span>Tìm kiếm theo mã hoặc tên khoa/phòng.</span>
+                </div>
+            </div>
+            <div class="kp-card-body">
+                <div class="kp-toolbar">
+                    <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Mã khoa/phòng / Tên khoa/phòng">
+                    <button type="button" class="btn btn-search-crmnt" onclick="DanhSachKhoaPhong(1)" id="btnTimKiem"><i class="ti-search"></i>Tìm kiếm</button>
+                </div>
+
+                <div class="kp-delete-panel" id="deleteKhoaPhongPanel">
+                    <strong>Xác nhận xóa khoa/phòng</strong>
+                    <span>Bạn có chắc chắn muốn xóa khoa/phòng này không?</span>
+                    <input type="hidden" id="delete_id" />
+                    <div class="kp-delete-actions">
+                        <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
+                        <button type="button" class="btn btn-main" onclick="CancelDeleteKhoaPhong()"><i class="ti-close"></i>Hủy</button>
+                    </div>
+                </div>
+
+                <div class="table-crmnt table-job" id="content_KhoaPhong"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        DanhSachKhoaPhong(1);
+    });
+
+    $("#txtSearch").on("keypress", function (e) {
+        if (e.keyCode === 13) {
+            DanhSachKhoaPhong(1);
+        }
+    });
+
+    function DanhSachKhoaPhong(pageIndex) {
+        var sSearch = $("#txtSearch").val();
+        $("#LoadingModal").modal("show");
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("DanhSachKhoaPhong")',
+            data: { pageIndex: pageIndex, sSearch: sSearch },
+            dataType: "html",
+            success: function (data) {
+                $("#content_KhoaPhong").html(data);
+                setTimeout(function () { $("#LoadingModal").modal("hide"); }, 300);
+            },
+            error: function () {
+                $("#LoadingModal").modal("hide");
+                toastr.error("Không tải được danh sách khoa/phòng.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    }
+
+    function pagingData(pageIndex) {
+        DanhSachKhoaPhong(pageIndex);
+    }
+
+    function FormKhoaPhong(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("FormKhoaPhong")',
+            data: { id: id },
+            dataType: "html",
+            success: function (data) {
+                $("#khoaPhongFormPanel").html(data);
+                $("html, body").animate({ scrollTop: $(".kp-card").first().offset().top - 12 }, 250);
+            },
+            error: function () {
+                toastr.error("Không tải được form khoa/phòng.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    }
+
+    function ResetKhoaPhongForm() {
+        FormKhoaPhong("");
+    }
+
+    function DeleteKhoaPhong(id) {
+        $("#delete_id").val(id);
+        $("#deleteKhoaPhongPanel").slideDown(150);
+    }
+
+    function CancelDeleteKhoaPhong() {
+        $("#delete_id").val("");
+        $("#deleteKhoaPhongPanel").slideUp(150);
+    }
+
+    function ActionDelete() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("XoaKhoaPhong")',
+            data: { id: $("#delete_id").val() },
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    CancelDeleteKhoaPhong();
+                    DanhSachKhoaPhong($("#pageIndex").val() || 1);
+                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    var msg = data.Message ? data.Message : "Không xóa được khoa/phòng.";
+                    toastr.warning(msg, "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+                }
+            },
+            error: function () {
+                toastr.error("Xảy ra lỗi khi xóa khoa/phòng.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    }
+
+    $(document).on("submit", "#fKhoaPhong", function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        var $btn = $("#btnSaveKhoaPhong");
+        var isEdit = !!$("#Id").val();
+        $btn.prop("disabled", true);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FormKhoaPhong", "QuanLyKhoaPhong")',
+            data: $form.serialize(),
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    DanhSachKhoaPhong($("#pageIndex").val() || 1);
+                    ResetKhoaPhongForm();
+                    toastr.success(isEdit ? "Cập nhật thành công." : "Thêm mới thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    DisplayKhoaPhongErrors(data.Errors);
+                    toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+                    $btn.prop("disabled", false);
+                }
+            },
+            error: function () {
+                $btn.prop("disabled", false);
+                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    });
+
+    function DisplayKhoaPhongErrors(errors) {
+        $("#fKhoaPhong .field-validation-valid, #fKhoaPhong .field-validation-error").html("");
+        if (!errors) return;
+        for (var i = 0; i < errors.length; i++) {
+            if (i === 0) {
+                $("#" + errors[i].Key).focus();
+            }
+            $("#fKhoaPhong span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+        }
+    }
+</script>

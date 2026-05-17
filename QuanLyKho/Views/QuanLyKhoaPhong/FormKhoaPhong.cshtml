@@ -1,0 +1,53 @@
+@using QuanLyKho.Utility
+@model QuanLyKho.Models.KhoaPhongForm
+@{
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+    var laCapNhat = Model != null && Model.Id.HasValue && Model.Id.Value != Guid.Empty;
+}
+
+@using (Html.BeginForm("FormKhoaPhong", "QuanLyKhoaPhong", FormMethod.Post, new { enctype = "multipart/form-data", id = "fKhoaPhong", @class = "form-crmnt kp-form" }))
+{
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="kp-form-intro">
+        <h5>Thông tin khoa/phòng</h5>
+        <p>Quản lý danh mục khoa/phòng dùng trong phiếu xuất kho.</p>
+    </div>
+
+    <div class="kp-form-grid">
+        <div class="form-group">
+            <label class="text-label">Mã khoa/phòng <span class="red-crmnt">(*)</span></label>
+            @if (laCapNhat)
+            {
+                @Html.TextBoxFor(x => x.MaTuDien, new { @class = "form-control input-sm", id = "MaTuDien", @readonly = "readonly", placeholder = "Nhập mã khoa/phòng" })
+            }
+            else
+            {
+                @Html.TextBoxFor(x => x.MaTuDien, new { @class = "form-control input-sm", id = "MaTuDien", placeholder = "Ví dụ: KP001, KHOA_NOI" })
+            }
+            @Html.ValidationMessageFor(x => x.MaTuDien)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Tên khoa/phòng <span class="red-crmnt">(*)</span></label>
+            @Html.TextBoxFor(x => x.TenTuDien, new { @class = "form-control input-sm", id = "TenTuDien", placeholder = "Ví dụ: Khoa Nội, Phòng Vật tư" })
+            @Html.ValidationMessageFor(x => x.TenTuDien)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Ghi chú</label>
+            @Html.TextAreaFor(x => x.GhiChu, 4, 0, new { @class = "form-control input-sm", placeholder = "Nhập ghi chú nếu cần" })
+            @Html.ValidationMessageFor(x => x.GhiChu)
+        </div>
+    </div>
+
+    <div class="kp-form-actions">
+        @if (coQuyenThaoTac)
+        {
+            <button type="submit" class="btn btn-main" id="btnSaveKhoaPhong">
+                <i class="ti-save"></i>@(laCapNhat ? "Cập nhật khoa/phòng" : "Lưu khoa/phòng")
+            </button>
+            <button type="button" class="btn btn-main" onclick="ResetKhoaPhongForm()"><i class="ti-reload"></i>Làm mới</button>
+        }
+    </div>
+}

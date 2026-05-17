@@ -1,4 +1,5 @@
 using BusinessLogic.Model;
+using System;
 using System.Collections.Generic;
 
 namespace QuanLyKho.Models
@@ -18,6 +19,14 @@ namespace QuanLyKho.Models
         public int Pagecount { get; set; }
         public int Total { get; set; }
         public int PageSize { get; private set; }
+        public IList<BaoCaoXuatNhapTonModel> TBL_BaoCaoXuatNhapTon { get; set; }
+    }
+
+    public class BaoCaoXuatNhapTonPrintModel
+    {
+        public DateTime TuNgay { get; set; }
+        public DateTime DenNgay { get; set; }
+        public string TenKho { get; set; }
         public IList<BaoCaoXuatNhapTonModel> TBL_BaoCaoXuatNhapTon { get; set; }
     }
 }

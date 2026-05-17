@@ -3,47 +3,113 @@
     var comboKho = ViewBag.ComboKho as System.Collections.Generic.IEnumerable<System.Web.Mvc.SelectListItem>;
 }
 
+<style>
+    .xnt-filter-panel {
+        background: #f7f9fc;
+        border: 1px solid #e6ebf2;
+        border-radius: 6px;
+        padding: 18px 20px 14px;
+        margin-bottom: 16px;
+    }
+
+    .xnt-filter-panel .form-group {
+        margin-bottom: 12px;
+    }
+
+    .xnt-filter-panel .text-label {
+        color: #25364d;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .xnt-filter-panel .form-control,
+    .xnt-filter-panel .select2-container .select2-selection--single {
+        min-height: 38px;
+        border-color: #d8dee8;
+        border-radius: 3px;
+    }
+
+    .xnt-filter-panel .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 36px;
+    }
+
+    .xnt-filter-panel .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px;
+    }
+
+    .xnt-action-row {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding-top: 2px;
+    }
+
+    .xnt-action-row .btn {
+        min-width: 128px;
+        height: 38px;
+        margin: 0 !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        white-space: nowrap;
+    }
+
+    @@media (max-width: 575.98px) {
+        .xnt-filter-panel {
+            padding: 14px;
+        }
+
+        .xnt-action-row {
+            flex-direction: column;
+        }
+
+        .xnt-action-row .btn {
+            width: 100%;
+        }
+    }
+</style>
+
 <div class="row content-all-crmnt">
     <div class="col-sm-12">
         <div class="tab-content br-n pn">
-            <div class="content-tab-crmnt">
-                <div class="row align-items-end">
-                    <div class="col-xl-2 col-sm-6 content-bg">
+            <div class="content-tab-crmnt xnt-filter-panel">
+                <div class="row">
+                    <div class="col-xl col-lg-4 col-md-6 content-bg">
                         <div class="form-group mb-2">
                             <label class="text-label d-block mb-1">Từ ngày</label>
                             <input type="date" id="tuNgay" class="form-control input-sm">
                         </div>
                     </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
+                    <div class="col-xl col-lg-4 col-md-6 content-bg">
                         <div class="form-group mb-2">
                             <label class="text-label d-block mb-1">Đến ngày</label>
                             <input type="date" id="denNgay" class="form-control input-sm">
                         </div>
                     </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
+                    <div class="col-xl col-lg-4 col-md-6 content-bg">
                         <div class="form-group mb-2">
                             <label class="text-label d-block mb-1">Kho</label>
                             @Html.DropDownList("idKho", comboKho, new { @class = "form-control select2", id = "idKho" })
                         </div>
                     </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
+                    <div class="col-xl col-lg-6 col-md-6 content-bg">
                         <div class="form-group mb-2">
                             <label class="text-label d-block mb-1">Mã sản phẩm</label>
                             <input type="text" id="maSanPham" class="form-control input-sm" placeholder="Nhập mã sản phẩm">
                         </div>
                     </div>
-                    <div class="col-xl-2 col-sm-6 content-bg">
+                    <div class="col-xl col-lg-6 col-md-12 content-bg">
                         <div class="form-group mb-2">
                             <label class="text-label d-block mb-1">Tên sản phẩm</label>
                             <input type="text" id="tenSanPham" class="form-control input-sm" placeholder="Nhập tên sản phẩm">
                         </div>
                     </div>
-                    <div class="col-xl-2 col-sm-12 content-bg">
-                        <div class="form-group mb-2">
-                            <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachBaoCaoXuatNhapTon(1)">Tìm kiếm</button>
-                            <button type="button" class="btn btn-main mb-2 ml-2" onclick="XuatExcelBaoCaoXuatNhapTon()"><i class="ti-download"></i>Xuất Excel</button>
-                        </div>
-                    </div>
+                </div>
+                <div class="xnt-action-row">
+                    <button type="button" class="btn btn-search-crmnt" onclick="DanhSachBaoCaoXuatNhapTon(1)"><i class="ti-search"></i>Tìm kiếm</button>
+                    <button type="button" class="btn btn-main" onclick="InBaoCaoXuatNhapTon()"><i class="ti-printer"></i>In Phiếu</button>
+                    <button type="button" class="btn btn-main" onclick="XuatExcelBaoCaoXuatNhapTon()"><i class="ti-download"></i>Xuất Excel</button>
                 </div>
             </div>
 
@@ -118,6 +184,18 @@
         };
         var url = '@Url.Action("XuatExcelBaoCaoXuatNhapTon", "QuanLyTonKho")' + '?' + $.param(payload);
         window.location.href = url;
+    }
+
+    function InBaoCaoXuatNhapTon() {
+        var payload = {
+            tuNgay: $("#tuNgay").val(),
+            denNgay: $("#denNgay").val(),
+            idKho: $("#idKho").val(),
+            maSanPham: $("#maSanPham").val(),
+            tenSanPham: $("#tenSanPham").val()
+        };
+        var url = '@Url.Action("InBaoCaoXuatNhapTon", "QuanLyTonKho")' + '?' + $.param(payload);
+        window.open(url, '_blank');
     }
 </script>
 }

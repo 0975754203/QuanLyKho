@@ -165,6 +165,57 @@ namespace QuanLyKho.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult InBaoCaoXuatNhapTon(DateTime? tuNgay, DateTime? denNgay, Guid? idKho, string tenSanPham, string maSanPham)
+        {
+            try
+            {
+                if (tuNgay.HasValue && denNgay.HasValue && tuNgay.Value.Date > denNgay.Value.Date)
+                {
+                    var tmp = tuNgay;
+                    tuNgay = denNgay;
+                    denNgay = tmp;
+                }
+
+                var tuNgayValue = tuNgay ?? DateTime.Now.Date;
+                var denNgayValue = denNgay ?? DateTime.Now.Date;
+                var list = KhoTonManager.Instance.BaoCaoXuatNhapTon(tuNgayValue, denNgayValue, idKho, maSanPham, tenSanPham, 1, 999999, out int total);
+                var tenKho = "Tất cả kho";
+
+                if (idKho.HasValue)
+                {
+                    using (var uow = new UnitOfWork())
+                    {
+                        var kho = uow.Repository<Kho>().Query()
+                            .Filter(x => x.Id == idKho.Value)
+                            .Get()
+                            .FirstOrDefault();
+
+                        if (kho != null && !string.IsNullOrWhiteSpace(kho.TenKho))
+                        {
+                            tenKho = kho.TenKho;
+                        }
+                    }
+                }
+
+                var model = new BaoCaoXuatNhapTonPrintModel
+                {
+                    TuNgay = tuNgayValue,
+                    DenNgay = denNgayValue,
+                    TenKho = tenKho,
+                    TBL_BaoCaoXuatNhapTon = list
+                };
+
+                ViewBag.Title = "In phiếu báo cáo xuất nhập tồn";
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                ex.Log();
+                return HttpNotFound();
+            }
+        }
+
         private string ExcelBaoCaoXuatNhapTon(int? pageIndex, DateTime? tuNgay, DateTime? denNgay, Guid? idKho, string tenSanPham, string maSanPham)
         {
             try

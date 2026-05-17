@@ -1,0 +1,158 @@
+﻿TableCount	1
+TABLE 1 ROWS 156 COLS 9
+TT	Tên vật tư	Đơn vị tính	Số lượng	Ký hiệu nhãn mác	Xuất xứ	Thời gian bảo hành	Đơn giá	Thành tiền
+A	Vật tư điện							
+1	Aptomat MCB 1P - 20A	Chiếc	40	SC68N/ C1020/ Sino	Việt Nam	12 tháng	65.455	2.618.200
+2	Aptomat MCB 1P - 32A	Chiếc	40	SC68N/ C1032/ Sino	Việt Nam	12 tháng	65.455	2.618.200
+3	Aptomat MCCB 3 pha - 50A	Chiếc	10	ABN3P-50A/ LS	Việt Nam	12 tháng	64.545	645.450
+4	Aptomat 2P MCB - 40A	Chiếc	20	SC68N/ C2040/ Sino	Việt Nam	12 tháng	73.636	1.472.720
+5	Máy khoan vít pin 21V	Chiếc	2	DCD700/ Dewalt	Trung Quốc	6 tháng	1.147.272	2.294.544
+6	Máy cắt gạch cầm tay	Chiếc	2	YMS-110/ Yamasu	Trung Quốc	6 tháng	940.909	1.881.818
+7	Máy khoan điện cầm tay	Chiếc	2	BM 13-750/ / Yamasu	Trung Quốc	6 tháng	780.000	1.560.000
+8	Máy cắt sắt bàn 355mm	Chiếc	2	LW1401/ Makita	Trung Quốc	6 tháng	3.318.181	6.636.362
+9	Băng dính điện	Cuộn	120	10YDS/ Nanoco	Việt Nam		7.273	872.760
+10	Bóng led tube 0.6m	Chiếc	10	T8 TT01 600/10W/ Rạng đông	Việt Nam	12 tháng	54.545	545.450
+11	Bóng đèn tròn Led buld 5W	Chiếc	300	A55N4/5W.H/ Rạng đông	Việt Nam	12 tháng	36.363	10.908.900
+12	Bóng đèn LED quả nhót	Chiếc	50	A45R/1W/ Rạng đông	Việt Nam	6 tháng	15.455	772.750
+13	Đèn LED Panel 30x120/40W	Chiếc	20	P08 300x1200/ 40W/ Rạng đông	Việt Nam	12 tháng	727.273	14.545.460
+14	Bóng đèn Panel 60x60/40W	Chiếc	30	P06 600x600/50W/ Rạng đông	Việt Nam	12 tháng	590.909	17.727.270
+15	Bóng đèn LED Tuýp T8 1.2m	Chiếc	1.500	T8 1.2m 20W/ Rạng đông	Việt Nam	12 tháng	219.091	328.636.500
+16	Bóng đèn LED Âm trần Downlight 110/ 9W	Chiếc	60	AT04 110/9W/ Rạng đông	Việt Nam	12 tháng	113.636	6.818.160
+17	Bóng đèn LED Âm trần Downlight	Chiếc	20	AT04 110/12W/ Rạng đông	Việt Nam	12 tháng	113.636	2.272.720
+18	Cây ghen nhựa	Máng	250	GA24/ Sino	Việt Nam		20.000	5.000.000
+19	Dây điện 2x1.5	Mét	1.000	VCTFK 2x1.5/ Cadisun	Việt Nam	12 tháng	7.273	7.273.000
+20	Dây điện 2x2.5	Mét	700	VCTFK 2x2.5/ Cadisun	Việt Nam	12 tháng	12.727	8.908.900
+21	Dây điện 2x4	Mét	500	VCTFK 2x4.0/ Cadisun	Việt Nam	12 tháng	20.000	10.000.000
+22	Đế nổi	Chiếc	100	CK157RH/ Sino	Việt Nam	6 tháng	3.636	363.600
+23	Đế âm	Chiếc	200	S2157/ Sino	Việt Nam	6 tháng	1.818	363.600
+24	Đui đèn - đui đèn tròn - xoáy	Chiếc	50	Đui đèn xoáy E27/  Rạng Đông	Việt Nam	6 tháng	10.909	545.450
+25	Bình nóng lạnh 50 lít.	Chiếc	10	PRO R50/ Ariston	Việt Nam	12 tháng	3.318.182	33.181.820
+26	Thanh đốt bình nóng lạnh 50 lít	Chiếc	100	Ariston	Việt Nam	12 tháng	300.000	30.000.000
+27	Dây chống giật bình nóng lạnh 50 lít	Chiếc	100	Ariston	Việt Nam	12 tháng	268.182	26.818.200
+28	Rơ - le cọc bình nóng lạnh 50 lít	Chiếc	100	Ariston	Việt Nam	12 tháng	300.000	30.000.000
+29	Gioăng cao su chống rò nước bình nóng lạnh 50 lít	Chiếc	100	Ariston	Việt Nam	3 tháng	154.545	15.454.500
+30	Bình nóng lạnh 30 lít	Chiếc	5	Ariston Vitaly 30L	Việt Nam	12 tháng	2.090.909	10.454.545
+31	Thanh đốt bình nóng lạnh 30 lít	Chiếc	50	Ariston	Việt Nam	12 tháng	281.818	14.090.900
+32	Dây chống giật bình nóng lạnh 30 lít	Chiếc	50	Ariston	Việt Nam	12 tháng	254.545	12.727.250
+33	Rơ - le bình nóng lạnh 30 lít	Chiếc	50	Ariston	Việt Nam	12 tháng	281.818	14.090.900
+34	Gioăng cao su chống rò nước bình nóng lạnh 30 lít	Chiếc	50	Ariston	Việt Nam	3 tháng	150.000	7.500.000
+35	Máy sưởi dầu (9 thanh sưởi)	Chiếc	10	TS923/ Tiross	Trung Quốc	12 tháng	1.809.091	18.090.910
+36	Quạt sưởi sợi đốt	Chiếc	10	HF-803H 900W/ Saiko	Việt Nam	12 tháng	1.036.364	10.363.640
+37	Hạt công tắc đảo chiều 10A	Chiếc	50	S30/1/2M/ Sino	Việt Nam	12 tháng	11.818	590.900
+38	Hạt công tắc 20A	Chiếc	80	S30/1/2M/ Sino	Việt Nam	12 tháng	50.000	4.000.000
+39	Hạt công tắc 10A	Chiếc	100	S30/1/2M/ Sino	Việt Nam	12 tháng	6.364	636.400
+40	Hộp số quạt trần	Chiếc	100	Hộp số quạt trần 1400/ Vinawind	Việt Nam	6 tháng	155.455	15.545.500
+41	Máng đèn Led tuýp đơn 1.2m - Không Ba Lát	Chiếc	50	FS-40/36x1-M9/ Rạng Đông	Việt Nam	12 tháng	41.818	2.090.900
+42	Máng đèn Led tuýp đôi 1.2m - Không Ba Lát	Chiếc	200	FS-40/36x2-M9/ Rạng Đông	Việt Nam	12 tháng	60.909	12.181.800
+43	Mặt ổ cắm đôi 2 Ổ cắm, 2 chấu, 2 công tắc	Chiếc	200	S18AU2/ Sino	Việt Nam	12 tháng	26.364	5.272.800
+44	Mặt ổ cắm đôi 2 Ổ cắm 2 chấu	Chiếc	200	S18AU2/ Sino	Việt Nam	12 tháng	30.909	6.181.800
+45	Ổ cắm  liền dây 3m, 3 ổ -10A	Chiếc	50	3SKN5/CC/ Sino	Việt Nam	12 tháng	72.727	3.636.350
+46	Ổ cắm  liền dây 5m, 6 ổ -10A	Chiếc	60	6SKN5/ Sino	Việt Nam	12 tháng	113.636	6.818.160
+47	Quạt thông gió gắn tường 200	Chiếc	200	QTG 200-PN/ Vinawind	Việt Nam	12 tháng	392.727	78.545.400
+48	Quạt thông gió âm trần thẳng 300	Chiếc	50	TC-25AV5/ Tico	Việt Nam	12 tháng	245.455	12.272.750
+49	Quạt trần 3 cánh sắt 1.4m	Chiếc	70	QT-1400S/ Vinawind	Việt Nam	12 tháng	878.182	61.472.740
+50	Quạt thông gió gắn tường 250 - 2 chiều	Chiếc	50	TC-15AV6/ Tico	Việt  Nam	12 tháng	227.273	11.363.650
+51	Quạt cây công nghiệp 750	Chiếc	40	QĐ750-Đ/ Vinawind	Việt Nam	12 tháng	1.409.091	56.363.640
+52	Quạt cây sải cánh 45cm	Chiếc	200	QĐ450-ĐM/ Vinawind	Việt Nam	12 tháng	470.000	94.000.000
+53	Quạt treo tường sải cánh 45cm	Chiếc	100	QTT450-ĐM/ Vinawind	Việt Nam	12 tháng	439.091	43.909.100
+54	Quạt công nghiệp treo tường 750	Chiếc	20	QTT750-Đ/ Vinawind	Việt Nam	12 tháng	1.290.909	25.818.180
+55	Quạt thông gió âm trần 25 x 25	Chiếc	20	TC-20AV4/ Tico	Việt Nam	12 tháng	245.455	4.909.100
+56	Tụ quạt trần 3.5µ	Chiếc	120	Tụ 3.5µ/ Vinawind	Việt Nam	6 tháng	27.273	3.272.760
+B	Thiết bị vệ sinh, vật tư sửa chữa cấp thoát nước							
+1	Bộ bát sen tắm + dây sen	Bộ	100	13608MDA+SH110/ Caesar	Việt Nam	6 tháng	323.636	32.363.600
+2	Ống nhiệt Ø20	Mét	50	Tiền Phong	Việt Nam		13.636	681.800
+3	Ống nhiệt Ø25	Mét	50	Tiền Phong	Việt Nam		22.727	1.136.350
+4	Ống PVC Ø21	Mét	50	Tiền Phong	Việt Nam		9.091	454.550
+5	Ống PVC Ø27	Mét	50	Tiền Phong	Việt Nam		13.636	681.800
+6	Ống PVC Ø34	Mét	50	Tiền Phong	Việt Nam		15.455	772.750
+7	Ống PVC Ø110	Mét	30	Tiền Phong	Việt Nam		96.364	2.890.920
+8	Khóa van nhiệt Ø20	Chiếc	30	Tiền Phong	Việt Nam		94.545	2.836.350
+9	Khóa van nhiệt Ø25	Chiếc	30	Tiền Phong	Việt Nam		109.091	3.272.730
+10	Khoá van nhiệt Ø32	Chiếc	30	Tiền Phong	Việt Nam		156.364	4.690.920
+11	Khóa van nhiệt Ø40	Chiếc	30	Tiền Phong	Việt Nam		263.636	7.909.080
+12	Khóa van PVC Ø21	Chiếc	20	Tiền Phong	Việt Nam		15.455	309.100
+13	Khóa van PVC Ø27	Chiếc	20	Tiền Phong	Việt Nam		22.727	454.540
+14	Khóa van PVC Ø34	Chiếc	20	Tiền Phong	Việt Nam		32.727	654.540
+15	Đầu bịt ren trong Ø21	Chiếc	100	Tiền Phong	Việt Nam		909	90.900
+16	Đầu bịt ống nhiệt Ø20	Chiếc	100	Tiền Phong	Việt Nam		909	90.900
+17	Đầu bịt ống nhiệt Ø25	Chiếc	100	Tiền Phong	Việt Nam		1.818	181.800
+18	Đầu bịt ống nhiệt Ø32	Chiếc	50	Tiền Phong	Việt Nam		2.727	136.350
+19	Đầu bịt ống nhiệt Ø40	Chiếc	50	Tiền Phong	Việt Nam		4.545	227.250
+20	Vòi đồng Ø21 1/2	Chiếc	50	Tiền Phong	Việt Nam		45.455	2.272.750
+21	Cút nhiệt ren trong Ø20 1/2	Chiếc	50	Tiền Phong	Việt Nam		20.000	1.000.000
+22	Cút nhiệt ren ngoài Ø20 1/2	Chiếc	50	Tiền Phong	Việt Nam		28.182	1.409.100
+23	Cút nhiệt ren trong Ø25 1/2	Chiếc	50	Tiền Phong	Việt Nam		22.727	1.136.350
+24	Cút nhiệt ren ngoài Ø25 1/2	Chiếc	50	Tiền Phong	Việt Nam		31.818	1.590.900
+25	Cút góc nhiệt Ø20	Chiếc	50	Tiền Phong	Việt Nam		2.727	136.350
+26	Cút góc nhiệt Ø25	Chiếc	50	Tiền Phong	Việt Nam		3.636	181.800
+27	Mang xông nhiệt Ø20	Chiếc	50	Tiền Phong	Việt Nam		909	45.450
+28	Mang xông nhiệt Ø25	Chiếc	50	Tiền Phong	Việt Nam		1.818	90.900
+29	Kép Inox Ø21 1/2.	Chiếc	50	Tiền Phong	Việt Nam		7.273	363.650
+30	T - Inox Ø 20 1/2	Chiếc	50	Tiền Phong	Việt Nam		21.818	1.090.900
+31	T - Inox Ø 25 1/2	Chiếc	50	Tiền Phong	Việt Nam		28.182	1.409.100
+32	T - Inox Ø 20 1/2	Chiếc	50	Tiền Phong	Việt Nam		20.000	1.000.000
+33	T - Inox Ø 25 1/2	Chiếc	50	Tiền Phong	Việt Nam		36.364	1.818.200
+34	Van khoá PVC Ø21	Chiếc	50	Tiền Phong	Việt Nam		15.455	772.750
+35	Van khoá PVC Ø27	Chiếc	50	Tiền Phong	Việt Nam		22.727	1.136.350
+36	Van khoá PVC Ø34	Chiếc	50	Tiền Phong	Việt Nam		32.727	1.636.350
+37	Ống T - nhiệt Ø 20	Chiếc	50	Tiền Phong	Việt Nam		2.727	136.350
+38	Ống T - nhiệt Ø 25	Chiếc	50	Tiền Phong	Việt Nam		4.545	227.250
+39	Ống T - nhiệt Ø 32	Chiếc	50	Tiền Phong	Việt Nam		8.182	409.100
+40	Côn thu ống nhiệt Ø25 - Ø20	Chiếc	50	Tiền Phong	Việt Nam		1.818	90.900
+41	Côn thu ống nhiệt Ø32 - Ø20	Chiếc	50	Tiền Phong	Việt Nam		2.727	136.350
+42	Côn thu ống nhiệt Ø32 - Ø25	Chiếc	50	Tiền Phong	Việt Nam		2.727	136.350
+43	Van phao đồng DN 40	Chiếc	8	Tiền Phong	Việt Nam	12 tháng	753.636	6.029.088
+44	Van phao đồng DN 21	Chiếc	10	Tiền Phong	Việt Nam	12 tháng	108.182	1.081.820
+45	Van phao đồng DN 27	Chiếc	10	Tiền Phong	Việt Nam	12 tháng	178.182	1.781.820
+46	Cút PVC Ø21	Chiếc	50	Tiền Phong	Việt Nam		909	45.450
+47	Cút PVC Ø27	Chiếc	50	Tiền Phong	Việt Nam		909	45.450
+48	Cút PVC Ø110	Chiếc	30	Tiền Phong	Việt Nam		52.727	1.581.810
+49	Ống T  PVC Ø21	Chiếc	50	Tiền Phong	Việt Nam		909	45.450
+50	Ống T PVC Ø27	Chiếc	50	Tiền Phong	Việt Nam		1.818	90.900
+51	Ống T PVC Ø34	Chiếc	50	Tiền Phong	Việt Nam		2.727	136.350
+52	Ống T  PVC Ø110	Chiếc	50	Tiền Phong	Việt Nam		67.273	3.363.650
+53	Chếch PVC  Ø21	Chiếc	50	Tiền Phong	Việt Nam		909	45.450
+54	Chếch PVC  Ø27	Chiếc	50	Tiền Phong	Việt Nam		909	45.450
+55	Chếch PVC  Ø34	Chiếc	50	Tiền Phong	Việt Nam		1.818	90.900
+56	Chếch PVC  Ø110	Chiếc	50	Tiền Phong	Việt Nam		45.455	2.272.750
+57	Mang xông PVC  Ø21	Chiếc	50	Tiền Phong	Việt Nam		909	45.450
+58	Mang xông PVC  Ø27	Chiếc	50	Tiền Phong	Việt Nam		909	45.450
+59	Mang xông PVC  Ø34	Chiếc	50	Tiền Phong	Việt Nam		909	45.450
+60	Mang xông PVC  Ø110	Chiếc	50	Tiền Phong	Việt Nam		34.545	1.727.250
+61	Keo dính PVC 50g	Tuýp	50	Tiền Phong	Việt Nam		6.364	318.200
+62	Kéo cắt ống nhiệt	Chiếc	5	C-mart A1106/ C-Mart Tool	Trung Quốc		139.090	695.450
+63	Cưa sắt cầm tay	Chiếc	5	THT541036/ Total	Trung Quốc		46.364	231.820
+64	Ga thoát sàn Inox D90	Chiếc	200	P1515L/ Kelas	Việt Nam		136.364	27.272.800
+65	Ga thoát sàn Inox D76	Chiếc	200	SUS8522/ CleanMAX	Việt Nam		209.091	41.818.200
+66	Rọ chắn rác Inox Ø110	Chiếc	50	CR110/ CleanMAX	Việt Nam		118.182	5.909.100
+67	Rọ chắn rác Inox Ø48	Chiếc	100	CR48/ CleanMAX	Việt Nam		100.000	10.000.000
+68	Vòi nước lọc Inox RO dài 30 cm	Chiếc	100	VLN600/ CleanMAX	Việt Nam		227.273	22.727.300
+69	Rắc co ren trong Ø20 1/2	Chiếc	30	Tiền Phong	Việt Nam		42.727	1.281.810
+70	Rắc co ren trong Ø25 1/2	Chiếc	30	Tiền Phong	Việt Nam		68.182	2.045.460
+71	Rắc co ren ngoài Ø20 1/2	Chiếc	30	Tiền Phong	Việt Nam		45.455	1.363.650
+72	Rắc co ren ngoài Ø25 1/2	Chiếc	30	Tiền Phong	Việt Nam		70.909	2.127.270
+73	Đầu bịt tròn uPVC Ø21	Chiếc	100	Tiền Phong	Việt Nam		909	90.900
+74	Đầu bịt tròn uPVC Ø27	Chiếc	100	Tiền Phong	Việt Nam		909	90.900
+75	Đầu bịt tròn uPVC Ø34	Chiếc	100	Tiền Phong	Việt Nam		909	90.900
+76	Đầu bịt tròn uPVC Ø48	Chiếc	50	Tiền Phong	Việt Nam		1.818	90.900
+77	Đầu bịt tròn uPVC Ø60	Chiếc	50	Tiền Phong	Việt Nam		7.273	363.650
+78	Đầu bịt tròn uPVC Ø76	Chiếc	50	Tiền Phong	Việt Nam		9.091	454.550
+79	Đầu bịt tròn uPVC Ø110	Chiếc	20	Tiền Phong	Việt Nam		24.545	490.900
+80	Băng tan	Cuộn	150	Tombo 9082	Malaysia		4.545	681.750
+81	Bộ ruột xả nước bồn cầu - Loại tay gạt hông	Bộ	100	A701-2-B/ Inax	Việt Nam	12 tháng	181.818	18.181.800
+82	Bộ nắp bồn cầu	Bộ	120	CF37AKV/ Inax	Việt Nam	12 tháng	286.364	34.363.680
+83	Bồn cầu vệ sinh	Bộ	20	C-117VA/ Inax	Việt Nam	12 tháng	1.627.273	32.545.460
+84	Chậu rửa mặt có chân đứng	Bộ	20	L-282V(EC/FC) + L-284VD/ Inax	Việt Nam	12 tháng	1.009.091	20.181.820
+85	Dây cấp nước chậu rửa - loại ngắn	Chiếc	300	BF422/ Caesar	Việt Nam	6 tháng	98.182	29.454.600
+86	Vòi chậu rửa nóng lạnh - 1 chân	Chiếc	50	B380CU/ Caesar	Việt Nam	12 tháng	1.006.364	50.318.200
+87	Vòi chậu rửa nóng lạnh - 2 chân	Chiếc	100	CleanMAX - 51225	Việt Nam	12 tháng	681.818	68.181.800
+88	Vòi chậu rửa - 1 chân	Chiếc	70	B104C/ Caesar	Việt Nam	12 tháng	441.818	30.927.260
+89	Vòi chậu rửa dụng cụ - 1 chân	Chiếc	40	K027C/ Caesar	Việt Nam	12 tháng	409.091	16.363.640
+90	Vòi xịt vệ sinh	Chiếc	200	CFV-102A/ Inax	Việt Nam	12 tháng	392.727	78.545.400
+91	Vòi sen tắm nước nóng lạnh gắn tường	Chiếc	20	S383C/ Caesar	Việt Nam	12 tháng	1.227.273	24.545.460
+92	Van xả ấn bồn tiểu  loại ống thẳng	Bộ	40	BF412G/ Caesar	Việt Nam	12 tháng	781.818	31.272.720
+93	Xi phông	Bộ	400	A325PS/ Inax	Việt Nam	12 tháng	306.364	122.545.600
+	Thành tiền	1.879.092.727						
+	Thuế GTGT 10%	187.909.273						
+	Tổng thành tiền	2.067.002.000						
+Bằng chữ: Hai tỷ, không trăm sáu mươi bảy triệu, không trăm lẻ hai nghìn đồng./.Giá trên đã bao gồm thuế 10% VAT, chi phí vận chuyển và các chi phí khác liên quan theo quy định của pháp luật.								

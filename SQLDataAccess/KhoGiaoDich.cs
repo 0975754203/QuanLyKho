@@ -17,7 +17,6 @@ namespace SQLDataAccess
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public KhoGiaoDich()
         {
-            this.KhoGiaoDich1 = new HashSet<KhoGiaoDich>();
             this.KhoGiaoDichChiTiets = new HashSet<KhoGiaoDichChiTiet>();
         }
     
@@ -37,9 +36,7 @@ namespace SQLDataAccess
         public Nullable<System.DateTime> NgayHopDong { get; set; }
     
         public virtual Kho Kho { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<KhoGiaoDich> KhoGiaoDich1 { get; set; }
-        public virtual KhoGiaoDich KhoGiaoDich2 { get; set; }
+        public virtual NhaThauCungCap NhaThauCungCap { get; set; }
         public virtual TaiKhoan TaiKhoan { get; set; }
         public virtual TuDien TuDien { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

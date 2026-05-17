@@ -258,6 +258,7 @@
     <Compile Include="Controllers\QuanLyDanhMucKhoController.cs" />
     <Compile Include="Controllers\QuanLyNhomVatTuController.cs" />
     <Compile Include="Controllers\QuanLyDonViTinhController.cs" />
+    <Compile Include="Controllers\QuanLyKhoaPhongController.cs" />
     <Compile Include="Controllers\QuanLyNhaCungCapController.cs" />
     <Compile Include="Controllers\QuanLyTonKhoController.cs" />
     <Compile Include="Controllers\QuanLyTheKhoController.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="Models\DanhMucKhoModel.cs" />
     <Compile Include="Models\NhomVatTuModel.cs" />
     <Compile Include="Models\DonViTinhModel.cs" />
+    <Compile Include="Models\KhoaPhongModel.cs" />
     <Compile Include="Models\NhaCungCapModel.cs" />
     <Compile Include="Models\KhoTonModel.cs" />
     <Compile Include="Models\TheKho_DSModel.cs" />
@@ -6165,12 +6167,16 @@
     <Content Include="Views\QuanLyDonViTinh\DanhSachDonViTinh.cshtml" />
     <Content Include="Views\QuanLyDonViTinh\FormDonViTinh.cshtml" />
     <Content Include="Views\QuanLyDonViTinh\Index.cshtml" />
+    <Content Include="Views\QuanLyKhoaPhong\DanhSachKhoaPhong.cshtml" />
+    <Content Include="Views\QuanLyKhoaPhong\FormKhoaPhong.cshtml" />
+    <Content Include="Views\QuanLyKhoaPhong\Index.cshtml" />
     <Content Include="Views\QuanLyNhaCungCap\DanhSachNhaCungCap.cshtml" />
     <Content Include="Views\QuanLyNhaCungCap\FormNhaCungCap.cshtml" />
     <Content Include="Views\QuanLyNhaCungCap\Index.cshtml" />
     <Content Include="Views\QuanLyTonKho\DanhSachTonKho.cshtml" />
     <Content Include="Views\QuanLyTonKho\DanhSachBaoCaoXuatNhapTon.cshtml" />
     <Content Include="Views\QuanLyTonKho\BaoCaoXuatNhapTon.cshtml" />
+    <Content Include="Views\QuanLyTonKho\InBaoCaoXuatNhapTon.cshtml" />
     <Content Include="Views\QuanLyTonKho\DanhSachBaoCaoXuatKhoaPhong.cshtml" />
     <Content Include="Views\QuanLyTonKho\BaoCaoXuatKhoaPhong.cshtml" />
     <Content Include="Views\QuanLyTonKho\Index.cshtml" />
