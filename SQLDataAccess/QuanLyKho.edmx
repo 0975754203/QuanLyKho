@@ -29,6 +29,9 @@
           <Property Name="NguoiGiaoNhan" Type="nvarchar" MaxLength="250" />
           <Property Name="IdKho" Type="uniqueidentifier" />
           <Property Name="IdGiaoDichCha" Type="uniqueidentifier" />
+          <Property Name="idNhaCungCap" Type="uniqueidentifier" />
+          <Property Name="SoHopDong" Type="nvarchar" MaxLength="500" />
+          <Property Name="NgayHopDong" Type="date" />
         </EntityType>
         <EntityType Name="KhoGiaoDichChiTiet">
           <Key>
@@ -63,6 +66,13 @@
           <Property Name="IdSanPham" Type="uniqueidentifier" Nullable="false" />
           <Property Name="SoLuong" Type="decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="IdKho" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NhaThauCungCap">
+          <Key>
+            <PropertyRef Name="idNhathaucc" />
+          </Key>
+          <Property Name="idNhathaucc" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TenNhaThau" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="NhomVatTu">
           <Key>
@@ -238,6 +248,7 @@
           <EntitySet Name="KhoGiaoDichChiTiet" EntityType="Self.KhoGiaoDichChiTiet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KhoSanPham" EntityType="Self.KhoSanPham" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KhoTon" EntityType="Self.KhoTon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NhaThauCungCap" EntityType="Self.NhaThauCungCap" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NhomVatTu" EntityType="Self.NhomVatTu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TaiKhoan" EntityType="Self.TaiKhoan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TuDien" EntityType="Self.TuDien" Schema="dbo" store:Type="Tables" />
@@ -311,8 +322,8 @@
           <Property Name="IdSanPham" Type="Guid" Nullable="false" />
           <Property Name="SoLuong" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="DonGia" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <NavigationProperty Name="KhoGiaoDich" Relationship="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoGiaoDich" FromRole="KhoGiaoDichChiTiet" ToRole="KhoGiaoDich" />
           <NavigationProperty Name="KhoSanPham" Relationship="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoSanPham" FromRole="KhoGiaoDichChiTiet" ToRole="KhoSanPham" />
+          <NavigationProperty Name="KhoGiaoDich" Relationship="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoGiaoDich" FromRole="KhoGiaoDichChiTiet" ToRole="KhoGiaoDich" />
         </EntityType>
         <EntityType Name="KhoTon">
           <Key>
@@ -345,8 +356,8 @@
           <Property Name="TenTuDien" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="TuDienLoai" Relationship="Self.FK_TuDien_TuDienLoai" FromRole="TuDien" ToRole="TuDienLoai" />
-          <NavigationProperty Name="KhoGiaoDiches" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_TuDien" FromRole="TuDien" ToRole="KhoGiaoDich" />
           <NavigationProperty Name="KhoSanPhams" Relationship="QuanLyKhoModel.FK_KhoSanPham_TuDien" FromRole="TuDien" ToRole="KhoSanPham" />
+          <NavigationProperty Name="KhoGiaoDiches" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_TuDien" FromRole="TuDien" ToRole="KhoGiaoDich" />
         </EntityType>
         <EntityType Name="TuDienLoai">
           <Key>
@@ -397,27 +408,6 @@
             <End Role="TuDienLoai" EntitySet="TuDienLoais" />
             <End Role="TuDien" EntitySet="TuDiens" />
           </AssociationSet>
-          <EntitySet Name="KhoGiaoDiches" EntityType="QuanLyKhoModel.KhoGiaoDich" />
-          <AssociationSet Name="FK_KhoGiaoDich_Kho" Association="QuanLyKhoModel.FK_KhoGiaoDich_Kho">
-            <End Role="Kho" EntitySet="Khoes" />
-            <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KhoGiaoDich_TaiKhoan" Association="QuanLyKhoModel.FK_KhoGiaoDich_TaiKhoan">
-            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
-            <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KhoGiaoDich_TuDien" Association="QuanLyKhoModel.FK_KhoGiaoDich_TuDien">
-            <End Role="TuDien" EntitySet="TuDiens" />
-            <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KhoGiaoDichChiTiet_KhoGiaoDich" Association="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoGiaoDich">
-            <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
-            <End Role="KhoGiaoDichChiTiet" EntitySet="KhoGiaoDichChiTiets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KhoGiaoDich_KhoGiaoDich" Association="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich">
-            <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
-            <End Role="KhoGiaoDich1" EntitySet="KhoGiaoDiches" />
-          </AssociationSet>
           <EntitySet Name="NhomVatTus" EntityType="QuanLyKhoModel.NhomVatTu" />
           <EntitySet Name="KhoSanPhams" EntityType="QuanLyKhoModel.KhoSanPham" />
           <AssociationSet Name="FK_KhoGiaoDichChiTiet_KhoSanPham" Association="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoSanPham">
@@ -436,89 +426,29 @@
             <End Role="KhoSanPham" EntitySet="KhoSanPhams" />
             <End Role="KhoTon" EntitySet="KhoTons" />
           </AssociationSet>
+          <EntitySet Name="KhoGiaoDiches" EntityType="QuanLyKhoModel.KhoGiaoDich" />
+          <AssociationSet Name="FK_KhoGiaoDich_Kho" Association="QuanLyKhoModel.FK_KhoGiaoDich_Kho">
+            <End Role="Kho" EntitySet="Khoes" />
+            <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KhoGiaoDich_KhoGiaoDich" Association="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich">
+            <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
+            <End Role="KhoGiaoDich1" EntitySet="KhoGiaoDiches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KhoGiaoDich_TaiKhoan" Association="QuanLyKhoModel.FK_KhoGiaoDich_TaiKhoan">
+            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
+            <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KhoGiaoDich_TuDien" Association="QuanLyKhoModel.FK_KhoGiaoDich_TuDien">
+            <End Role="TuDien" EntitySet="TuDiens" />
+            <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KhoGiaoDichChiTiet_KhoGiaoDich" Association="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoGiaoDich">
+            <End Role="KhoGiaoDich" EntitySet="KhoGiaoDiches" />
+            <End Role="KhoGiaoDichChiTiet" EntitySet="KhoGiaoDichChiTiets" />
+          </AssociationSet>
+          <EntitySet Name="NhaThauCungCaps" EntityType="QuanLyKhoModel.NhaThauCungCap" />
         </EntityContainer>
-        <EntityType Name="KhoGiaoDich">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="MaGiaoDich" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="NgayTao" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IdNguoiTao" Type="Guid" Nullable="false" />
-          <Property Name="LoaiGiaoDich" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="DaXoa" Type="Boolean" Nullable="false" />
-          <Property Name="IdKhoaPhong" Type="Guid" />
-          <Property Name="GhiChu" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
-          <Property Name="NguoiGiaoNhan" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="IdKho" Type="Guid" />
-          <NavigationProperty Name="Kho" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_Kho" FromRole="KhoGiaoDich" ToRole="Kho" />
-          <NavigationProperty Name="TaiKhoan" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_TaiKhoan" FromRole="KhoGiaoDich" ToRole="TaiKhoan" />
-          <NavigationProperty Name="TuDien" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_TuDien" FromRole="KhoGiaoDich" ToRole="TuDien" />
-          <NavigationProperty Name="KhoGiaoDichChiTiets" Relationship="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoGiaoDich" FromRole="KhoGiaoDich" ToRole="KhoGiaoDichChiTiet" />
-          <Property Name="IdGiaoDichCha" Type="Guid" />
-          <NavigationProperty Name="KhoGiaoDich1" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich" FromRole="KhoGiaoDich" ToRole="KhoGiaoDich1" />
-          <NavigationProperty Name="KhoGiaoDich2" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich" FromRole="KhoGiaoDich1" ToRole="KhoGiaoDich" />
-        </EntityType>
-        <Association Name="FK_KhoGiaoDich_Kho">
-          <End Type="QuanLyKhoModel.Kho" Role="Kho" Multiplicity="0..1" />
-          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Kho">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="KhoGiaoDich">
-              <PropertyRef Name="IdKho" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KhoGiaoDich_TaiKhoan">
-          <End Type="QuanLyKhoModel.TaiKhoan" Role="TaiKhoan" Multiplicity="1" />
-          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TaiKhoan">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="KhoGiaoDich">
-              <PropertyRef Name="IdNguoiTao" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KhoGiaoDich_TuDien">
-          <End Type="QuanLyKhoModel.TuDien" Role="TuDien" Multiplicity="0..1" />
-          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TuDien">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="KhoGiaoDich">
-              <PropertyRef Name="IdKhoaPhong" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KhoGiaoDichChiTiet_KhoGiaoDich">
-          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="1" />
-          <End Type="QuanLyKhoModel.KhoGiaoDichChiTiet" Role="KhoGiaoDichChiTiet" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="KhoGiaoDich">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="KhoGiaoDichChiTiet">
-              <PropertyRef Name="IdGiaoDich" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KhoGiaoDich_KhoGiaoDich">
-          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="0..1" />
-          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich1" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="KhoGiaoDich">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="KhoGiaoDich1">
-              <PropertyRef Name="IdGiaoDichCha" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="NhomVatTu">
           <Key>
             <PropertyRef Name="Id" />
@@ -595,6 +525,98 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="KhoGiaoDich">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="MaGiaoDich" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="NgayTao" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdNguoiTao" Type="Guid" Nullable="false" />
+          <Property Name="LoaiGiaoDich" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="DaXoa" Type="Boolean" Nullable="false" />
+          <Property Name="IdKhoaPhong" Type="Guid" />
+          <Property Name="GhiChu" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="NguoiGiaoNhan" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="IdKho" Type="Guid" />
+          <Property Name="IdGiaoDichCha" Type="Guid" />
+          <Property Name="idNhaCungCap" Type="Guid" />
+          <Property Name="SoHopDong" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="NgayHopDong" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Kho" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_Kho" FromRole="KhoGiaoDich" ToRole="Kho" />
+          <NavigationProperty Name="KhoGiaoDich1" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich" FromRole="KhoGiaoDich" ToRole="KhoGiaoDich1" />
+          <NavigationProperty Name="KhoGiaoDich2" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_KhoGiaoDich" FromRole="KhoGiaoDich1" ToRole="KhoGiaoDich" />
+          <NavigationProperty Name="TaiKhoan" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_TaiKhoan" FromRole="KhoGiaoDich" ToRole="TaiKhoan" />
+          <NavigationProperty Name="TuDien" Relationship="QuanLyKhoModel.FK_KhoGiaoDich_TuDien" FromRole="KhoGiaoDich" ToRole="TuDien" />
+          <NavigationProperty Name="KhoGiaoDichChiTiets" Relationship="QuanLyKhoModel.FK_KhoGiaoDichChiTiet_KhoGiaoDich" FromRole="KhoGiaoDich" ToRole="KhoGiaoDichChiTiet" />
+        </EntityType>
+        <Association Name="FK_KhoGiaoDich_Kho">
+          <End Type="QuanLyKhoModel.Kho" Role="Kho" Multiplicity="0..1" />
+          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kho">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KhoGiaoDich">
+              <PropertyRef Name="IdKho" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KhoGiaoDich_KhoGiaoDich">
+          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="0..1" />
+          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KhoGiaoDich">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KhoGiaoDich1">
+              <PropertyRef Name="IdGiaoDichCha" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KhoGiaoDich_TaiKhoan">
+          <End Type="QuanLyKhoModel.TaiKhoan" Role="TaiKhoan" Multiplicity="1" />
+          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaiKhoan">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KhoGiaoDich">
+              <PropertyRef Name="IdNguoiTao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KhoGiaoDich_TuDien">
+          <End Type="QuanLyKhoModel.TuDien" Role="TuDien" Multiplicity="0..1" />
+          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TuDien">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KhoGiaoDich">
+              <PropertyRef Name="IdKhoaPhong" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KhoGiaoDichChiTiet_KhoGiaoDich">
+          <End Type="QuanLyKhoModel.KhoGiaoDich" Role="KhoGiaoDich" Multiplicity="1" />
+          <End Type="QuanLyKhoModel.KhoGiaoDichChiTiet" Role="KhoGiaoDichChiTiet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KhoGiaoDich">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KhoGiaoDichChiTiet">
+              <PropertyRef Name="IdGiaoDich" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="NhaThauCungCap">
+          <Key>
+            <PropertyRef Name="idNhathaucc" />
+          </Key>
+          <Property Name="idNhathaucc" Type="Guid" Nullable="false" />
+          <Property Name="TenNhaThau" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -663,23 +685,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="KhoGiaoDiches">
-            <EntityTypeMapping TypeName="QuanLyKhoModel.KhoGiaoDich">
-              <MappingFragment StoreEntitySet="KhoGiaoDich">
-                <ScalarProperty Name="IdGiaoDichCha" ColumnName="IdGiaoDichCha" />
-                <ScalarProperty Name="IdKho" ColumnName="IdKho" />
-                <ScalarProperty Name="NguoiGiaoNhan" ColumnName="NguoiGiaoNhan" />
-                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
-                <ScalarProperty Name="IdKhoaPhong" ColumnName="IdKhoaPhong" />
-                <ScalarProperty Name="DaXoa" ColumnName="DaXoa" />
-                <ScalarProperty Name="LoaiGiaoDich" ColumnName="LoaiGiaoDich" />
-                <ScalarProperty Name="IdNguoiTao" ColumnName="IdNguoiTao" />
-                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
-                <ScalarProperty Name="MaGiaoDich" ColumnName="MaGiaoDich" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="NhomVatTus">
             <EntityTypeMapping TypeName="QuanLyKhoModel.NhomVatTu">
               <MappingFragment StoreEntitySet="NhomVatTu">
@@ -702,6 +707,34 @@
                 <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
                 <ScalarProperty Name="MaSanPham" ColumnName="MaSanPham" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KhoGiaoDiches">
+            <EntityTypeMapping TypeName="QuanLyKhoModel.KhoGiaoDich">
+              <MappingFragment StoreEntitySet="KhoGiaoDich">
+                <ScalarProperty Name="NgayHopDong" ColumnName="NgayHopDong" />
+                <ScalarProperty Name="SoHopDong" ColumnName="SoHopDong" />
+                <ScalarProperty Name="idNhaCungCap" ColumnName="idNhaCungCap" />
+                <ScalarProperty Name="IdGiaoDichCha" ColumnName="IdGiaoDichCha" />
+                <ScalarProperty Name="IdKho" ColumnName="IdKho" />
+                <ScalarProperty Name="NguoiGiaoNhan" ColumnName="NguoiGiaoNhan" />
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="IdKhoaPhong" ColumnName="IdKhoaPhong" />
+                <ScalarProperty Name="DaXoa" ColumnName="DaXoa" />
+                <ScalarProperty Name="LoaiGiaoDich" ColumnName="LoaiGiaoDich" />
+                <ScalarProperty Name="IdNguoiTao" ColumnName="IdNguoiTao" />
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="MaGiaoDich" ColumnName="MaGiaoDich" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NhaThauCungCaps">
+            <EntityTypeMapping TypeName="QuanLyKhoModel.NhaThauCungCap">
+              <MappingFragment StoreEntitySet="NhaThauCungCap">
+                <ScalarProperty Name="TenNhaThau" ColumnName="TenNhaThau" />
+                <ScalarProperty Name="idNhathaucc" ColumnName="idNhathaucc" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

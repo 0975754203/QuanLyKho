@@ -12,15 +12,9 @@ namespace SQLDataAccess
     using System;
     using System.Collections.Generic;
     
-    public partial class KhoGiaoDichChiTiet
+    public partial class NhaThauCungCap
     {
-        public System.Guid Id { get; set; }
-        public System.Guid IdGiaoDich { get; set; }
-        public System.Guid IdSanPham { get; set; }
-        public decimal SoLuong { get; set; }
-        public decimal DonGia { get; set; }
-    
-        public virtual KhoSanPham KhoSanPham { get; set; }
-        public virtual KhoGiaoDich KhoGiaoDich { get; set; }
+        public System.Guid idNhathaucc { get; set; }
+        public string TenNhaThau { get; set; }
     }
 }

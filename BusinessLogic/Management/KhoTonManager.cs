@@ -26,10 +26,12 @@ namespace BusinessLogic.Management
         #endregion
 
         #region Public Interface
-        public List<KhoTonModel> Search(string sSearch, Guid? idKho, int pageIndex, int pageSize, out int total)
+        public List<KhoTonModel> Search(string sSearch, Guid? idKho, Guid? idNhaCungCap, string soHopDong, int pageIndex, int pageSize, out int total)
         {
             using (var uow = new UnitOfWork())
             {
+                soHopDong = string.IsNullOrWhiteSpace(soHopDong) ? null : soHopDong.Trim();
+
                 var query = uow.Repository<KhoTon>()
                     .Query()
                     .Filter(x =>
@@ -41,9 +43,40 @@ namespace BusinessLogic.Management
                                 )))
                         && (!idKho.HasValue || x.IdKho == idKho.Value));
 
-                var pageItems = query
+                var items = query
                     .OrderBy(x => x.OrderBy(y => y.KhoSanPham.MaSanPham))
-                    .GetPage(pageIndex, pageSize, out total);
+                    .Get()
+                    .ToList();
+
+                if (idNhaCungCap.HasValue || !string.IsNullOrEmpty(soHopDong))
+                {
+                    var chiTietQuery = uow.Repository<KhoGiaoDichChiTiet>()
+                        .Query()
+                        .Filter(x => x.KhoGiaoDich != null
+                            && !x.KhoGiaoDich.DaXoa
+                            && x.KhoGiaoDich.LoaiGiaoDich == "NHAP"
+                            && (!idNhaCungCap.HasValue || x.KhoGiaoDich.idNhaCungCap == idNhaCungCap.Value)
+                            && (string.IsNullOrEmpty(soHopDong) || (x.KhoGiaoDich.SoHopDong != null && x.KhoGiaoDich.SoHopDong.Contains(soHopDong)))
+                            && (!idKho.HasValue || x.KhoGiaoDich.IdKho == idKho.Value))
+                        .Include(x => x.KhoGiaoDich);
+
+                    var capSanPhamKho = chiTietQuery.Get()
+                        .Where(x => x.KhoGiaoDich != null && x.KhoGiaoDich.IdKho.HasValue)
+                        .Select(x => x.IdSanPham.ToString() + "|" + x.KhoGiaoDich.IdKho.Value.ToString())
+                        .Distinct()
+                        .ToList();
+                    var setCapSanPhamKho = new HashSet<string>(capSanPhamKho);
+
+                    items = items
+                        .Where(x => setCapSanPhamKho.Contains(x.IdSanPham.ToString() + "|" + x.IdKho.ToString()))
+                        .ToList();
+                }
+
+                total = items.Count;
+                var pageItems = items
+                    .Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
 
                 return pageItems.Select(x => new KhoTonModel
                 {
@@ -99,6 +132,18 @@ namespace BusinessLogic.Management
                     var display = string.IsNullOrWhiteSpace(dvt)
                         ? string.Format("{0} — Tồn: {1}", ten, tonStr)
                         : string.Format("{0} — Tồn: {1} {2}", ten, tonStr, dvt);
+                    var phieuNhapGanNhat = uow.Repository<KhoGiaoDichChiTiet>().Query()
+                        .Filter(ct => ct.IdSanPham == x.IdSanPham
+                            && ct.KhoGiaoDich != null
+                            && !ct.KhoGiaoDich.DaXoa
+                            && ct.KhoGiaoDich.LoaiGiaoDich == "NHAP"
+                            && ct.KhoGiaoDich.IdKho == idKho
+                            && ct.KhoGiaoDich.SoHopDong != null
+                            && ct.KhoGiaoDich.SoHopDong != "")
+                        .Include(ct => ct.KhoGiaoDich)
+                        .OrderBy(q => q.OrderByDescending(ct => ct.KhoGiaoDich.NgayTao))
+                        .FirstOrDefault();
+
                     return new KhoSanPhamTrongKhoOption
                     {
                         IdSanPham = x.IdSanPham,
@@ -107,7 +152,10 @@ namespace BusinessLogic.Management
                         TonKho = x.SoLuong,
                         DonViTinh = dvt,
                         DonGia = x.KhoSanPham != null ? x.KhoSanPham.DonGia : 0,
-                        XuatXu = x.KhoSanPham != null ? x.KhoSanPham.XuatXu : string.Empty
+                        XuatXu = x.KhoSanPham != null ? x.KhoSanPham.XuatXu : string.Empty,
+                        SoHopDong = phieuNhapGanNhat != null && phieuNhapGanNhat.KhoGiaoDich != null
+                            ? phieuNhapGanNhat.KhoGiaoDich.SoHopDong
+                            : string.Empty
                     };
                 }).ToList();
             }

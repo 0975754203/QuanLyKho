@@ -70,6 +70,9 @@
     <Compile Include="KhoSanPham.cs">
       <DependentUpon>QuanLyKho.tt</DependentUpon>
     </Compile>
+    <Compile Include="NhaThauCungCap.cs">
+      <DependentUpon>QuanLyKho.tt</DependentUpon>
+    </Compile>
     <Compile Include="NhomVatTu.cs">
       <DependentUpon>QuanLyKho.tt</DependentUpon>
     </Compile>

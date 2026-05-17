@@ -108,6 +108,30 @@
         font-weight: 600;
     }
 
+    .nhap-product-selected {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 8px;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .nhap-product-selected-name {
+        font-weight: 700;
+        color: #17324d;
+        white-space: nowrap;
+    }
+
+    .nhap-product-selected-meta {
+        color: #647789;
+        font-size: 12px;
+        font-style: italic;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     .select2-container--default .select2-results__option--highlighted[aria-selected] .nhap-product-option-name,
     .select2-container--default .select2-results__option--highlighted[aria-selected] .nhap-product-option-meta {
         color: #17324d;
@@ -285,7 +309,8 @@
         return {
             name: parts[0] || "",
             price: parts[1] || "",
-            origin: parts[2] || ""
+            origin: parts[2] || "",
+            warranty: parts[3] || ""
         };
     }
 
@@ -295,16 +320,34 @@
         }
 
         var product = parseProductOption(option.text);
+        var soHopDong = $("#SoHopDong").val();
+        if (!soHopDong) {
+            soHopDong = "Chưa nhập";
+        }
+        var ngayHopDong = $("#NgayHopDong").val();
+        var namHopDong = ngayHopDong ? ngayHopDong.substring(0, 4) : "Chưa nhập";
         var $wrap = $('<div class="nhap-product-option"></div>');
         $('<span class="nhap-product-option-name"></span>').text(product.name).appendTo($wrap);
         var $meta = $('<span class="nhap-product-option-meta"></span>').appendTo($wrap);
         $('<span></span>').text('Đơn giá: ' + product.price).appendTo($meta);
         $('<span></span>').text('Xuất xứ: ' + product.origin).appendTo($meta);
+        $('<span></span>').text('Số HĐ: ' + soHopDong).appendTo($meta);
+        $('<span></span>').text('Năm HĐ: ' + namHopDong).appendTo($meta);
         return $wrap;
     }
 
     function formatSelectedProduct(option) {
-        return parseProductOption(option.text).name;
+        if (!option.id) {
+            return option.text;
+        }
+
+        var product = parseProductOption(option.text);
+        var $wrap = $('<span class="nhap-product-selected"></span>');
+        $('<span class="nhap-product-selected-name"></span>').text(product.name).appendTo($wrap);
+        $('<span class="nhap-product-selected-meta"></span>')
+            .text('(Đơn giá: ' + product.price + ', Xuất xứ: ' + product.origin + ', Bảo hành: ' + product.warranty + ')')
+            .appendTo($wrap);
+        return $wrap;
     }
 
     function initNhapKhoEnhancements() {

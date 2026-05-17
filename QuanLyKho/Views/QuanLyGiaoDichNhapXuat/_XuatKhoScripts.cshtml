@@ -210,6 +210,30 @@
         font-weight: 600;
     }
 
+    .xuat-product-selected {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 8px;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .xuat-product-selected-name {
+        font-weight: 700;
+        color: #17324d;
+        white-space: nowrap;
+    }
+
+    .xuat-product-selected-meta {
+        color: #647789;
+        font-size: 12px;
+        font-style: italic;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     .select2-container--default .select2-results__option--highlighted[aria-selected] .xuat-product-option-name,
     .select2-container--default .select2-results__option--highlighted[aria-selected] .xuat-product-option-meta {
         color: #17324d;
@@ -265,7 +289,8 @@
                 + ' data-price="' + xuatEscOpt(rows[i].price) + '"'
                 + ' data-origin="' + xuatEscOpt(rows[i].origin) + '"'
                 + ' data-stock="' + xuatEscOpt(rows[i].stock) + '"'
-                + ' data-unit="' + xuatEscOpt(rows[i].unit) + '">'
+                + ' data-unit="' + xuatEscOpt(rows[i].unit) + '"'
+                + ' data-contract="' + xuatEscOpt(rows[i].contract) + '">'
                 + xuatEscOpt(rows[i].text) + '</option>';
         }
         return html;
@@ -292,6 +317,7 @@
         product.origin = $el.data("origin") || "";
         product.stock = $el.data("stock") || "";
         product.unit = $el.data("unit") || "";
+        product.contract = $el.data("contract") || "";
         product.name = $el.data("name") || product.name;
 
         return product;
@@ -320,7 +346,18 @@
     }
 
     function formatSelectedXuatProduct(option) {
-        return readXuatProductOption(option).name;
+        if (!option.id) {
+            return option.text;
+        }
+
+        var product = readXuatProductOption(option);
+        var tonText = product.stock ? product.stock + (product.unit ? ' ' + product.unit : '') : '0';
+        var $wrap = $('<span class="xuat-product-selected"></span>');
+        $('<span class="xuat-product-selected-name"></span>').text(product.name).appendTo($wrap);
+        $('<span class="xuat-product-selected-meta"></span>')
+            .text('(Đơn giá: ' + (product.price || '0') + ', Tồn: ' + tonText + ', Số HĐ: ' + (product.contract || 'Chưa cập nhật') + ')')
+            .appendTo($wrap);
+        return $wrap;
     }
 
     function initXuatKhoEnhancements() {

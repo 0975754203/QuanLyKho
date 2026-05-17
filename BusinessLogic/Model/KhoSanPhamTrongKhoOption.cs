@@ -14,5 +14,6 @@ namespace BusinessLogic.Model
         public string DonViTinh { get; set; }
         public decimal DonGia { get; set; }
         public string XuatXu { get; set; }
+        public string SoHopDong { get; set; }
     }
 }

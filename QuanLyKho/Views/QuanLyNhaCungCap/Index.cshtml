@@ -1,0 +1,386 @@
+@using QuanLyKho.Utility
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+}
+@Html.Partial("_PermissionMessage")
+
+<style>
+    .ncc-page { color: #263238; }
+    .ncc-hero {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        padding: 22px 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+    .ncc-hero h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 6px;
+        color: #17324d;
+    }
+    .ncc-hero p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 14px;
+    }
+    .ncc-layout {
+        display: grid;
+        grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+    }
+    .ncc-card {
+        background: #ffffff;
+        border: 1px solid #e7edf3;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(31, 45, 61, 0.06);
+        overflow: hidden;
+    }
+    .ncc-card-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #edf1f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+    .ncc-card-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #17324d;
+    }
+    .ncc-card-header span {
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+    .ncc-card-body { padding: 20px; }
+    .ncc-form-intro {
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border: 1px solid #dcebe4;
+        border-radius: 8px;
+        background: #f6faf8;
+    }
+    .ncc-form-intro h5 {
+        margin: 0 0 4px;
+        color: #17324d;
+        font-size: 17px;
+        font-weight: 700;
+    }
+    .ncc-form-intro p {
+        margin: 0;
+        color: #6b7c8f;
+        font-size: 13px;
+    }
+    .ncc-form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .ncc-form .form-group { margin-bottom: 0; }
+    .ncc-form .form-control {
+        min-height: 38px;
+        border-radius: 6px;
+        padding: 7px 10px;
+        font-size: 14px;
+    }
+    .ncc-form-actions {
+        margin-top: 14px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .ncc-toolbar {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+    .ncc-toolbar .form-control {
+        height: 42px;
+        border-radius: 6px;
+    }
+    .ncc-empty-permission {
+        padding: 18px;
+        border: 1px dashed #cdd8e4;
+        border-radius: 8px;
+        background: #f8fbfd;
+        color: #6b7c8f;
+    }
+    .ncc-delete-panel {
+        display: none;
+        margin-bottom: 14px;
+        padding: 14px 16px;
+        border: 1px solid #ffd6d6;
+        border-radius: 8px;
+        background: #fff7f7;
+    }
+    .ncc-delete-panel strong {
+        color: #bf1f1f;
+        display: block;
+        margin-bottom: 4px;
+    }
+    .ncc-delete-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .ncc-list-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: collapse;
+    }
+    .ncc-list-table th {
+        background: #f7f9fb;
+        color: #25729b;
+        font-size: 14px;
+        font-weight: 700;
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+        white-space: nowrap;
+    }
+    .ncc-list-table td {
+        border: 1px solid #e7edf3;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 10px;
+    }
+    .ncc-list-table .text-left { text-align: left; }
+    .ncc-action-cell { white-space: nowrap; }
+    .ncc-action-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 6px;
+        border: 1px solid #dbe4ee;
+        background: #ffffff;
+        color: #345;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 3px;
+    }
+    .ncc-action-btn:hover,
+    .ncc-action-btn:focus {
+        color: #ffffff;
+        background: #1f7a63;
+        border-color: #1f7a63;
+    }
+    .ncc-action-btn.danger:hover,
+    .ncc-action-btn.danger:focus {
+        background: #c0392b;
+        border-color: #c0392b;
+    }
+    @@media (max-width: 991px) {
+        .ncc-hero,
+        .ncc-card-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+        .ncc-layout { grid-template-columns: 1fr; }
+        .ncc-toolbar { grid-template-columns: 1fr; }
+    }
+    @@media (max-width: 575px) {
+        .ncc-list-table { min-width: 560px; }
+    }
+</style>
+
+<div class="ncc-page">
+    <div class="ncc-hero">
+        <div>
+            <h3>Quản lý Nhà cung cấp</h3>
+            <p>Thêm, cập nhật và quản lý nhà cung cấp dùng cho danh sách vật tư.</p>
+        </div>
+        @if (coQuyenThaoTac)
+        {
+            <button type="button" class="btn btn-main" onclick="ResetNhaCungCapForm()"><i class="ti-plus"></i>Thêm nhà cung cấp</button>
+        }
+    </div>
+
+    <div class="ncc-layout">
+        <div class="ncc-card">
+            <div class="ncc-card-header">
+                <div>
+                    <h4>Thông tin nhà cung cấp</h4>
+                    <span>Thêm mới hoặc chỉnh sửa nhà cung cấp.</span>
+                </div>
+            </div>
+            <div class="ncc-card-body" id="nhaCungCapFormPanel">
+                @if (coQuyenThaoTac)
+                {
+                    @Html.Action("FormNhaCungCap", "QuanLyNhaCungCap", new { id = "" })
+                }
+                else
+                {
+                    <div class="ncc-empty-permission">Bạn chỉ có quyền xem danh sách nhà cung cấp.</div>
+                }
+            </div>
+        </div>
+
+        <div class="ncc-card">
+            <div class="ncc-card-header">
+                <div>
+                    <h4>Danh sách nhà cung cấp</h4>
+                    <span>Tìm kiếm theo tên nhà cung cấp.</span>
+                </div>
+            </div>
+            <div class="ncc-card-body">
+                <div class="ncc-toolbar">
+                    <input type="text" id="txtSearch" class="form-control input-sm" placeholder="Tên nhà cung cấp">
+                    <button type="button" class="btn btn-search-crmnt" onclick="DanhSachNhaCungCap(1)" id="btnTimKiem"><i class="ti-search"></i>Tìm kiếm</button>
+                </div>
+
+                <div class="ncc-delete-panel" id="deleteNhaCungCapPanel">
+                    <strong>Xác nhận xóa nhà cung cấp</strong>
+                    <span>Bạn có chắc chắn muốn xóa nhà cung cấp này không?</span>
+                    <input type="hidden" id="delete_id" />
+                    <div class="ncc-delete-actions">
+                        <button type="button" class="btn btn-main" onclick="ActionDelete()"><i class="ti-trash"></i>Xóa</button>
+                        <button type="button" class="btn btn-main" onclick="CancelDeleteNhaCungCap()"><i class="ti-close"></i>Hủy</button>
+                    </div>
+                </div>
+
+                <div class="table-crmnt table-job" id="content_NhaCungCap"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        DanhSachNhaCungCap(1);
+    });
+
+    $("#txtSearch").on("keypress", function (e) {
+        if (e.keyCode === 13) {
+            DanhSachNhaCungCap(1);
+        }
+    });
+
+    function DanhSachNhaCungCap(pageIndex) {
+        var sSearch = $("#txtSearch").val();
+        $("#LoadingModal").modal("show");
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("DanhSachNhaCungCap")',
+            data: { pageIndex: pageIndex, sSearch: sSearch },
+            dataType: "html",
+            success: function (data) {
+                $("#content_NhaCungCap").html(data);
+                setTimeout(function () { $("#LoadingModal").modal("hide"); }, 300);
+            },
+            error: function () {
+                $("#LoadingModal").modal("hide");
+                toastr.error("Không tải được danh sách nhà cung cấp.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    }
+
+    function pagingData(pageIndex) {
+        DanhSachNhaCungCap(pageIndex);
+    }
+
+    function FormNhaCungCap(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("FormNhaCungCap")',
+            data: { id: id },
+            dataType: "html",
+            success: function (data) {
+                $("#nhaCungCapFormPanel").html(data);
+                $("html, body").animate({ scrollTop: $(".ncc-card").first().offset().top - 12 }, 250);
+            },
+            error: function () {
+                toastr.error("Không tải được form nhà cung cấp.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    }
+
+    function ResetNhaCungCapForm() {
+        FormNhaCungCap("");
+    }
+
+    function DeleteNhaCungCap(id) {
+        $("#delete_id").val(id);
+        $("#deleteNhaCungCapPanel").slideDown(150);
+    }
+
+    function CancelDeleteNhaCungCap() {
+        $("#delete_id").val("");
+        $("#deleteNhaCungCapPanel").slideUp(150);
+    }
+
+    function ActionDelete() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("XoaNhaCungCap")',
+            data: { id: $("#delete_id").val() },
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    CancelDeleteNhaCungCap();
+                    DanhSachNhaCungCap($("#pageIndex").val() || 1);
+                    toastr.success("Xóa thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    var msg = data.Message ? data.Message : "Không xóa được nhà cung cấp.";
+                    toastr.warning(msg, "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+                }
+            },
+            error: function () {
+                toastr.error("Xảy ra lỗi khi xóa nhà cung cấp.", "Lỗi", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    }
+
+    $(document).on("submit", "#fNhaCungCap", function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        var $btn = $("#btnSaveNhaCungCap");
+        var isEdit = !!$("#Id").val();
+        $btn.prop("disabled", true);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FormNhaCungCap", "QuanLyNhaCungCap")',
+            data: $form.serialize(),
+            dataType: "json",
+            success: function (data) {
+                if (data.Sucess) {
+                    DanhSachNhaCungCap($("#pageIndex").val() || 1);
+                    ResetNhaCungCapForm();
+                    toastr.success(isEdit ? "Cập nhật thành công." : "Thêm mới thành công.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+                } else {
+                    DisplayNhaCungCapErrors(data.Errors);
+                    toastr.warning("Vui lòng kiểm tra dữ liệu nhập.", "Cảnh báo", { timeOut: 5e3, closeButton: !0 });
+                    $btn.prop("disabled", false);
+                }
+            },
+            error: function () {
+                $btn.prop("disabled", false);
+                toastr.error("Xảy ra lỗi hệ thống. Vui lòng thử lại sau.", "Thông báo", { timeOut: 5e3, closeButton: !0 });
+            }
+        });
+    });
+
+    function DisplayNhaCungCapErrors(errors) {
+        $("#fNhaCungCap .field-validation-valid, #fNhaCungCap .field-validation-error").html("");
+        if (!errors) return;
+        for (var i = 0; i < errors.length; i++) {
+            if (i === 0) {
+                $("#" + errors[i].Key).focus();
+            }
+            $("#fNhaCungCap span[data-valmsg-for='" + errors[i].Key + "']").text(errors[i].Value[0]);
+        }
+    }
+</script>

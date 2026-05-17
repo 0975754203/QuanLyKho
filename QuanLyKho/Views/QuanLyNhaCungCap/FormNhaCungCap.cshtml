@@ -1,0 +1,34 @@
+@using QuanLyKho.Utility
+@model QuanLyKho.Models.NhaCungCapForm
+@{
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+    var laCapNhat = Model != null && Model.Id.HasValue && Model.Id.Value != Guid.Empty;
+}
+
+@using (Html.BeginForm("FormNhaCungCap", "QuanLyNhaCungCap", FormMethod.Post, new { enctype = "multipart/form-data", id = "fNhaCungCap", @class = "form-crmnt ncc-form" }))
+{
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="ncc-form-intro">
+        <h5>Thông tin nhà cung cấp</h5>
+        <p>Quản lý đơn vị cung cấp dùng khi khai báo thông tin vật tư.</p>
+    </div>
+
+    <div class="ncc-form-grid">
+        <div class="form-group">
+            <label class="text-label">Tên nhà cung cấp <span class="red-crmnt">(*)</span></label>
+            @Html.TextBoxFor(x => x.TenNhaCungCap, new { @class = "form-control input-sm", id = "TenNhaCungCap", placeholder = "Ví dụ: Công ty thiết bị y tế ABC" })
+            @Html.ValidationMessageFor(x => x.TenNhaCungCap)
+        </div>
+    </div>
+
+    <div class="ncc-form-actions">
+        @if (coQuyenThaoTac)
+        {
+            <button type="submit" class="btn btn-main" id="btnSaveNhaCungCap">
+                <i class="ti-save"></i>@(laCapNhat ? "Cập nhật nhà cung cấp" : "Lưu nhà cung cấp")
+            </button>
+            <button type="button" class="btn btn-main" onclick="ResetNhaCungCapForm()"><i class="ti-reload"></i>Làm mới</button>
+        }
+    </div>
+}

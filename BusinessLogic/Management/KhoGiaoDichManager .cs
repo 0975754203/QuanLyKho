@@ -101,6 +101,9 @@ namespace BusinessLogic.Management
                 objUserAdd.IdKhoaPhong = values.IdKhoaPhong.IsNotNull() ? values.IdKhoaPhong : null;
                 objUserAdd.IdKho = values.IdKho.IsNotNull() ? values.IdKho : null;
                 objUserAdd.IdGiaoDichCha = null;
+                objUserAdd.idNhaCungCap = values.idNhaCungCap.IsNotNull() ? values.idNhaCungCap : null;
+                objUserAdd.SoHopDong = string.IsNullOrWhiteSpace(values.SoHopDong) ? null : values.SoHopDong.Trim();
+                objUserAdd.NgayHopDong = values.NamHopDong.HasValue ? new DateTime(values.NamHopDong.Value, 1, 1) : values.NgayHopDong;
                 objUserAdd.GhiChu = values.GhiChu;
                 objUserAdd.NguoiGiaoNhan = values.NguoiGiaoNhan;
                 objUserAdd.DaXoa = false;
@@ -167,6 +170,9 @@ namespace BusinessLogic.Management
                         IdKhoaPhong = values.IdKhoaPhong.IsNotNull() ? values.IdKhoaPhong : null,
                         IdKho = idKhoNhan,
                         IdGiaoDichCha = objUserAdd.Id,
+                        idNhaCungCap = objUserAdd.idNhaCungCap,
+                        SoHopDong = objUserAdd.SoHopDong,
+                        NgayHopDong = objUserAdd.NgayHopDong,
                         GhiChu = values.GhiChu,
                         NguoiGiaoNhan = values.NguoiGiaoNhan,
                         DaXoa = false

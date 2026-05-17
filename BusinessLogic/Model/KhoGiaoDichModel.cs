@@ -17,6 +17,10 @@ namespace BusinessLogic.Model
         public Guid? IdKhoaPhong { get; set; }
         public Guid? IdKho { get; set; }
         public Guid? IdGiaoDichCha { get; set; }
+        public Guid? idNhaCungCap { get; set; }
+        public string SoHopDong { get; set; }
+        public DateTime? NgayHopDong { get; set; }
+        public int? NamHopDong { get; set; }
         public string GhiChu { get; set; }
         public string NguoiGiaoNhan { get; set; }
         public string sTenKho { get; set; }

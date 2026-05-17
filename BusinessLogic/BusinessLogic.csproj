@@ -134,6 +134,7 @@
     <Compile Include="Management\KhoGiaoDichManager .cs" />
     <Compile Include="Management\DanhMucKhoManager.cs" />
     <Compile Include="Management\NhomVatTuManager.cs" />
+    <Compile Include="Management\NhaCungCapManager.cs" />
     <Compile Include="Management\KhoTonManager.cs" />
     <Compile Include="Management\ReportExcel.cs" />
     <Compile Include="Management\KhoSanPhamManager.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Model\ExcelByKeyModel.cs" />
     <Compile Include="Model\KhoModel.cs" />
     <Compile Include="Model\NhomVatTuModel.cs" />
+    <Compile Include="Model\NhaCungCapModel.cs" />
     <Compile Include="Model\KhoGiaoDichModel.cs" />
     <Compile Include="Model\BaoCaoXuatNhapTonModel.cs" />
     <Compile Include="Model\BaoCaoXuatKhoaPhongModel.cs" />

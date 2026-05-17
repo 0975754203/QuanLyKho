@@ -1,0 +1,51 @@
+@using QuanLyKho.Utility
+@model QuanLyKho.Models.NhaCungCap_DSModel
+@{
+    var coQuyenThaoTac = Global.CoQuyenThaoTacDuLieuKho();
+    var danhSach = Model.TBL_NhaCungCap ?? new System.Collections.Generic.List<BusinessLogic.Model.NhaCungCapModel>();
+    var stt = (Model.PageIndex - 1) * Model.PageSize;
+}
+
+<div class="table-responsive">
+    <table class="ncc-list-table">
+        <thead>
+            <tr>
+                <th style="width:70px;">STT</th>
+                <th>Tên nhà cung cấp</th>
+                <th style="width:110px;">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (danhSach.Count > 0)
+            {
+                foreach (var item in danhSach)
+                {
+                    <tr>
+                        <td>@(++stt)</td>
+                        <td class="text-left">@item.TenNhaCungCap</td>
+                        <td class="ncc-action-cell">
+                            @if (coQuyenThaoTac)
+                            {
+                                <a href="javascript:void(0)" onclick="FormNhaCungCap('@item.Id')" class="ncc-action-btn" title="Sửa"><i class="ti-pencil-alt"></i></a>
+                                <a href="javascript:void(0)" onclick="DeleteNhaCungCap('@item.Id')" class="ncc-action-btn danger" title="Xóa"><i class="ti-trash"></i></a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">Không có dữ liệu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@Html.GenPaging().PagingHTML(Model.PageIndex, Model.Pagecount, Model.Total)
+<input type="hidden" id="pageIndex" name="pageIndex" value="@Model.PageIndex" />

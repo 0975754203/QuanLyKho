@@ -1,6 +1,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var comboKho = ViewBag.ComboKho as System.Collections.Generic.IEnumerable<System.Web.Mvc.SelectListItem>;
+    var comboNhaCungCap = ViewBag.ComboNhaCungCap as System.Collections.Generic.IEnumerable<System.Web.Mvc.SelectListItem>;
 }
 
 <div class="row content-all-crmnt">
@@ -20,6 +21,19 @@
                             @Html.DropDownList("idKho", comboKho, new { @class = "form-control select2", id = "idKho" })
                         </div>
                     </div>
+                    <div class="col-xl-3 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Nhà cung cấp</label>
+                            @Html.DropDownList("idNhaCungCap", comboNhaCungCap, new { @class = "form-control select2", id = "idNhaCungCap" })
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 content-bg">
+                        <div class="form-group mb-2">
+                            <label class="text-label d-block mb-1">Số hợp đồng</label>
+                            <input type="text" id="soHopDong" class="form-control input-sm" list="goiYSoHopDong" placeholder="Nhập hoặc chọn số hợp đồng">
+                            <datalist id="goiYSoHopDong"></datalist>
+                        </div>
+                    </div>
                     <div class="col-xl-2 col-sm-6 content-bg">
                         <div class="form-group mb-2">
                             <button type="button" class="btn btn-search-crmnt mb-2" onclick="DanhSachTonKho(1)" id="btnTimKiem">Tìm kiếm</button>
@@ -37,6 +51,8 @@
 <script>
     $(document).ready(function () {
         $("#idKho").select2({ width: '100%' });
+        $("#idNhaCungCap").select2({ width: '100%' });
+        TaiGoiYSoHopDong();
         DanhSachTonKho(1);
     });
 
@@ -46,9 +62,39 @@
         }
     });
 
+    $("#soHopDong").on('keypress', function (e) {
+        if (e.keyCode === 13) {
+            DanhSachTonKho(1);
+        }
+    });
+
+    $("#idNhaCungCap").on("change", function () {
+        $("#soHopDong").val("");
+        TaiGoiYSoHopDong();
+    });
+
+    function TaiGoiYSoHopDong() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GoiYSoHopDong")',
+            data: { idNhaCungCap: $("#idNhaCungCap").val() },
+            dataType: "json",
+            success: function (data) {
+                var $list = $("#goiYSoHopDong");
+                $list.empty();
+                if (!data) return;
+                for (var i = 0; i < data.length; i++) {
+                    $("<option />").attr("value", data[i]).appendTo($list);
+                }
+            }
+        });
+    }
+
     function DanhSachTonKho(pageIndex) {
         var sSearch = $("#txtSearch").val();
         var idKho = $("#idKho").val();
+        var idNhaCungCap = $("#idNhaCungCap").val();
+        var soHopDong = $("#soHopDong").val();
         $("#LoadingModal").modal('show');
 
         $.ajax({
@@ -57,7 +103,9 @@
             data: {
                 pageIndex: pageIndex,
                 sSearch: sSearch,
-                idKho: idKho
+                idKho: idKho,
+                idNhaCungCap: idNhaCungCap,
+                soHopDong: soHopDong
             },
             dataType: "html",
             success: function (data) {

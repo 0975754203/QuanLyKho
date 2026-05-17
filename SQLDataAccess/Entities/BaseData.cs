@@ -37,4 +37,7 @@ namespace SQLDataAccess
     public partial class NhomVatTu : BaseData
     {
     }
+    public partial class NhaThauCungCap : BaseData
+    {
+    }
 }

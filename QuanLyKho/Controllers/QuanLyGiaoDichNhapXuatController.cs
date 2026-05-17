@@ -177,7 +177,8 @@ namespace QuanLyKho.Controllers
                 price = x.DonGia.ToString("N0"),
                 origin = string.IsNullOrWhiteSpace(x.XuatXu) ? "Chưa cập nhật" : x.XuatXu,
                 stock = x.TonKho.ToString("N2"),
-                unit = x.DonViTinh ?? string.Empty
+                unit = x.DonViTinh ?? string.Empty,
+                contract = string.IsNullOrWhiteSpace(x.SoHopDong) ? "Chưa cập nhật" : x.SoHopDong
             }), JsonRequestBehavior.AllowGet);
         }
 
@@ -369,6 +370,9 @@ namespace QuanLyKho.Controllers
                     IdNguoiTao = model.IdNguoiTao,
                     IdKhoaPhong = model.IdKhoaPhong,
                     IdKho = model.IdKho,
+                    idNhaCungCap = model.idNhaCungCap,
+                    SoHopDong = model.SoHopDong,
+                    NgayHopDong = model.NgayHopDong,
                     GhiChu = model.GhiChu,
                     NguoiGiaoNhan = string.IsNullOrWhiteSpace(model.NguoiGiaoNhan) ? null : model.NguoiGiaoNhan.Trim(),
                     LoaiGiaoDich = "NHAP",
@@ -455,7 +459,7 @@ namespace QuanLyKho.Controllers
                     .Select(x => new SelectListItem
                     {
                         Value = x.Id.ToString(),
-                        Text = x.TenSanPham + "||" + x.DonGia.ToString("N0") + "||" + (string.IsNullOrWhiteSpace(x.XuatXu) ? "Chưa cập nhật" : x.XuatXu)
+                        Text = x.TenSanPham + "||" + x.DonGia.ToString("N0") + "||" + (string.IsNullOrWhiteSpace(x.XuatXu) ? "Chưa cập nhật" : x.XuatXu) + "||" + (string.IsNullOrWhiteSpace(x.ThoiGianBaoHanh) ? "Chưa cập nhật" : x.ThoiGianBaoHanh)
                     })
                     .ToList();
                 dsSanPham.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn sản phẩm --" });
@@ -467,6 +471,13 @@ namespace QuanLyKho.Controllers
                     .ToList();
                 dsKho.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn kho --" });
                 ViewBag.ComboKhoNhap = dsKho;
+
+                var dsNhaCungCap = uow.Repository<NhaThauCungCap>().Query().Get()
+                    .OrderBy(x => x.TenNhaThau)
+                    .Select(x => new SelectListItem { Value = x.idNhathaucc.ToString(), Text = x.TenNhaThau })
+                    .ToList();
+                dsNhaCungCap.Insert(0, new SelectListItem { Value = "", Text = "-- Chọn nhà cung cấp --" });
+                ViewBag.ComboNhaCungCap = dsNhaCungCap;
             }
         }
 

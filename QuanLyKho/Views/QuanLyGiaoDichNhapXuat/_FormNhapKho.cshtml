@@ -2,6 +2,7 @@
 @{
     var comboSanPham = ViewBag.ComboSanPham as IEnumerable<SelectListItem>;
     var comboKho = ViewBag.ComboKhoNhap as IEnumerable<SelectListItem>;
+    var comboNhaCungCap = ViewBag.ComboNhaCungCap as IEnumerable<SelectListItem>;
 }
 
 @using (Html.BeginForm("NhapKho", "QuanLyGiaoDichNhapXuat", FormMethod.Post, new { id = "fNhapKho", @class = "form-crmnt nhap-kho-form" }))
@@ -30,6 +31,24 @@
             <label class="text-label">Họ tên người giao</label>
             @Html.TextBoxFor(x => x.NguoiGiaoNhan, new { @class = "form-control", placeholder = "Nhập họ tên người giao hàng" })
             @Html.ValidationMessageFor(x => x.NguoiGiaoNhan)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Nhà cung cấp</label>
+            @Html.DropDownListFor(x => x.idNhaCungCap, comboNhaCungCap, new { @class = "form-control select2 nhap-select" })
+            @Html.ValidationMessageFor(x => x.idNhaCungCap)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Số hợp đồng</label>
+            @Html.TextBoxFor(x => x.SoHopDong, new { @class = "form-control input-sm", placeholder = "Nhập số hợp đồng" })
+            @Html.ValidationMessageFor(x => x.SoHopDong)
+        </div>
+
+        <div class="form-group">
+            <label class="text-label">Năm hợp đồng</label>
+            @Html.TextBoxFor(x => x.NgayHopDong, "{0:yyyy-MM-dd}", new { @class = "form-control input-sm", type = "date" })
+            @Html.ValidationMessageFor(x => x.NgayHopDong)
         </div>
 
         <div class="form-group nhap-note-field">

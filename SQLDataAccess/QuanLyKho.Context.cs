@@ -31,8 +31,9 @@ namespace SQLDataAccess
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
         public virtual DbSet<TuDien> TuDiens { get; set; }
         public virtual DbSet<TuDienLoai> TuDienLoais { get; set; }
-        public virtual DbSet<KhoGiaoDich> KhoGiaoDiches { get; set; }
         public virtual DbSet<NhomVatTu> NhomVatTus { get; set; }
         public virtual DbSet<KhoSanPham> KhoSanPhams { get; set; }
+        public virtual DbSet<KhoGiaoDich> KhoGiaoDiches { get; set; }
+        public virtual DbSet<NhaThauCungCap> NhaThauCungCaps { get; set; }
     }
 }

@@ -31,19 +31,26 @@ namespace QuanLyKho.Controllers
                     .ToList();
                 dsKho.Insert(0, new SelectListItem { Value = "", Text = "-- Tất cả kho --" });
                 ViewBag.ComboKho = dsKho;
+
+                var dsNhaCungCap = uow.Repository<NhaThauCungCap>().Query().Get()
+                    .OrderBy(x => x.TenNhaThau)
+                    .Select(x => new SelectListItem { Value = x.idNhathaucc.ToString(), Text = x.TenNhaThau })
+                    .ToList();
+                dsNhaCungCap.Insert(0, new SelectListItem { Value = "", Text = "-- Tất cả nhà cung cấp --" });
+                ViewBag.ComboNhaCungCap = dsNhaCungCap;
             }
             return View();
         }
 
         [HttpGet]
-        public ActionResult DanhSachTonKho(int? pageIndex, string sSearch, Guid? idKho)
+        public ActionResult DanhSachTonKho(int? pageIndex, string sSearch, Guid? idKho, Guid? idNhaCungCap, string soHopDong)
         {
             try
             {
                 pageIndex = pageIndex ?? 1;
                 var pageSize = HangSo.PageSize;
 
-                var list = KhoTonManager.Instance.Search(sSearch, idKho, (int)pageIndex, pageSize, out int total);
+                var list = KhoTonManager.Instance.Search(sSearch, idKho, idNhaCungCap, soHopDong, (int)pageIndex, pageSize, out int total);
 
                 var pagecount = (int)Math.Ceiling((double)total / (int)pageSize);
                 var modelDs = new KhoTon_DSModel((int)pageIndex, pagecount, (int)pageSize, total, list);
@@ -53,6 +60,29 @@ namespace QuanLyKho.Controllers
             {
                 ex.Log();
                 return null;
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GoiYSoHopDong(Guid? idNhaCungCap)
+        {
+            using (var uow = new UnitOfWork())
+            {
+                var query = uow.Repository<KhoGiaoDich>().Query()
+                    .Filter(x => !x.DaXoa
+                        && x.LoaiGiaoDich == "NHAP"
+                        && x.SoHopDong != null
+                        && x.SoHopDong != ""
+                        && (!idNhaCungCap.HasValue || x.idNhaCungCap == idNhaCungCap.Value));
+
+                var list = query.Get()
+                    .Select(x => x.SoHopDong)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+
+                return Json(list, JsonRequestBehavior.AllowGet);
             }
         }
 
