@@ -26,7 +26,7 @@ namespace BusinessLogic.Management
         #endregion
 
         #region Public Interface
-        public List<KhoTonModel> Search(string sSearch, Guid? idKho, Guid? idNhaCungCap, string soHopDong, int pageIndex, int pageSize, out int total)
+        public List<KhoTonModel> Search(string sSearch, Guid? idKho, Guid? idNhaCungCap, string soHopDong, int pageIndex, int pageSize, out int total, out decimal tongTonKho, out decimal tongGiaTri)
         {
             using (var uow = new UnitOfWork())
             {
@@ -73,6 +73,8 @@ namespace BusinessLogic.Management
                 }
 
                 total = items.Count;
+                tongTonKho = items.Sum(x => x.SoLuong);
+                tongGiaTri = items.Sum(x => x.SoLuong * (x.KhoSanPham != null ? x.KhoSanPham.DonGia : 0));
                 var pageItems = items
                     .Skip((pageIndex - 1) * pageSize)
                     .Take(pageSize)

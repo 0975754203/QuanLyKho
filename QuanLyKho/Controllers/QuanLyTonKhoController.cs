@@ -50,10 +50,10 @@ namespace QuanLyKho.Controllers
                 pageIndex = pageIndex ?? 1;
                 var pageSize = HangSo.PageSize;
 
-                var list = KhoTonManager.Instance.Search(sSearch, idKho, idNhaCungCap, soHopDong, (int)pageIndex, pageSize, out int total);
+                var list = KhoTonManager.Instance.Search(sSearch, idKho, idNhaCungCap, soHopDong, (int)pageIndex, pageSize, out int total, out decimal tongTonKho, out decimal tongGiaTri);
 
                 var pagecount = (int)Math.Ceiling((double)total / (int)pageSize);
-                var modelDs = new KhoTon_DSModel((int)pageIndex, pagecount, (int)pageSize, total, list);
+                var modelDs = new KhoTon_DSModel((int)pageIndex, pagecount, (int)pageSize, total, list, tongTonKho, tongGiaTri);
                 return PartialView(modelDs);
             }
             catch (Exception ex)

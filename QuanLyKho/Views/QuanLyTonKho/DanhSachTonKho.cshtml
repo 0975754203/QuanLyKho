@@ -2,8 +2,7 @@
 @model QuanLyKho.Models.KhoTon_DSModel
 
 @{
-    decimal totalTonKho = 0;
-    decimal totalGiaTri = 0;
+    var stt = (Model.PageIndex - 1) * Model.PageSize;
 }
 
 <div class="table-responsive">
@@ -22,16 +21,13 @@
             </tr>
         </thead>
         <tbody>
-            @{ var i = 0; }
             @if (Model.TBL_TonKho != null && Model.TBL_TonKho.Count > 0)
             {
                 foreach (var item in Model.TBL_TonKho)
                 {
                     var tongTien = item.DonGia * item.TonKho;
-                    totalTonKho += item.TonKho;
-                    totalGiaTri += tongTien;
                     <tr>
-                        <td>@(++i)</td>
+                        <td>@(++stt)</td>
                         <td>@item.MaSanPham</td>
                         <td>@item.TenSanPham</td>
                         <td>@item.TenKho</td>
@@ -44,10 +40,10 @@
                 }
                 <tr class="table-info">
                     <td colspan="5" class="text-right font-weight-bold">Tổng cộng:</td>
-                    <td class="text-right font-weight-bold">@string.Format("{0:n0}", totalTonKho)</td>
+                    <td class="text-right font-weight-bold">@string.Format("{0:n0}", Model.TongTonKho)</td>
                     <td></td>
                     <td></td>
-                    <td class="text-right font-weight-bold">@string.Format("{0:n0}", totalGiaTri)</td>
+                    <td class="text-right font-weight-bold">@string.Format("{0:n0}", Model.TongGiaTri)</td>
                 </tr>
             }
             else
