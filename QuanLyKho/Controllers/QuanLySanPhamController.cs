@@ -115,6 +115,7 @@ namespace QuanLyKho.Controllers
                     string message = "";
                     var data = model.CopyAs<KhoSanPhamModel>();
                     data.IdNhomVatTu = model.IdNhomVatTu;
+                    data.DonGia = model.DonGia ?? 0;
                     data.XuatXu = model.XuatXu;
                     message = KhoSanPhamManager.Instance.SaveOrUpdate(data);
 

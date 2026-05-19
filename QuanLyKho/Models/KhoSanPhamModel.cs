@@ -20,7 +20,7 @@ namespace QuanLyKho.Models
         public string TenSanPham { get; set; }
         public Guid IdDonViTinh { get; set; }
         public Guid IdNhomVatTu { get; set; }
-        public decimal DonGia { get; set; }
+        public decimal? DonGia { get; set; }
         public string XuatXu { get; set; }
         public string KyhieuNhanmac { get; set; }
         public string ThoiGianBaoHanh { get; set; }
@@ -34,8 +34,8 @@ namespace QuanLyKho.Models
                 yield return new ValidationResult("Vui lòng chọn đơn vị tính", new[] { nameof(IdDonViTinh) });
             if (IdNhomVatTu == Guid.Empty)
                 yield return new ValidationResult("Vui lòng chọn nhóm vật tư", new[] { nameof(IdNhomVatTu) });
-            if (DonGia <= 0)
-                yield return new ValidationResult("Vui lòng nhập đơn giá hợp lệ", new[] { nameof(DonGia) });
+            if (DonGia.HasValue && DonGia.Value < 0)
+                yield return new ValidationResult("Đơn giá không được nhỏ hơn 0", new[] { nameof(DonGia) });
         }
     }
     public class KhoSanPham_DSModel
@@ -57,4 +57,3 @@ namespace QuanLyKho.Models
         public IList<KhoSanPhamModel> TBL_SanPham { get; set; }
     }
 }
-
